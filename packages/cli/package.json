@@ -1,0 +1,13 @@
+{
+  "name": "@kothar/cli",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "kothar": "./src/index.ts"
+  },
+  "dependencies": {
+    "@kothar/core": "0.0.0"
+  }
+}

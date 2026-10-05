@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1645" height="490" viewBox="0 -30 1645 490" font-family="Noto Sans CJK JP, sans-serif" font-size="13">
+<defs><marker id="a" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect x="0" y="-30" width="1645" height="490" fill="#fff"/>
+<text x="8" y="-10" fill="#6b7280" font-size="12">案B：A＋層と層内順序（入れ子）</text>
+<rect x="517" y="54" width="771" height="337" rx="8" fill="none" stroke="#6b7280"/>
+<text x="525" y="70" fill="#374151" font-size="12">VPC</text>
+<rect x="684" y="114" width="152" height="200" rx="8" fill="none" stroke="#6b7280"/>
+<text x="692" y="130" fill="#374151" font-size="12">アプリ層</text>
+<rect x="20" y="165.33" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="80" y="198.33" text-anchor="middle">ユーザー</text>
+<rect x="332" y="165.33" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="392" y="198.33" text-anchor="middle">CDN</text>
+<rect x="1485" y="20" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="1545" y="53" text-anchor="middle">IdP</text>
+<rect x="1485" y="288" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="1545" y="321" text-anchor="middle">決済代行</text>
+<rect x="1485" y="96" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="1545" y="129" text-anchor="middle">ログ基盤</text>
+<rect x="1485" y="192" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="1545" y="225" text-anchor="middle">監視</text>
+<rect x="1485" y="364" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="1545" y="397" text-anchor="middle">鍵管理</text>
+<rect x="533" y="165.33" width="126" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="596" y="198.33" text-anchor="middle">API Gateway</text>
+<rect x="861" y="127" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="921" y="160" text-anchor="middle">注文DB</text>
+<rect x="861" y="203" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="921" y="236" text-anchor="middle">在庫DB</text>
+<rect x="1001" y="308" width="131" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="1066.5" y="341" text-anchor="middle">イベントキュー</text>
+<rect x="1152" y="308" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="1212" y="341" text-anchor="middle">通知ワーカー</text>
+<rect x="700" y="156" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="760" y="189" text-anchor="middle">注文サービス</text>
+<rect x="700" y="232" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="760" y="265" text-anchor="middle">在庫サービス</text>
+<path d="M140,193.33 L332,193.33" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="219.5" y="184.33" fill="#374151" font-size="11">HTTPS</text>
+<path d="M452,193.33 L533,193.33" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M659,184 L700,184" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M659,202.67 L669,202.67 L669,260 L700,260" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M820,184 L851,184 L851,155 L861,155" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M820,260 L851,260 L851,231 L861,231" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M596,165.33 L596,86 L1545,86 L1545,76" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="1356" y="103" fill="#374151" font-size="11">トークン検証</text>
+<path d="M760,156 L760,146 L851,146 L851,116 L1313,116 L1313,354 L1545,354 L1545,344" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="1378" y="371" fill="#374151" font-size="11">決済</text>
+<path d="M760,288 L760,298 L1066.5,298 L1066.5,308" fill="none" stroke="#1f2937" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a)"/>
+<text x="899" y="291" fill="#374151" font-size="11">在庫変動</text>
+<path d="M1132,336 L1152,336" fill="none" stroke="#1f2937" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a)"/>
+<path d="M1212,364 L1212,374 L80,374 L80,221.33" fill="none" stroke="#b45309" stroke-width="1.6" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<text x="203" y="391" fill="#374151" font-size="11">プッシュ通知</text>
+<path d="M1288,96 L1333,96 L1333,124 L1485,124" fill="none" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<path d="M1288,106 L1323,106 L1323,220 L1485,220" fill="none" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<path d="M1288,136 L1303,136 L1303,392 L1485,392" fill="none" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
+</svg>

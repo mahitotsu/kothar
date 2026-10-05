@@ -1,0 +1,544 @@
+{
+ "nodes": {
+  "user": {
+   "x": 20,
+   "y": 165.33,
+   "w": 120,
+   "h": 56,
+   "label": "ユーザー",
+   "region": "main"
+  },
+  "cdn": {
+   "x": 332,
+   "y": 165.33,
+   "w": 120,
+   "h": 56,
+   "label": "CDN",
+   "region": "main"
+  },
+  "idp": {
+   "x": 1485,
+   "y": 20,
+   "w": 120,
+   "h": 56,
+   "label": "IdP",
+   "region": "top"
+  },
+  "psp": {
+   "x": 1485,
+   "y": 288,
+   "w": 120,
+   "h": 56,
+   "label": "決済代行",
+   "region": "top"
+  },
+  "log": {
+   "x": 1485,
+   "y": 96,
+   "w": 120,
+   "h": 56,
+   "label": "ログ基盤",
+   "region": "side"
+  },
+  "mon": {
+   "x": 1485,
+   "y": 192,
+   "w": 120,
+   "h": 56,
+   "label": "監視",
+   "region": "side"
+  },
+  "kms": {
+   "x": 1485,
+   "y": 364,
+   "w": 120,
+   "h": 56,
+   "label": "鍵管理",
+   "region": "side"
+  },
+  "apigw": {
+   "x": 533,
+   "y": 165.33,
+   "w": 126,
+   "h": 56,
+   "label": "API Gateway",
+   "region": "main"
+  },
+  "orderdb": {
+   "x": 861,
+   "y": 127,
+   "w": 120,
+   "h": 56,
+   "label": "注文DB",
+   "region": "main"
+  },
+  "stockdb": {
+   "x": 861,
+   "y": 203,
+   "w": 120,
+   "h": 56,
+   "label": "在庫DB",
+   "region": "main"
+  },
+  "queue": {
+   "x": 1001,
+   "y": 308,
+   "w": 131,
+   "h": 56,
+   "label": "イベントキュー",
+   "region": "bottom"
+  },
+  "worker": {
+   "x": 1152,
+   "y": 308,
+   "w": 120,
+   "h": 56,
+   "label": "通知ワーカー",
+   "region": "bottom"
+  },
+  "order": {
+   "x": 700,
+   "y": 156,
+   "w": 120,
+   "h": 56,
+   "label": "注文サービス",
+   "region": "main"
+  },
+  "stock": {
+   "x": 700,
+   "y": 232,
+   "w": 120,
+   "h": 56,
+   "label": "在庫サービス",
+   "region": "main"
+  }
+ },
+ "groups": {
+  "vpc": {
+   "x": 517,
+   "y": 54,
+   "w": 771,
+   "h": 337,
+   "label": "VPC",
+   "members": [
+    "apigw",
+    "orderdb",
+    "stockdb",
+    "queue",
+    "worker",
+    "order",
+    "stock"
+   ]
+  },
+  "app": {
+   "x": 684,
+   "y": 114,
+   "w": 152,
+   "h": 200,
+   "label": "アプリ層",
+   "members": [
+    "order",
+    "stock"
+   ]
+  }
+ },
+ "edges": [
+  {
+   "from": "user",
+   "to": "cdn",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     140,
+     193.33
+    ],
+    [
+     332,
+     193.33
+    ]
+   ],
+   "label": {
+    "text": "HTTPS",
+    "x": 216.5,
+    "y": 172.33,
+    "w": 39,
+    "h": 16
+   }
+  },
+  {
+   "from": "cdn",
+   "to": "apigw",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     452,
+     193.33
+    ],
+    [
+     533,
+     193.33
+    ]
+   ]
+  },
+  {
+   "from": "apigw",
+   "to": "order",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     659,
+     184
+    ],
+    [
+     700,
+     184
+    ]
+   ]
+  },
+  {
+   "from": "apigw",
+   "to": "stock",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     659,
+     202.67
+    ],
+    [
+     669,
+     202.67
+    ],
+    [
+     669,
+     260
+    ],
+    [
+     700,
+     260
+    ]
+   ]
+  },
+  {
+   "from": "order",
+   "to": "orderdb",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     820,
+     184
+    ],
+    [
+     851,
+     184
+    ],
+    [
+     851,
+     155
+    ],
+    [
+     861,
+     155
+    ]
+   ]
+  },
+  {
+   "from": "stock",
+   "to": "stockdb",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     820,
+     260
+    ],
+    [
+     851,
+     260
+    ],
+    [
+     851,
+     231
+    ],
+    [
+     861,
+     231
+    ]
+   ]
+  },
+  {
+   "from": "apigw",
+   "to": "idp",
+   "rule": {
+    "style": "external",
+    "from": "NORTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     596,
+     165.33
+    ],
+    [
+     596,
+     86
+    ],
+    [
+     1545,
+     86
+    ],
+    [
+     1545,
+     76
+    ]
+   ],
+   "label": {
+    "text": "トークン検証",
+    "x": 1353,
+    "y": 91,
+    "w": 72,
+    "h": 16
+   }
+  },
+  {
+   "from": "order",
+   "to": "psp",
+   "rule": {
+    "style": "external",
+    "from": "NORTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     760,
+     156
+    ],
+    [
+     760,
+     146
+    ],
+    [
+     851,
+     146
+    ],
+    [
+     851,
+     116
+    ],
+    [
+     1313,
+     116
+    ],
+    [
+     1313,
+     354
+    ],
+    [
+     1545,
+     354
+    ],
+    [
+     1545,
+     344
+    ]
+   ],
+   "label": {
+    "text": "決済",
+    "x": 1375,
+    "y": 359,
+    "w": 28,
+    "h": 16
+   }
+  },
+  {
+   "from": "stock",
+   "to": "queue",
+   "rule": {
+    "style": "async",
+    "from": "SOUTH",
+    "to": "NORTH"
+   },
+   "points": [
+    [
+     760,
+     288
+    ],
+    [
+     760,
+     298
+    ],
+    [
+     1066.5,
+     298
+    ],
+    [
+     1066.5,
+     308
+    ]
+   ],
+   "label": {
+    "text": "在庫変動",
+    "x": 896,
+    "y": 279,
+    "w": 50,
+    "h": 16
+   }
+  },
+  {
+   "from": "queue",
+   "to": "worker",
+   "rule": {
+    "style": "async",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     1132,
+     336
+    ],
+    [
+     1152,
+     336
+    ]
+   ]
+  },
+  {
+   "from": "worker",
+   "to": "user",
+   "rule": {
+    "style": "reverse",
+    "from": "SOUTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     1212,
+     364
+    ],
+    [
+     1212,
+     374
+    ],
+    [
+     80,
+     374
+    ],
+    [
+     80,
+     221.33
+    ]
+   ],
+   "label": {
+    "text": "プッシュ通知",
+    "x": 200,
+    "y": 379,
+    "w": 72,
+    "h": 16
+   }
+  },
+  {
+   "from": "vpc",
+   "to": "log",
+   "rule": {
+    "style": "telemetry",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     1288,
+     96
+    ],
+    [
+     1333,
+     96
+    ],
+    [
+     1333,
+     124
+    ],
+    [
+     1485,
+     124
+    ]
+   ]
+  },
+  {
+   "from": "vpc",
+   "to": "mon",
+   "rule": {
+    "style": "telemetry",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     1288,
+     106
+    ],
+    [
+     1323,
+     106
+    ],
+    [
+     1323,
+     220
+    ],
+    [
+     1485,
+     220
+    ]
+   ]
+  },
+  {
+   "from": "vpc",
+   "to": "kms",
+   "rule": {
+    "style": "telemetry",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     1288,
+     136
+    ],
+    [
+     1303,
+     136
+    ],
+    [
+     1303,
+     392
+    ],
+    [
+     1485,
+     392
+    ]
+   ]
+  }
+ ]
+}

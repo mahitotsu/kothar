@@ -1,0 +1,6 @@
+{
+  "name": "kothar",
+  "version": "0.0.0",
+  "license": "MIT",
+  "description": "構成図に込める意図を空間の文法として宣言し、その文法どおりに図を描いて検査する Kothar のスキルとフック"
+}
