@@ -2,12 +2,12 @@
 id: S-GRAMMAR-1
 status: 仮説
 satisfies: [R-LAYOUT-1, R-LAYOUT-4, R-LINT-3]
-grounds: [docs/adr/0002-diagram-input.md]
+grounds: [docs/adr/0002-diagram-input.md, docs/adr/0009-attribute-vocabulary.md]
 ---
 
 # S-GRAMMAR-1：文法の語彙と、文法から作るもの
 
-文法には、次のものを書く。ノードの名前は参照せず、属性と線の種類だけを参照する。
+文法には、次のものを書く。ノードの名前は参照せず、語彙（S-INPUT-1）にある属性と線の種類だけを参照する。
 
 | 語彙 | 書くこと |
 | --- | --- |

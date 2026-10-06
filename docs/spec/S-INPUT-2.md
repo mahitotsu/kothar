@@ -2,7 +2,7 @@
 id: S-INPUT-2
 status: 仮説
 satisfies: [R-PIN-1, R-LAYOUT-1]
-grounds: [docs/adr/0002-diagram-input.md]
+grounds: [docs/adr/0002-diagram-input.md, docs/adr/0009-attribute-vocabulary.md]
 ---
 
 # S-INPUT-2：モデルの中身
@@ -11,9 +11,9 @@ grounds: [docs/adr/0002-diagram-input.md]
 
 | 要素 | 持つもの |
 | --- | --- |
-| ノード | ID、ラベル、属性（キーと値の組） |
+| ノード | ID、ラベル、属性（語彙にあるキーと値の組） |
 | グループ | ID、ラベル、属性、メンバー（ノードとグループの ID） |
-| 線 | 出るノードかグループの ID、入るノードかグループの ID、種類（`kind`）、ラベル |
+| 線 | 出るノードかグループの ID、入るノードかグループの ID、種類（語彙にある `kind`）、ラベル |
 | ピン留め | ノードの ID と、そのノードの中心の座標（x、y） |
 
-属性の最小の集合は、T2 の ADR で決める。仮説としては、検証 0001 で使った `trust`、`mode`、`concern` と、グループの `boundary`、`tier` を置く。
+サンプルの構成図の語彙は、検証 0001 で使った `trust`、`mode`、`concern`、グループの `boundary`、`tier`、線の `kind`（`call`、`publish`、`push`、`uses`）とする。
