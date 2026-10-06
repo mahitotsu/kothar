@@ -96,8 +96,8 @@ for (const p of inScope.filter((p) => !scenarios.some((s) => s.promises.includes
 const cycleRequirements = requirements.filter((r) => r.cycle === cycle);
 for (const r of requirements) {
   if (r.sources.length === 0) gaps.push({ stage: 3, message: `${r.id}：sources がない` });
-  for (const id of r.sources.filter((id) => !promises.includes(id) && !scenarioIds.includes(id)))
-    gaps.push({ stage: 3, message: `${r.id}：存在しない ${id} を出どころにしている` });
+  for (const id of r.sources.filter((id) => !scenarioIds.includes(id)))
+    gaps.push({ stage: 3, message: `${r.id}：シナリオでない ${id} を出どころにしている` });
   if (!r.verification) gaps.push({ stage: 3, message: `${r.id}：verification がない` });
 }
 for (const s of scenarios.filter((s) => s.promises.some((p) => inScope.includes(p))))
@@ -119,7 +119,7 @@ const out = [`# 対応表（フェーズ${cycle}）`, ""];
 out.push("| 約束 | このサイクル | シナリオ | 要件 | 仕様の項目 | テスト |", "| --- | --- | --- | --- | --- | --- |");
 for (const p of promises) {
   const xs = scenarios.filter((s) => s.promises.includes(p)).map((s) => s.id);
-  const rs = requirements.filter((r) => r.sources.some((id) => id === p || xs.includes(id))).map((r) => r.id);
+  const rs = requirements.filter((r) => r.sources.some((id) => xs.includes(id))).map((r) => r.id);
   const ss = specItems.filter((s) => s.satisfies.some((r) => rs.includes(r))).map((s) => `${s.id}（${s.status}）`);
   const ts = tests.filter((t) => t.requirements.some((r) => rs.includes(r))).map((t) => t.path);
   out.push(`| ${p} | ${inScope.includes(p) ? "扱う" : ""} | ${list(xs)} | ${list(rs)} | ${list(ss)} | ${list(ts)} |`);
