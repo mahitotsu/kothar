@@ -62,7 +62,7 @@ grammar.md の7つの不変条件を、配置の結果の JSON に対して検�
 | D | 12 | 3:3 5:2 6:3 7:4 | 一致 | 71 px |
 | E | 0 | なし | 一致 | 140 px |
 
-各案の図：[A](assets/0001-elk-layout-A.svg)、[B](assets/0001-elk-layout-B.svg)、[C](assets/0001-elk-layout-C.svg)、[D](assets/0001-elk-layout-D.svg)、[E](assets/0001-elk-layout-E.svg)
+各案の図：[A](evidence/0001-elk-layout/A.svg)、[B](evidence/0001-elk-layout/B.svg)、[C](evidence/0001-elk-layout/C.svg)、[D](evidence/0001-elk-layout/D.svg)、[E](evidence/0001-elk-layout/E.svg)
 
 案 E の図を、手で描いた元の図と並べると、要素の位置関係と線の意味は一致していた。上段は呼び出す側の真上、端の列は右端にあり、逆向きの通知は図の下を回っている。違いは、元の図ではイベントキューが在庫サービスの真下にあるのに対し、案 E では右にずれている点である。
 

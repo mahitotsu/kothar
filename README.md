@@ -37,7 +37,8 @@ npm run typecheck
 # ベンチマークの元の図を描く
 node benchmarks/sample-arch/handplaced.ts > benchmarks/sample-arch/handplaced.svg
 
-# レイアウトの検証を回す（spikes/elk-layout/out/ に結果を書く）
+# レイアウトの検証を回す（spikes/elk-layout/out/ に結果を書く。out/ はコミットしない。
+# 報告書の根拠は docs/spikes/evidence/ にある）
 node spikes/elk-layout/layout.ts
 ```
 
