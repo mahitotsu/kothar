@@ -6,6 +6,7 @@
 
 - [docs/process.md](docs/process.md)：作業プロセス。今どのサイクルのどの段階にいるかを確かめてから作業する。「AI エージェントの作業の決まり」に従う。
 - [docs/README.md](docs/README.md)：文書体系。文書を書く前に、種類と規則を確かめる。ADR は規則の番号（A1、K4 など）に照らして書き、レビューする。
+- [TODO.md](TODO.md)：作業項目の一覧。作業に伴って生じた作業項目は、ここに加える。
 
 ## 止まるところ
 
@@ -19,4 +20,3 @@
 
 - Node.js 24 以上。TypeScript はビルドせず、Node の型の除去で実行する。
 - `npm install` のあと、`npm run typecheck` で型を検査する。
-- 作業項目は GitHub Issues（mahitotsu/kothar）で管理する。
