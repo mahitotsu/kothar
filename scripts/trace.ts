@@ -74,7 +74,10 @@ const requirements = files("docs/requirements", (name) => /^R-.+\.md$/.test(name
 // 仕様の項目
 const specItems = files("docs/spec", (name) => /^S-.+\.md$/.test(name)).map((path) => {
   const fm = frontmatter(path, 4);
-  return { id: checkId(path, fm.id, basename(path, ".md"), 4), status: String(fm.status ?? ""), satisfies: idList(fm.satisfies) };
+  const item = { id: checkId(path, fm.id, basename(path, ".md"), 4), status: String(fm.status ?? ""), satisfies: idList(fm.satisfies) };
+  for (const ground of idList(fm.grounds).filter((g) => !existsSync(join(root, g))))
+    gaps.push({ stage: 4, message: `${item.id}：根拠の ${ground} がない` });
+  return item;
 });
 
 // テスト：テストの名前の先頭に書いた要件の ID
@@ -104,6 +107,9 @@ for (const s of scenarios.filter((s) => s.promises.some((p) => inScope.includes(
   if (!cycleRequirements.some((r) => r.sources.includes(s.id)))
     gaps.push({ stage: 3, message: `${s.id}：このサイクルの要件の出どころになっていない` });
 
+for (const s of specItems)
+  for (const id of s.satisfies.filter((id) => !requirements.some((r) => r.id === id)))
+    gaps.push({ stage: 4, message: `${s.id}：存在しない要件 ${id} を満たすとしている` });
 for (const r of cycleRequirements.filter((r) => !specItems.some((s) => s.satisfies.includes(r.id))))
   gaps.push({ stage: 4, message: `${r.id}：仕様の項目がない` });
 
