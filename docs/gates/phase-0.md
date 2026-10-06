@@ -1,3 +1,8 @@
+---
+phase: 0
+next_cycle_promises: [P1, P2, P3, P4, P5, P6, P10, P12]
+---
+
 # ゲートの記録：フェーズ0
 
 - 判定：収束
