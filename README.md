@@ -6,11 +6,12 @@
 
 ## 文書
 
-文書の種類と書き方は [docs/README.md](docs/README.md) にまとめてある。まず読むものは次の3つ。
+文書の種類と書き方は [docs/README.md](docs/README.md) にまとめてある。まず読むものは次の4つ。
 
 - [PR/FAQ](docs/prfaq.md)：誰に何を約束するか
 - [計画](docs/plan.md)：どの順で作り、何で判断するか
 - [ADR](docs/adr/)：何をなぜそう決めたか
+- [作業プロセス](docs/process.md)：どの順で作業し、いつ誰が決めるか
 
 ## 構成
 
@@ -22,7 +23,7 @@
 | `.claude-plugin/marketplace.json` | このリポジトリを Claude Code のマーケットプレイスとして公開する |
 | `benchmarks/` | 評価用の図。図ごとに、手で描いた元の図と、込めた文法を置く |
 | `spikes/` | 技術検証のコード。本実装には使わない。結果は `docs/spikes/` の報告書にある |
-| `docs/` | PR/FAQ、計画、ADR、検証の報告書、ゲートの記録 |
+| `docs/` | PR/FAQ、計画、作業プロセス、ADR、検証の報告書、ゲートの記録 |
 
 ## 開発
 
