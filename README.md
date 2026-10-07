@@ -17,8 +17,8 @@
 
 | パス | 中身 |
 | --- | --- |
-| `packages/core` | 文法のコンパイラ、レイアウト、レンダラー、リンター（未実装） |
-| `packages/cli` | `kothar render / lint / check`（未実装） |
+| `packages/core` | 入力の読み込みと検査、文法のコンパイラ、レイアウト、レンダラー、リンター。`schema/` に語彙、文法、モデルの JSON Schema |
+| `packages/cli` | `kothar render / lint / check` |
 | `plugins/kothar` | Claude Code のプラグイン（未実装） |
 | `.claude-plugin/marketplace.json` | このリポジトリを Claude Code のマーケットプレイスとして公開する |
 | `benchmarks/` | 評価用の図。図ごとに、手で描いた元の図と、込めた文法を置く |
@@ -34,6 +34,11 @@ Node.js 24 以上が必要。TypeScript はビルドせず、Node の型の除�
 ```
 npm install
 npm run typecheck
+npm test
+
+# サンプル構成図を描き、検査する
+node packages/cli/src/index.ts render benchmarks/sample-arch/model.yaml --out architecture.svg
+node packages/cli/src/index.ts lint benchmarks/sample-arch/model.yaml
 
 # 約束、シナリオ、要件、仕様、テストの対応表と、対応の抜けを出力する
 # （npm run trace -- --stage <段階の番号> とすると、その段階までの出る条件に抜けがあれば失敗する）

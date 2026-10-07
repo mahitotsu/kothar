@@ -1,0 +1,42 @@
+# 型の検査と受け入れテストを、Linux と macOS で回す。
+# R-DET-1 のために、両方の OS で描いたサンプル構成図の SVG と JSON が、バイト単位で一致することも確かめる。
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - name: サンプル構成図を描く
+        run: node packages/cli/src/index.ts render benchmarks/sample-arch/model.yaml --out out-${{ matrix.os }}.svg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: drawing-${{ matrix.os }}
+          path: out-${{ matrix.os }}.*
+
+  same-output:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - name: Linux と macOS の出力を比べる
+        run: |
+          cmp out-ubuntu-latest.svg out-macos-latest.svg
+          cmp out-ubuntu-latest.json out-macos-latest.json

@@ -1,8 +1,8 @@
 ---
 id: S-INPUT-2
-status: 仮説
+status: 確定
 satisfies: [R-PIN-1, R-LAYOUT-1]
-grounds: [docs/adr/0002-diagram-input.md, docs/adr/0009-attribute-vocabulary.md]
+grounds: [docs/adr/0002-diagram-input.md, docs/adr/0009-attribute-vocabulary.md, packages/core/test/acceptance.test.ts]
 ---
 
 # S-INPUT-2：モデルの中身

@@ -1,8 +1,8 @@
 ---
 id: S-GRAMMAR-1
-status: 仮説
+status: 確定
 satisfies: [R-LAYOUT-1, R-LAYOUT-4, R-LINT-3]
-grounds: [docs/adr/0001-layout-approach.md, docs/adr/0002-diagram-input.md, docs/adr/0008-input-notation.md, docs/adr/0009-attribute-vocabulary.md]
+grounds: [docs/adr/0001-layout-approach.md, docs/adr/0002-diagram-input.md, docs/adr/0008-input-notation.md, docs/adr/0009-attribute-vocabulary.md, packages/core/test/acceptance.test.ts]
 ---
 
 # S-GRAMMAR-1：文法の語彙と、文法から作るもの

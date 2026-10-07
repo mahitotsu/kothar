@@ -1,8 +1,8 @@
 ---
 id: S-LINT-1
-status: 仮説
+status: 確定
 satisfies: [R-LINT-1, R-LINT-2, R-LINT-3]
-grounds: [docs/spikes/0003-edge-overlap.md]
+grounds: [docs/spikes/0003-edge-overlap.md, packages/core/test/acceptance.test.ts, packages/cli/test/cli.test.ts]
 ---
 
 # S-LINT-1：リンター

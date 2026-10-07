@@ -1,8 +1,8 @@
 ---
 id: S-INPUT-1
-status: 仮説
+status: 確定
 satisfies: [R-RENDER-1, R-LAYOUT-4]
-grounds: [docs/adr/0002-diagram-input.md, docs/adr/0008-input-notation.md, docs/adr/0009-attribute-vocabulary.md]
+grounds: [docs/adr/0002-diagram-input.md, docs/adr/0008-input-notation.md, docs/adr/0009-attribute-vocabulary.md, packages/core/test/acceptance.test.ts, packages/cli/test/cli.test.ts]
 ---
 
 # S-INPUT-1：語彙、文法、モデルのファイル

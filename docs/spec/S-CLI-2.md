@@ -1,8 +1,8 @@
 ---
 id: S-CLI-2
-status: 仮説
+status: 確定
 satisfies: [R-CHECK-1, R-CHECK-2]
-grounds: []
+grounds: [packages/cli/test/cli.test.ts]
 ---
 
 # S-CLI-2：check

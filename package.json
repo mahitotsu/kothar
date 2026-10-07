@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "trace": "node scripts/trace.ts"
+    "trace": "node scripts/trace.ts",
+    "test": "node --test \"packages/*/test/*.test.ts\""
   },
   "engines": {
     "node": ">=24"

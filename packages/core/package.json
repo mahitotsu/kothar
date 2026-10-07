@@ -6,6 +6,8 @@
   "type": "module",
   "exports": "./src/index.ts",
   "dependencies": {
-    "elkjs": "^0.12.0"
+    "ajv": "^8.20.0",
+    "elkjs": "^0.12.0",
+    "yaml": "^2.9.1"
   }
 }

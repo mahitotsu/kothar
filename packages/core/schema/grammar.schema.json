@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kothar:schema:grammar",
+  "title": "Kothar の文法",
+  "type": "object",
+  "required": ["vocabulary", "flow", "regions", "styles", "edges"],
+  "additionalProperties": false,
+  "properties": {
+    "vocabulary": { "description": "語彙のファイルのパス（この文法のファイルからの相対パス）", "type": "string" },
+    "flow": { "description": "流れの向き", "enum": ["right"] },
+    "regions": {
+      "description": "領域。上から順に当てはめる",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "place"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "place": { "enum": ["main", "below-main", "above-caller", "side-column"] },
+          "when": { "type": "object", "additionalProperties": { "type": "string" } },
+          "label": { "type": "string" }
+        }
+      }
+    },
+    "styles": {
+      "description": "線のスタイル",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["line"],
+        "additionalProperties": false,
+        "properties": {
+          "line": { "enum": ["solid", "dashed", "dotted"] },
+          "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+          "weight": { "enum": ["thin", "normal"] }
+        }
+      }
+    },
+    "edges": {
+      "description": "線の規則。上から順に当てはめる",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["kind", "style", "exit", "enter"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": { "type": "string" },
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "style": { "type": "string" },
+          "exit": { "enum": ["north", "south", "east", "west"] },
+          "enter": { "enum": ["north", "south", "east", "west"] },
+          "flow": { "type": "boolean" },
+          "route": { "enum": ["around"] }
+        }
+      }
+    }
+  }
+}

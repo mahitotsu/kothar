@@ -11,5 +11,5 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["packages/*/src", "benchmarks", "spikes", "scripts"]
+  "include": ["packages/*/src", "packages/*/test", "benchmarks", "spikes", "scripts"]
 }
