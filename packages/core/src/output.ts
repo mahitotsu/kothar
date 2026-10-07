@@ -3,7 +3,7 @@
 
 import type { Compiled } from "./compile.ts";
 import { r2 } from "./layout.ts";
-import { FONT_FAMILY, LABEL_FONT_SIZE, NODE_FONT_SIZE } from "./text.ts";
+import { FONT_FAMILY, FONT_NAME, LABEL_FONT_SIZE, NODE_FONT_SIZE, subsetFont } from "./text.ts";
 import type { Layout, StyleDef } from "./types.ts";
 
 export function toJson(l: Layout): string {
@@ -44,8 +44,17 @@ export function toSvg(c: Compiled, l: Layout): string {
   const W = Math.ceil(Math.max(...rects.map((r) => r.x + r.w), ...pts.map((q) => q[0]), ...l.edges.flatMap((e) => (e.label ? [e.label.rect.x + e.label.rect.w] : [])))) + 20;
   const H = Math.ceil(Math.max(...rects.map((r) => r.y + r.h), ...pts.map((q) => q[1]))) + 20;
 
+  // 図に使う字だけのサブセットを埋め込む（ADR 0010）
+  const texts = [
+    ...l.nodes.map((n) => n.label),
+    ...l.groups.map((g) => g.label),
+    ...l.edges.flatMap((e) => (e.label ? [e.label.text] : [])),
+    ...l.regions.flatMap((r) => (r.region.label ? [r.region.label] : [])),
+  ];
+  const fontData = Buffer.from(subsetFont(texts)).toString("base64");
   const o: string[] = [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" font-family="${esc(FONT_FAMILY)}" font-size="${NODE_FONT_SIZE}">`,
+    `<style>@font-face{font-family:"${FONT_NAME}";src:url(data:font/ttf;base64,${fontData}) format("truetype");}</style>`,
     `<defs><marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>`,
     `<rect width="${W}" height="${H}" fill="#ffffff"/>`,
   ];

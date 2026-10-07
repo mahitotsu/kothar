@@ -17,7 +17,7 @@
 
 | パス | 中身 |
 | --- | --- |
-| `packages/core` | 入力の読み込みと検査、文法のコンパイラ、レイアウト、レンダラー、リンター。`schema/` に語彙、文法、モデルの JSON Schema |
+| `packages/core` | 入力の読み込みと検査、文法のコンパイラ、レイアウト、レンダラー、リンター。`schema/` に語彙、文法、モデルの JSON Schema、`fonts/` に同梱するフォント |
 | `packages/cli` | `kothar render / lint / check` |
 | `plugins/kothar` | Claude Code のプラグイン（未実装） |
 | `.claude-plugin/marketplace.json` | このリポジトリを Claude Code のマーケットプレイスとして公開する |
@@ -57,4 +57,4 @@ node spikes/font-metrics/measure.ts <フォントを置いたディレクトリ>
 
 ## ライセンス
 
-[MIT](LICENSE)
+[MIT](LICENSE)。同梱するフォント（`packages/core/fonts/BIZUDPGothic-Regular.ttf`）は SIL Open Font License 1.1 で、ライセンスの文書は [packages/core/fonts/OFL.txt](packages/core/fonts/OFL.txt) にある。

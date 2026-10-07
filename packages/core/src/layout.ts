@@ -81,7 +81,8 @@ export async function layout(c: Compiled): Promise<Layout> {
       "elk.json.shapeCoords": "ROOT",
       "elk.json.edgeCoords": "ROOT",
       "elk.spacing.nodeNode": String(GAP),
-      "elk.layered.spacing.nodeNodeBetweenLayers": "60",
+      // ラベルを ELK に渡さないので、層の間を広めにとってラベルの場所を残す
+      "elk.layered.spacing.nodeNodeBetweenLayers": "100",
       "elk.spacing.edgeLabel": "4",
       "elk.layered.considerModelOrder.strategy": "NODES_AND_EDGES",
       "elk.separateConnectedComponents": "false",
@@ -194,24 +195,28 @@ export async function layout(c: Compiled): Promise<Layout> {
       .slice(1)
       .map((b, i) => [p[i], b] as [Point, Point])
       .sort(([a1, b1], [a2, b2]) => Math.abs(b2[0] - a2[0]) + Math.abs(b2[1] - a2[1]) - (Math.abs(b1[0] - a1[0]) + Math.abs(b1[1] - a1[1])));
-    const candidates = segments.flatMap(([a, b]) =>
+    const candidates = segments.flatMap(([a, b], si) =>
       [0.5, 0.35, 0.65, 0.2, 0.8].flatMap((t) => {
         const [x, y] = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
-        return a[0] === b[0]
-          ? [{ x: r2(x + 6), y: r2(y - size.h / 2), w: size.w, h: size.h }, { x: r2(x - 6 - size.w), y: r2(y - size.h / 2), w: size.w, h: size.h }]
-          : [{ x: r2(x - size.w / 2), y: r2(y - size.h - 4), w: size.w, h: size.h }, { x: r2(x - size.w / 2), y: r2(y + 4), w: size.w, h: size.h }];
+        const rs: Rect[] =
+          a[0] === b[0]
+            ? [{ x: r2(x + 6), y: r2(y - size.h / 2), w: size.w, h: size.h }, { x: r2(x - 6 - size.w), y: r2(y - size.h / 2), w: size.w, h: size.h }]
+            : [{ x: r2(x - size.w / 2), y: r2(y - size.h - 4), w: size.w, h: size.h }, { x: r2(x - size.w / 2), y: r2(y + 4), w: size.w, h: size.h }];
+        return rs.map((r) => ({ r, si }));
       }),
     );
     const others = points.filter((q, j): q is Point[] => j !== k && !!q);
+    // 自分の線のうち、ラベルを添える線分のほかの線分とも重ならないようにする
+    const own = (r: Rect, si: number) => segments.filter((_, i) => i !== si).filter(([a, b]) => segmentHits(a, b, r)).length;
     const cost = (r: Rect) =>
       100 * model.nodes.filter((n) => intersects(r, rects.get(n.id)!)).length +
       10 * (model.groups ?? []).filter((g) => crossesFrame(r, rects.get(g.id)!)).length +
       10 * placedLabels.filter((l) => intersects(r, l)).length +
       others.filter((q) => q.slice(1).some((z, i) => segmentHits(q[i], z, r))).length;
-    let chosen = candidates[0];
+    let chosen = candidates[0].r;
     let best = Infinity;
-    for (const r of candidates) {
-      const v = cost(r);
+    for (const { r, si } of candidates) {
+      const v = cost(r) + own(r, si);
       if (v < best) [chosen, best] = [r, v];
       if (v === 0) break;
     }
