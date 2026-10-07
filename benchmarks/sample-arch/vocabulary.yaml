@@ -1,0 +1,15 @@
+# サンプル構成図の語彙。属性のキーと、とりうる値。線の種類の一覧。
+# 文法とモデルは、ここにない属性や線の種類を書けない（ADR 0009）。
+
+attributes:
+  trust: [external]        # 信頼の境界の外にある
+  mode: [async]            # 非同期に処理する
+  concern: [cross-cutting] # 横断的な関心事
+  boundary: [network]      # ネットワークの境界（グループに付ける）
+  tier: [app]              # アプリケーションの層（グループに付ける）
+
+edgeKinds:
+  - call    # 呼び出す
+  - publish # 非同期に送る
+  - push    # 利用者に向かって逆向きに届ける
+  - uses    # 横断的な関心事を使う

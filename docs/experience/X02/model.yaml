@@ -1,0 +1,27 @@
+# X02 のモデル。経費精算システムの構成図。語彙と文法は、サンプル構成図のものを変えずに使う。
+
+vocabulary: ../../../benchmarks/sample-arch/vocabulary.yaml
+grammar: ../../../benchmarks/sample-arch/grammar.yaml
+
+nodes:
+  - { id: user, label: 社員 }
+  - { id: web, label: 経費精算画面 }
+  - { id: claim, label: 申請サービス }
+  - { id: claimdb, label: 申請DB }
+  - { id: acct, label: 会計サービス, attrs: { trust: external } }
+  - { id: approval, label: 承認キュー, attrs: { mode: async } }
+  - { id: notifier, label: 通知ワーカー, attrs: { mode: async } }
+  - { id: audit, label: 監査ログ, attrs: { concern: cross-cutting } }
+
+groups:
+  - { id: vpc, label: VPC, attrs: { boundary: network }, members: [claim, claimdb, approval, notifier] }
+
+edges:
+  - { from: user, to: web, kind: call, label: HTTPS }
+  - { from: web, to: claim, kind: call }
+  - { from: claim, to: claimdb, kind: call }
+  - { from: claim, to: acct, kind: call, label: 仕訳 }
+  - { from: claim, to: approval, kind: publish, label: 申請 }
+  - { from: approval, to: notifier, kind: publish }
+  - { from: notifier, to: user, kind: push, label: 承認依頼 }
+  - { from: vpc, to: audit, kind: uses }

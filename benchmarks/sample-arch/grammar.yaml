@@ -1,0 +1,43 @@
+# サンプル構成図の文法。配置の約束事を、語彙の属性と線の種類に割り当てる。
+# 説明と、この文法から期待する不変条件は grammar.md にある。
+
+vocabulary: vocabulary.yaml
+
+# 流れの向き。呼び出す側が左、呼ばれる側が右
+flow: right
+
+# 領域。上から順に当てはめ、最初に当たった領域に置く。どれにも当たらなければ main に置く
+regions:
+  - name: side
+    place: side-column      # 図の右端の列
+    when: { concern: cross-cutting }
+    label: 横断的な関心事
+  - name: top
+    place: above-caller     # 本流の上の帯。呼び出す側の真上
+    when: { trust: external }
+    label: 外部サービス
+  - name: bottom
+    place: below-main       # 本流の下の帯
+    when: { mode: async }
+    label: 非同期
+  - name: main
+    place: main             # 中央の帯
+
+# 線のスタイル
+styles:
+  sync: { line: solid }
+  external: { line: solid }
+  async: { line: dashed }
+  reverse: { line: dotted, color: "#b45309" }
+  telemetry: { line: dotted, color: "#9ca3af", weight: thin }
+
+# 線の種類ごとの規則。上から順に当てはめる。from と to は両端の領域
+# exit と enter は、出る辺と入る辺。flow が true の線は、流れの向きに沿う（出るノードが入るノードより左）
+# route が around の線は、通過するノードより外側（図の下）を回る
+edges:
+  - { kind: call, to: top, style: external, exit: north, enter: south }
+  - { kind: call, style: sync, exit: east, enter: west, flow: true }
+  - { kind: publish, from: bottom, to: bottom, style: async, exit: east, enter: west }
+  - { kind: publish, style: async, exit: south, enter: north }
+  - { kind: push, style: reverse, exit: south, enter: south, route: around }
+  - { kind: uses, style: telemetry, exit: east, enter: west }
