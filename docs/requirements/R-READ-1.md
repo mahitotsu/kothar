@@ -12,4 +12,4 @@ render が出力する SVG は、Kothar のない環境でも表示できる。
 
 ## 検証
 
-X01 の例の入力で render した SVG を、Kothar を入れていない環境で、GitHub のファイルの表示と、Chrome、Firefox、Safari のそれぞれで開き、すべてのノード、線、ラベル、グループの枠が表示されれば合格とする。
+X01 の例の入力で render した SVG を、Kothar を入れていない環境で、Chrome と Edge のそれぞれで開き、すべてのノード、線、ラベル、グループの枠が表示されれば合格とする。

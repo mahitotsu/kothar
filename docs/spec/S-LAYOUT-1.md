@@ -1,8 +1,8 @@
 ---
 id: S-LAYOUT-1
-status: 仮説
+status: 確定
 satisfies: [R-LAYOUT-1, R-LAYOUT-2, R-LAYOUT-3, R-LAYOUT-4, R-LAYOUT-5, R-LAYOUT-6, R-LAYOUT-7, R-READ-2]
-grounds: [docs/spikes/0001-elk-layout.md, docs/spikes/0002-post-place.md, docs/spikes/0003-edge-overlap.md, docs/adr/0001-layout-approach.md]
+grounds: [docs/spikes/0001-elk-layout.md, docs/spikes/0002-post-place.md, docs/spikes/0003-edge-overlap.md, docs/adr/0001-layout-approach.md, packages/core/test/acceptance.test.ts, docs/spikes/0005-human-review.md]
 ---
 
 # S-LAYOUT-1：配置の方式

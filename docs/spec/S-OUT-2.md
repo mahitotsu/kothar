@@ -1,8 +1,8 @@
 ---
 id: S-OUT-2
-status: 仮説
+status: 確定
 satisfies: [R-RENDER-1, R-READ-1, R-READ-2, R-LAYOUT-5]
-grounds: [docs/adr/0010-font-embedding.md, docs/spikes/0004-font-metrics.md]
+grounds: [docs/adr/0010-font-embedding.md, docs/spikes/0004-font-metrics.md, packages/core/test/acceptance.test.ts, docs/spikes/0005-human-review.md]
 ---
 
 # S-OUT-2：SVG のレンダラー

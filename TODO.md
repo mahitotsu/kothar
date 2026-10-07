@@ -2,7 +2,7 @@
 
 次に何をするかの一覧。書き方は [docs/README.md](docs/README.md) の「作業項目」を参照。
 
-- 次の ID：T15
+- 次の ID：T16
 
 ## T3：アイコンの扱いを決める
 
@@ -45,3 +45,10 @@ P8 を扱うフェーズの収束のループで決める。
 - 完了条件：扱うフェーズがゲートで決まっている
 
 R-LAYOUT-5 の確認（2026-10-07）で、手で描いた元の図のほうが、横の配置が等間隔で見やすいという指摘があった。ELK は層ごとに幅の違う間隔で置くので、本流のノードの横の間隔がそろわない。
+
+## T15：SVG が GitHub、Firefox、Safari で表示できるかを確かめる
+
+- 関連：[R-READ-1](docs/requirements/R-READ-1.md)、[ADR 0010](docs/adr/0010-font-embedding.md)、[検証 0005](docs/spikes/0005-human-review.md)
+- 完了条件：扱うフェーズがゲートで決まっている
+
+フェーズ1では、R-READ-1 の表示先を、確かめられた Chrome と Edge にした。PR/FAQ の P4（Kothar を知らなくても読める）と、ADR 0010 の見直す条件（埋め込んだフォントで表示されないブラウザが1つでもあれば見直す）のために、GitHub のファイルの表示、Firefox、Safari でも確かめる。
