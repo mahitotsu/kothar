@@ -52,6 +52,7 @@ node benchmarks/sample-arch/handplaced.ts > benchmarks/sample-arch/handplaced.sv
 node spikes/elk-layout/layout.ts
 node spikes/post-place/layout.ts
 node spikes/edge-overlap/layout.ts
+node spikes/font-metrics/measure.ts <フォントを置いたディレクトリ>  # フォントの取り方はコードの冒頭にある
 ```
 
 ## ライセンス
