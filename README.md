@@ -46,6 +46,7 @@ node benchmarks/sample-arch/handplaced.ts > benchmarks/sample-arch/handplaced.sv
 # 報告書の根拠は docs/spikes/evidence/ にある）
 node spikes/elk-layout/layout.ts
 node spikes/post-place/layout.ts
+node spikes/edge-overlap/layout.ts
 ```
 
 ## ライセンス
