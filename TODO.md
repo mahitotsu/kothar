@@ -37,13 +37,7 @@ grammar.md には、性質の違う内容が混ざっている。文書体系の
 - [handplaced.svg](benchmarks/sample-arch/handplaced.svg) にある「横断的な関心事」の枠が、モデルのグループにも文法にもない。端の列の見せ方とするか、グループとするかを決める。
 - 文書体系に「ベンチマークの説明」の書き方の節がない。整理とあわせて書き方を決める。
 - フェーズ1の要件（[docs/requirements/](docs/requirements/)）は、grammar.md の規則の番号を参照している。番号を変えたら、要件も直す。
-
-## T7：ADR 0001 を判定する
-
-- 関連：[ADR 0001](docs/adr/0001-layout-approach.md)
-- 完了条件：ADR 0001 の状態が承認または却下になっている
-
-[検証 0002](docs/spikes/0002-post-place.md) の結果を根拠に、選択肢を評価し直して判定する。
+- 規則9（線の重なり）の「重なる」とみなす間隔を書く。[検証 0003](docs/spikes/0003-edge-overlap.md) では 8px 未満を重なりとした。
 
 ## T8：プラグインからエンジンを呼ぶ方式を決める
 
