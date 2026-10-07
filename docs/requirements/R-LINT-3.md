@@ -8,7 +8,7 @@ approved_cycle: 1
 
 # R-LINT-3
 
-lint は、grammar.md の規則1〜7のそれぞれについて、違反を検出する。
+lint は、grammar.md の規則1〜9のそれぞれについて、違反を検出する。
 
 ## 検証
 
