@@ -1,8 +1,8 @@
 ---
 id: S-DET-1
-status: 仮説
+status: 確定
 satisfies: [R-DET-1, R-CHECK-2]
-grounds: [docs/adr/0005-implementation-language.md]
+grounds: [docs/adr/0005-implementation-language.md, packages/core/test/acceptance.test.ts, .github/workflows/ci.yml]
 ---
 
 # S-DET-1：決定性
