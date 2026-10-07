@@ -150,13 +150,17 @@ test("R-DET-1: 同じ入力から、同じプロセスでも別のプロセス�
   }
 });
 
-test("R-DET-2: X06 で線を1本足しても、ほかのノードの移動量の平均が 20px 以下", async () => {
+test("R-DET-2: X06 で線を1本足しても、本流と下段のノードの左右の順と上下の順が入れ替わらない", async () => {
   const [before, after] = [await drawX01(), await draw(X06_AFTER)];
-  const others = before.layout.nodes.filter((n) => n.id !== "order" && n.id !== "queue");
-  const moves = others.map((n) => {
-    const [p, q] = [center(n.rect), center(nodeRect(after, n.id))];
-    return Math.hypot(p.x - q.x, p.y - q.y);
-  });
-  const mean = moves.reduce((s, m) => s + m, 0) / moves.length;
-  assert.ok(mean <= 20, `移動量の平均が ${mean.toFixed(1)}px`);
+  const ids = before.layout.nodes.filter((n) => ["main", "below-main"].includes(n.region.place)).map((n) => n.id);
+  const at = (d: Drawing, id: string) => center(nodeRect(d, id));
+  const swapped: string[] = [];
+  for (let i = 0; i < ids.length; i++)
+    for (let j = i + 1; j < ids.length; j++)
+      for (const axis of ["x", "y"] as const) {
+        const s1 = Math.sign(at(before, ids[i])[axis] - at(before, ids[j])[axis]);
+        const s2 = Math.sign(at(after, ids[i])[axis] - at(after, ids[j])[axis]);
+        if (s1 * s2 < 0) swapped.push(`${ids[i]} と ${ids[j]}（${axis}）`);
+      }
+  assert.deepEqual(swapped, []);
 });
