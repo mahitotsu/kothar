@@ -1,0 +1,622 @@
+{
+ "nodes": {
+  "s6": {
+   "x": 1056,
+   "y": 240,
+   "w": 120,
+   "h": 56,
+   "label": "6. ゲート",
+   "region": "main"
+  },
+  "s1": {
+   "x": 52,
+   "y": 240,
+   "w": 120,
+   "h": 56,
+   "label": "1. 約束",
+   "region": "main"
+  },
+  "s2": {
+   "x": 192,
+   "y": 240,
+   "w": 120,
+   "h": 56,
+   "label": "2. 体験",
+   "region": "main"
+  },
+  "s3": {
+   "x": 332,
+   "y": 240,
+   "w": 120,
+   "h": 56,
+   "label": "3. 要件",
+   "region": "main"
+  },
+  "s4": {
+   "x": 606,
+   "y": 240,
+   "w": 129,
+   "h": 56,
+   "label": "4. 仕様の仮説",
+   "region": "main"
+  },
+  "s5": {
+   "x": 755,
+   "y": 240,
+   "w": 120,
+   "h": 56,
+   "label": "5. 収束",
+   "region": "main"
+  },
+  "adr": {
+   "x": 895,
+   "y": 392,
+   "w": 120,
+   "h": 56,
+   "label": "ADR",
+   "region": "bottom"
+  },
+  "spike": {
+   "x": 895,
+   "y": 316,
+   "w": 120,
+   "h": 56,
+   "label": "検証",
+   "region": "bottom"
+  },
+  "impl": {
+   "x": 895,
+   "y": 468,
+   "w": 120,
+   "h": 56,
+   "label": "実装とテスト",
+   "region": "bottom"
+  },
+  "owner": {
+   "x": 82,
+   "y": 20,
+   "w": 1064,
+   "h": 56,
+   "label": "責任者",
+   "region": "top"
+  },
+  "docs": {
+   "x": 1312,
+   "y": 257,
+   "w": 120,
+   "h": 56,
+   "label": "文書体系",
+   "region": "side"
+  },
+  "todo": {
+   "x": 1312,
+   "y": 353,
+   "w": 131,
+   "h": 56,
+   "label": "作業項目の一覧",
+   "region": "side"
+  },
+  "trace": {
+   "x": 1312,
+   "y": 449,
+   "w": 120,
+   "h": 56,
+   "label": "対応表",
+   "region": "side"
+  }
+ },
+ "groups": {
+  "cycle": {
+   "x": 20,
+   "y": 176,
+   "w": 1172,
+   "h": 410,
+   "label": "サイクル",
+   "members": [
+    "s6",
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5",
+    "adr",
+    "spike",
+    "impl"
+   ]
+  },
+  "promise": {
+   "x": 36,
+   "y": 208,
+   "w": 432,
+   "h": 125,
+   "label": "約束のループ",
+   "members": [
+    "s1",
+    "s2",
+    "s3"
+   ]
+  },
+  "converge": {
+   "x": 590,
+   "y": 208,
+   "w": 441,
+   "h": 332,
+   "label": "収束のループ",
+   "members": [
+    "s4",
+    "s5",
+    "adr",
+    "spike",
+    "impl"
+   ]
+  }
+ },
+ "edges": [
+  {
+   "from": "s1",
+   "to": "s2",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     172,
+     268
+    ],
+    [
+     192,
+     268
+    ]
+   ]
+  },
+  {
+   "from": "s2",
+   "to": "s3",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     312,
+     268
+    ],
+    [
+     332,
+     268
+    ]
+   ]
+  },
+  {
+   "from": "s3",
+   "to": "s4",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     452,
+     268
+    ],
+    [
+     606,
+     268
+    ]
+   ]
+  },
+  {
+   "from": "s4",
+   "to": "s5",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     735,
+     268
+    ],
+    [
+     755,
+     268
+    ]
+   ]
+  },
+  {
+   "from": "s5",
+   "to": "s6",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     875,
+     268
+    ],
+    [
+     1056,
+     268
+    ]
+   ]
+  },
+  {
+   "from": "s1",
+   "to": "owner",
+   "rule": {
+    "style": "external",
+    "from": "NORTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     110,
+     240
+    ],
+    [
+     110,
+     76
+    ]
+   ],
+   "routed": true
+  },
+  {
+   "from": "s2",
+   "to": "owner",
+   "rule": {
+    "style": "external",
+    "from": "NORTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     250,
+     240
+    ],
+    [
+     250,
+     76
+    ]
+   ],
+   "routed": true
+  },
+  {
+   "from": "s3",
+   "to": "owner",
+   "rule": {
+    "style": "external",
+    "from": "NORTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     390,
+     240
+    ],
+    [
+     390,
+     76
+    ]
+   ],
+   "routed": true
+  },
+  {
+   "from": "s5",
+   "to": "owner",
+   "rule": {
+    "style": "external",
+    "from": "NORTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     815,
+     240
+    ],
+    [
+     815,
+     76
+    ]
+   ],
+   "routed": true,
+   "label": {
+    "text": "ADR",
+    "x": 821,
+    "y": 150,
+    "w": 26,
+    "h": 16
+   }
+  },
+  {
+   "from": "s6",
+   "to": "owner",
+   "rule": {
+    "style": "external",
+    "from": "NORTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     1115,
+     240
+    ],
+    [
+     1115,
+     76
+    ]
+   ],
+   "routed": true,
+   "label": {
+    "text": "判定",
+    "x": 1121,
+    "y": 150,
+    "w": 28,
+    "h": 16
+   }
+  },
+  {
+   "from": "s5",
+   "to": "adr",
+   "rule": {
+    "style": "async",
+    "from": "SOUTH",
+    "to": "NORTH"
+   },
+   "points": [
+    [
+     827,
+     296
+    ],
+    [
+     827,
+     382
+    ],
+    [
+     955,
+     382
+    ],
+    [
+     955,
+     392
+    ]
+   ]
+  },
+  {
+   "from": "s5",
+   "to": "spike",
+   "rule": {
+    "style": "async",
+    "from": "SOUTH",
+    "to": "NORTH"
+   },
+   "points": [
+    [
+     851,
+     296
+    ],
+    [
+     851,
+     306
+    ],
+    [
+     955,
+     306
+    ],
+    [
+     955,
+     316
+    ]
+   ]
+  },
+  {
+   "from": "s5",
+   "to": "impl",
+   "rule": {
+    "style": "async",
+    "from": "SOUTH",
+    "to": "NORTH"
+   },
+   "points": [
+    [
+     803,
+     296
+    ],
+    [
+     803,
+     458
+    ],
+    [
+     955,
+     458
+    ],
+    [
+     955,
+     468
+    ]
+   ]
+  },
+  {
+   "from": "s5",
+   "to": "s3",
+   "rule": {
+    "style": "reverse",
+    "from": "SOUTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     779,
+     296
+    ],
+    [
+     779,
+     468
+    ],
+    [
+     575,
+     468
+    ],
+    [
+     575,
+     306
+    ],
+    [
+     392,
+     306
+    ],
+    [
+     392,
+     296
+    ]
+   ],
+   "label": {
+    "text": "上流に戻る",
+    "x": 498.5,
+    "y": 309,
+    "w": 61,
+    "h": 16
+   }
+  },
+  {
+   "from": "s6",
+   "to": "s1",
+   "rule": {
+    "style": "reverse",
+    "from": "SOUTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     1116,
+     296
+    ],
+    [
+     1116,
+     550
+    ],
+    [
+     483,
+     550
+    ],
+    [
+     483,
+     316
+    ],
+    [
+     112,
+     316
+    ],
+    [
+     112,
+     296
+    ]
+   ],
+   "label": {
+    "text": "次のサイクル",
+    "x": 493,
+    "y": 553,
+    "w": 72,
+    "h": 16
+   }
+  },
+  {
+   "from": "cycle",
+   "to": "docs",
+   "rule": {
+    "style": "telemetry",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     1192,
+     315
+    ],
+    [
+     1295,
+     315
+    ],
+    [
+     1295,
+     285
+    ],
+    [
+     1312,
+     285
+    ]
+   ],
+   "routed": true
+  },
+  {
+   "from": "cycle",
+   "to": "todo",
+   "rule": {
+    "style": "telemetry",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     1192,
+     450
+    ],
+    [
+     1295,
+     450
+    ],
+    [
+     1295,
+     380
+    ],
+    [
+     1312,
+     380
+    ]
+   ],
+   "routed": true
+  },
+  {
+   "from": "s2",
+   "to": "trace",
+   "rule": {
+    "style": "telemetry",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     312,
+     270
+    ],
+    [
+     320,
+     270
+    ],
+    [
+     320,
+     540
+    ],
+    [
+     1295,
+     540
+    ],
+    [
+     1295,
+     475
+    ],
+    [
+     1312,
+     475
+    ]
+   ],
+   "routed": true
+  }
+ ]
+}

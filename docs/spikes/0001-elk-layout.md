@@ -3,6 +3,7 @@
 - 実施日：2026-10-05
 - 関連する ADR：[0001](../adr/0001-layout-approach.md)
 - 検証のコード：[spikes/elk-layout/](../../spikes/elk-layout/)（elkjs 0.12.0、Node.js 24、Linux）
+- 訂正：[検証 0002](0002-post-place.md)
 
 ## 目的
 
