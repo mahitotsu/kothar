@@ -1,0 +1,568 @@
+{
+ "nodes": {
+  "user": {
+   "x": 20,
+   "y": 266.33,
+   "w": 120,
+   "h": 56,
+   "label": "ユーザー",
+   "region": "main"
+  },
+  "cdn": {
+   "x": 332,
+   "y": 266.33,
+   "w": 120,
+   "h": 56,
+   "label": "CDN",
+   "region": "main"
+  },
+  "apigw": {
+   "x": 533,
+   "y": 266.33,
+   "w": 126,
+   "h": 56,
+   "label": "API Gateway",
+   "region": "main"
+  },
+  "orderdb": {
+   "x": 861,
+   "y": 208,
+   "w": 120,
+   "h": 56,
+   "label": "注文DB",
+   "region": "main"
+  },
+  "stockdb": {
+   "x": 861,
+   "y": 304,
+   "w": 120,
+   "h": 56,
+   "label": "在庫DB",
+   "region": "main"
+  },
+  "queue": {
+   "x": 1001,
+   "y": 429,
+   "w": 131,
+   "h": 56,
+   "label": "イベントキュー",
+   "region": "bottom"
+  },
+  "worker": {
+   "x": 1152,
+   "y": 429,
+   "w": 120,
+   "h": 56,
+   "label": "通知ワーカー",
+   "region": "bottom"
+  },
+  "order": {
+   "x": 700,
+   "y": 257,
+   "w": 120,
+   "h": 56,
+   "label": "注文サービス",
+   "region": "main"
+  },
+  "stock": {
+   "x": 700,
+   "y": 353,
+   "w": 120,
+   "h": 56,
+   "label": "在庫サービス",
+   "region": "main"
+  },
+  "idp": {
+   "x": 536,
+   "y": 20,
+   "w": 120,
+   "h": 56,
+   "label": "IdP",
+   "region": "top"
+  },
+  "psp": {
+   "x": 700,
+   "y": 20,
+   "w": 120,
+   "h": 56,
+   "label": "決済代行",
+   "region": "top"
+  },
+  "log": {
+   "x": 1408,
+   "y": 220,
+   "w": 120,
+   "h": 56,
+   "label": "ログ基盤",
+   "region": "side"
+  },
+  "mon": {
+   "x": 1408,
+   "y": 316,
+   "w": 120,
+   "h": 56,
+   "label": "監視",
+   "region": "side"
+  },
+  "kms": {
+   "x": 1408,
+   "y": 412,
+   "w": 120,
+   "h": 56,
+   "label": "鍵管理",
+   "region": "side"
+  }
+ },
+ "groups": {
+  "vpc": {
+   "x": 517,
+   "y": 176,
+   "w": 771,
+   "h": 336,
+   "label": "VPC",
+   "members": [
+    "apigw",
+    "orderdb",
+    "stockdb",
+    "queue",
+    "worker",
+    "order",
+    "stock"
+   ]
+  },
+  "app": {
+   "x": 684,
+   "y": 225,
+   "w": 152,
+   "h": 210,
+   "label": "アプリ層",
+   "members": [
+    "order",
+    "stock"
+   ]
+  }
+ },
+ "edges": [
+  {
+   "from": "user",
+   "to": "cdn",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     140,
+     294.33
+    ],
+    [
+     332,
+     294.33
+    ]
+   ],
+   "label": {
+    "text": "HTTPS",
+    "x": 216.5,
+    "y": 273.33,
+    "w": 39,
+    "h": 16
+   }
+  },
+  {
+   "from": "cdn",
+   "to": "apigw",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     452,
+     294.33
+    ],
+    [
+     533,
+     294.33
+    ]
+   ]
+  },
+  {
+   "from": "apigw",
+   "to": "order",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     659,
+     285
+    ],
+    [
+     700,
+     285
+    ]
+   ]
+  },
+  {
+   "from": "apigw",
+   "to": "stock",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     659,
+     303.67
+    ],
+    [
+     669,
+     303.67
+    ],
+    [
+     669,
+     381
+    ],
+    [
+     700,
+     381
+    ]
+   ]
+  },
+  {
+   "from": "order",
+   "to": "orderdb",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     820,
+     285
+    ],
+    [
+     851,
+     285
+    ],
+    [
+     851,
+     236
+    ],
+    [
+     861,
+     236
+    ]
+   ]
+  },
+  {
+   "from": "stock",
+   "to": "stockdb",
+   "rule": {
+    "style": "sync",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     820,
+     381
+    ],
+    [
+     851,
+     381
+    ],
+    [
+     851,
+     332
+    ],
+    [
+     861,
+     332
+    ]
+   ]
+  },
+  {
+   "from": "apigw",
+   "to": "idp",
+   "rule": {
+    "style": "external",
+    "from": "NORTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     595,
+     266.33
+    ],
+    [
+     595,
+     76
+    ]
+   ],
+   "routed": true,
+   "label": {
+    "text": "トークン検証",
+    "x": 601,
+    "y": 163.16,
+    "w": 72,
+    "h": 16
+   }
+  },
+  {
+   "from": "order",
+   "to": "psp",
+   "rule": {
+    "style": "external",
+    "from": "NORTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     760,
+     257
+    ],
+    [
+     760,
+     76
+    ]
+   ],
+   "routed": true,
+   "label": {
+    "text": "決済",
+    "x": 766,
+    "y": 158.5,
+    "w": 28,
+    "h": 16
+   }
+  },
+  {
+   "from": "stock",
+   "to": "queue",
+   "rule": {
+    "style": "async",
+    "from": "SOUTH",
+    "to": "NORTH"
+   },
+   "points": [
+    [
+     760,
+     409
+    ],
+    [
+     760,
+     419
+    ],
+    [
+     1066.5,
+     419
+    ],
+    [
+     1066.5,
+     429
+    ]
+   ],
+   "label": {
+    "text": "在庫変動",
+    "x": 896,
+    "y": 400,
+    "w": 50,
+    "h": 16
+   }
+  },
+  {
+   "from": "queue",
+   "to": "worker",
+   "rule": {
+    "style": "async",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     1132,
+     457
+    ],
+    [
+     1152,
+     457
+    ]
+   ]
+  },
+  {
+   "from": "worker",
+   "to": "user",
+   "rule": {
+    "style": "reverse",
+    "from": "SOUTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     1212,
+     485
+    ],
+    [
+     1212,
+     495
+    ],
+    [
+     80,
+     495
+    ],
+    [
+     80,
+     322.33
+    ]
+   ],
+   "label": {
+    "text": "プッシュ通知",
+    "x": 200,
+    "y": 500,
+    "w": 72,
+    "h": 16
+   }
+  },
+  {
+   "from": "vpc",
+   "to": "log",
+   "rule": {
+    "style": "telemetry",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     1288,
+     260
+    ],
+    [
+     1390,
+     260
+    ],
+    [
+     1390,
+     250
+    ],
+    [
+     1408,
+     250
+    ]
+   ],
+   "routed": true
+  },
+  {
+   "from": "vpc",
+   "to": "mon",
+   "rule": {
+    "style": "telemetry",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     1288,
+     345
+    ],
+    [
+     1408,
+     345
+    ]
+   ],
+   "routed": true
+  },
+  {
+   "from": "vpc",
+   "to": "kms",
+   "rule": {
+    "style": "telemetry",
+    "from": "EAST",
+    "to": "WEST"
+   },
+   "points": [
+    [
+     1288,
+     430
+    ],
+    [
+     1390,
+     430
+    ],
+    [
+     1390,
+     440
+    ],
+    [
+     1408,
+     440
+    ]
+   ],
+   "routed": true
+  },
+  {
+   "from": "stock",
+   "to": "psp",
+   "rule": {
+    "style": "external",
+    "from": "NORTH",
+    "to": "SOUTH"
+   },
+   "points": [
+    [
+     760,
+     353
+    ],
+    [
+     760,
+     335
+    ],
+    [
+     700,
+     335
+    ],
+    [
+     700,
+     340
+    ],
+    [
+     500,
+     340
+    ],
+    [
+     500,
+     95
+    ],
+    [
+     775,
+     95
+    ],
+    [
+     775,
+     85
+    ],
+    [
+     770,
+     85
+    ],
+    [
+     770,
+     76
+    ]
+   ],
+   "routed": true,
+   "label": {
+    "text": "返金",
+    "x": 643.5,
+    "y": 87,
+    "w": 28,
+    "h": 16
+   }
+  }
+ ]
+}

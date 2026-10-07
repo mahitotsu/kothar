@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1483" height="656" viewBox="0 -30 1483 656" font-family="Noto Sans CJK JP, sans-serif" font-size="13">
+<defs><marker id="a" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect x="0" y="-30" width="1483" height="656" fill="#fff"/>
+<text x="8" y="-10" fill="#6b7280" font-size="12">題材3：作業プロセス／案H：G＋線と枠線に沿う経路を避ける</text>
+<rect x="20" y="176" width="1172" height="410" rx="8" fill="none" stroke="#6b7280"/>
+<text x="28" y="192" fill="#374151" font-size="12">サイクル</text>
+<rect x="36" y="208" width="432" height="125" rx="8" fill="none" stroke="#6b7280"/>
+<text x="44" y="224" fill="#374151" font-size="12">約束のループ</text>
+<rect x="590" y="208" width="441" height="332" rx="8" fill="none" stroke="#6b7280"/>
+<text x="598" y="224" fill="#374151" font-size="12">収束のループ</text>
+<rect x="1056" y="240" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="1116" y="273" text-anchor="middle">6. ゲート</text>
+<rect x="52" y="240" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="112" y="273" text-anchor="middle">1. 約束</text>
+<rect x="192" y="240" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="252" y="273" text-anchor="middle">2. 体験</text>
+<rect x="332" y="240" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="392" y="273" text-anchor="middle">3. 要件</text>
+<rect x="606" y="240" width="129" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="670.5" y="273" text-anchor="middle">4. 仕様の仮説</text>
+<rect x="755" y="240" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="815" y="273" text-anchor="middle">5. 収束</text>
+<rect x="895" y="392" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="955" y="425" text-anchor="middle">ADR</text>
+<rect x="895" y="316" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="955" y="349" text-anchor="middle">検証</text>
+<rect x="895" y="468" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="955" y="501" text-anchor="middle">実装とテスト</text>
+<rect x="82" y="20" width="1064" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="614" y="53" text-anchor="middle">責任者</text>
+<rect x="1312" y="257" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="1372" y="290" text-anchor="middle">文書体系</text>
+<rect x="1312" y="353" width="131" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="1377.5" y="386" text-anchor="middle">作業項目の一覧</text>
+<rect x="1312" y="449" width="120" height="56" rx="6" fill="#f9fafb" stroke="#111827"/>
+<text x="1372" y="482" text-anchor="middle">対応表</text>
+<path d="M172,268 L192,268" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M312,268 L332,268" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M452,268 L606,268" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M735,268 L755,268" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M875,268 L1056,268" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M110,240 L110,76" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M250,240 L250,76" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M390,240 L390,76" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M815,240 L815,76" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="824" y="162" fill="#374151" font-size="11">ADR</text>
+<path d="M1115,240 L1115,76" fill="none" stroke="#1f2937" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="1124" y="162" fill="#374151" font-size="11">判定</text>
+<path d="M827,296 L827,382 L955,382 L955,392" fill="none" stroke="#1f2937" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a)"/>
+<path d="M851,296 L851,306 L955,306 L955,316" fill="none" stroke="#1f2937" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a)"/>
+<path d="M803,296 L803,458 L955,458 L955,468" fill="none" stroke="#1f2937" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a)"/>
+<path d="M779,296 L779,468 L575,468 L575,306 L392,306 L392,296" fill="none" stroke="#b45309" stroke-width="1.6" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<text x="501.5" y="321" fill="#374151" font-size="11">上流に戻る</text>
+<path d="M1116,296 L1116,550 L483,550 L483,316 L112,316 L112,296" fill="none" stroke="#b45309" stroke-width="1.6" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<text x="496" y="565" fill="#374151" font-size="11">次のサイクル</text>
+<path d="M1192,315 L1295,315 L1295,285 L1312,285" fill="none" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<path d="M1192,450 L1295,450 L1295,380 L1312,380" fill="none" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<path d="M312,270 L320,270 L320,195 L1280,195 L1280,475 L1312,475" fill="none" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
+</svg>
