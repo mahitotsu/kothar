@@ -1,0 +1,40 @@
+# 信頼境界の図の文法（X08）。サンプル構成図と同じ語彙で、同じモデルを、信頼境界の内と外に分けて描く。
+# 説明と、この文法から期待する不変条件は trust.md にある。
+
+vocabulary: vocabulary.yaml
+
+flow: right
+
+# 領域。上から順に当てはめる
+regions:
+  - name: hidden
+    place: hidden             # 横断的な関心事は、この図には出さない
+    when: { concern: cross-cutting }
+  - name: external
+    place: column
+    column: 2                 # 右の列
+    when: { trust: external }
+    label: 外部のサービス
+  - name: inside
+    place: column
+    column: 1                 # 中央の列。信頼境界（VPC）の中
+    when: { inGroup: { boundary: network } }
+    label: 信頼境界の中
+  - name: client
+    place: column
+    column: 0                 # 左の列。どれにも当たらないもの
+    label: 利用者側
+
+styles:
+  crossing: { line: solid, color: "#c2410c", weight: thick }
+  inside: { line: solid, color: "#9ca3af", weight: thin }
+  insideAsync: { line: dashed, color: "#9ca3af", weight: thin }
+
+# 信頼境界（boundary: network のグループ）をまたぐ線は太い強調色、またがない線は細い灰色
+edges:
+  - { kind: uses, hidden: true }
+  - { kind: call, crosses: { boundary: network }, style: crossing, exit: east, enter: west, flow: true }
+  - { kind: call, style: inside, exit: east, enter: west, flow: true }
+  - { kind: push, crosses: { boundary: network }, style: crossing, exit: south, enter: south, route: around }
+  - { kind: push, style: inside, exit: south, enter: south, route: around }
+  - { kind: publish, style: insideAsync, exit: east, enter: west }

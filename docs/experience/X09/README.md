@@ -5,15 +5,7 @@
 | ファイル | 中身 |
 | --- | --- |
 | [model.yaml](../../../benchmarks/sample-arch/model.yaml)、[vocabulary.yaml](../../../benchmarks/sample-arch/vocabulary.yaml) | X01 と同じモデルと語彙。変えない |
-| リクエストの流れの図の文法 | 下の表の約束事を書いた文法。文法の書き方（語彙）は、このサイクルの仕様で決めるので、決まったら YAML のファイルにする |
-
-リクエストの流れの図の文法に書く約束事：
-
-| 約束事 | 内容 |
-| --- | --- |
-| 流れの向き | 左から右 |
-| 出すもの | `call` の線と、その両端のノードだけ |
-| 領域 | `trust: external` のノードは上段（呼び出す側の真上）、ほかは本流 |
+| [request-flow.yaml](../../../benchmarks/sample-arch/request-flow.yaml) | リクエストの流れの図の文法。約束事の説明は [request-flow.md](../../../benchmarks/sample-arch/request-flow.md) にある |
 
 ## 期待する出力
 

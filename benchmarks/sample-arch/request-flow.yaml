@@ -1,0 +1,31 @@
+# リクエストの流れの図の文法（X09）。サンプル構成図と同じ語彙で、同じモデルの同期の呼び出しだけを描く。
+# 説明と、この文法から期待する不変条件は request-flow.md にある。
+
+vocabulary: vocabulary.yaml
+
+flow: right
+
+regions:
+  - name: hidden-async
+    place: hidden             # 非同期の処理は出さない
+    when: { mode: async }
+  - name: hidden-concern
+    place: hidden             # 横断的な関心事は出さない
+    when: { concern: cross-cutting }
+  - name: top
+    place: above-caller
+    when: { trust: external }
+    label: 外部サービス
+  - name: main
+    place: main
+
+styles:
+  sync: { line: solid }
+  external: { line: solid }
+
+edges:
+  - { kind: call, to: top, style: external, exit: north, enter: south }
+  - { kind: call, style: sync, exit: east, enter: west, flow: true }
+  - { kind: publish, hidden: true }
+  - { kind: push, hidden: true }
+  - { kind: uses, hidden: true }

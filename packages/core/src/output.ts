@@ -82,7 +82,7 @@ export function toSvg(c: Compiled, l: Layout): string {
   for (const e of l.edges) {
     const s = styles[e.rule.style];
     const color = s.color ?? "#1f2937";
-    const width = s.weight === "thin" ? 1.2 : 1.6;
+    const width = s.weight === "thin" ? 1.2 : s.weight === "thick" ? 2.8 : 1.6;
     const d = e.points.map(([x, y], i) => `${i ? "L" : "M"}${x},${y}`).join(" ");
     o.push(`<path d="${d}" fill="none" stroke="${color}" stroke-width="${width}"${DASH[s.line]} marker-end="url(#arrow)"/>`);
     if (e.label)

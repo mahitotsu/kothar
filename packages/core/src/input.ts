@@ -16,7 +16,8 @@ export class InputError extends Error {
 }
 
 const schemaDir = join(import.meta.dirname, "..", "schema");
-const ajv = new Ajv2020({ allErrors: true, strict: true });
+// if と then の中で required を使うので、strictRequired だけを緩める
+const ajv = new Ajv2020({ allErrors: true, strict: true, strictRequired: false });
 const validators = new Map<string, ValidateFunction>();
 function validator(name: "vocabulary" | "grammar" | "model"): ValidateFunction {
   let v = validators.get(name);
@@ -55,13 +56,16 @@ function readYaml(path: string, name: "vocabulary" | "grammar" | "model", shown:
 
 const list = (values: string[]) => values.map((v) => `「${v}」`).join("、");
 
-/** モデルのファイルを読み、参照する語彙と文法とあわせて検査する */
-export function loadInput(modelPath: string, cwd = process.cwd()): Input {
+/**
+ * モデルのファイルを読み、参照する語彙と文法とあわせて検査する。
+ * grammarPath を指定したときは、モデルが参照する文法の代わりに、その文法を使う（S-CLI-4）
+ */
+export function loadInput(modelPath: string, cwd = process.cwd(), grammarPath?: string): Input {
   const show = (p: string) => relative(cwd, p) || p;
   const modelFile = resolve(cwd, modelPath);
   const model = readYaml(modelFile, "model", show(modelFile)) as Model;
   const vocabFile = resolve(dirname(modelFile), model.vocabulary);
-  const grammarFile = resolve(dirname(modelFile), model.grammar);
+  const grammarFile = grammarPath ? resolve(cwd, grammarPath) : resolve(dirname(modelFile), model.grammar);
   const vocabulary = readYaml(vocabFile, "vocabulary", show(vocabFile)) as Vocabulary;
   const grammar = readYaml(grammarFile, "grammar", show(grammarFile)) as Grammar;
 
@@ -71,8 +75,9 @@ export function loadInput(modelPath: string, cwd = process.cwd()): Input {
   if (resolve(dirname(grammarFile), grammar.vocabulary) !== vocabFile)
     problems.push(`${g}: 文法の語彙（${grammar.vocabulary}）が、モデルの語彙（${model.vocabulary}）と同じファイルでない`);
 
-  const checkAttrs = (file: string, where: string, attrs: Record<string, string> | undefined) => {
+  const checkAttrs = (file: string, where: string, attrs: Record<string, unknown> | undefined) => {
     for (const [key, value] of Object.entries(attrs ?? {})) {
+      if (typeof value !== "string") continue;
       const values = vocabulary.attributes[key];
       if (!values) problems.push(`${file}: ${where}: 属性「${key}」は語彙にない。語彙にある属性は ${list(Object.keys(vocabulary.attributes))}`);
       else if (!values.includes(value)) problems.push(`${file}: ${where}: 属性「${key}」の値「${value}」は語彙にない。語彙にある値は ${list(values)}`);
@@ -86,13 +91,18 @@ export function loadInput(modelPath: string, cwd = process.cwd()): Input {
   const regionNames = grammar.regions.map((r) => r.name);
   grammar.regions.forEach((r, i) => {
     checkAttrs(g, `/regions/${i}/when`, r.when);
+    checkAttrs(g, `/regions/${i}/when/inGroup`, r.when?.inGroup);
     if (regionNames.indexOf(r.name) !== i) problems.push(`${g}: /regions/${i}: 領域の名前「${r.name}」が重複している`);
   });
-  if (!grammar.regions.some((r) => r.place === "main" && !r.when)) problems.push(`${g}: /regions: 条件（when）のない main の領域がない`);
+  if (!grammar.regions.some((r) => !r.when)) problems.push(`${g}: /regions: 条件（when）のない領域がない`);
+  // 列（column）は、ほかの置き方（hidden を除く）と混ぜない
+  const places = new Set(grammar.regions.map((r) => r.place).filter((p) => p !== "hidden"));
+  if (places.has("column") && places.size > 1) problems.push(`${g}: /regions: 列（column）の領域と、ほかの置き方の領域を混ぜている`);
   grammar.edges.forEach((e, i) => {
     checkKind(g, `/edges/${i}`, e.kind);
+    checkAttrs(g, `/edges/${i}/crosses`, e.crosses);
     for (const end of [e.from, e.to]) if (end && !regionNames.includes(end)) problems.push(`${g}: /edges/${i}: 領域「${end}」は文法にない`);
-    if (!grammar.styles[e.style]) problems.push(`${g}: /edges/${i}: スタイル「${e.style}」は文法にない`);
+    if (!e.hidden && !grammar.styles[e.style]) problems.push(`${g}: /edges/${i}: スタイル「${e.style}」は文法にない`);
   });
 
   // モデル

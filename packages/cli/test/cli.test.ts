@@ -85,3 +85,14 @@ test("R-CHECK-3: ネットワークを遮断しても、render、lint、check �
   assert.equal(kothar(["lint", X07_MODEL], offline).status, 0);
   assert.equal(kothar(["check", X07_MODEL, svg], offline).status, 0);
 });
+
+test("R-VIEW-1: render、lint、check が --grammar で指定した文法で描き、検査する", () => {
+  const trust = join(X01_MODEL, "..", "trust.yaml");
+  const svg = join(tmp(), "trust.svg");
+  assert.equal(kothar(["render", X01_MODEL, "--grammar", trust, "--out", svg]).status, 0);
+  assert.ok(!readFileSync(svg, "utf8").includes(">ログ基盤<"), "信頼境界の図に、出さないはずのノードがある");
+  assert.equal(kothar(["lint", X01_MODEL, "--grammar", trust]).status, 0);
+  assert.equal(kothar(["check", X01_MODEL, svg, "--grammar", trust]).status, 0);
+  // 文法を指定しないと、モデルが参照する文法（構成図）で描くので、信頼境界の図とは一致しない
+  assert.notEqual(kothar(["check", X01_MODEL, svg]).status, 0);
+});

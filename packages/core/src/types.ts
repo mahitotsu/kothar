@@ -1,19 +1,25 @@
 // 入力（語彙、文法、モデル）と、配置の結果の型。
 
 export type Side = "north" | "south" | "east" | "west";
-export type Place = "main" | "below-main" | "above-caller" | "side-column";
+export type Place = "main" | "below-main" | "above-caller" | "side-column" | "column" | "hidden";
 
 export type Vocabulary = {
   attributes: Record<string, string[]>;
   edgeKinds: string[];
 };
 
-export type RegionDef = { name: string; place: Place; when?: Record<string, string>; label?: string };
-export type StyleDef = { line: "solid" | "dashed" | "dotted"; color?: string; weight?: "thin" | "normal" };
+/** when の inGroup は、その属性を持つグループの中（入れ子を含む）にあるノードに当たる */
+export type RegionWhen = { inGroup?: Record<string, string> } & { [key: string]: string | Record<string, string> | undefined };
+export type RegionDef = { name: string; place: Place; column?: number; when?: RegionWhen; label?: string };
+export type StyleDef = { line: "solid" | "dashed" | "dotted"; color?: string; weight?: "thin" | "normal" | "thick" };
 export type EdgeRuleDef = {
   kind: string;
   from?: string;
   to?: string;
+  /** この属性を持つグループの枠を、片方の端だけが中にある線に当たる */
+  crosses?: Record<string, string>;
+  /** この規則に当たる線を出さない。出さない規則には style、exit、enter を書かない */
+  hidden?: true;
   style: string;
   exit: Side;
   enter: Side;

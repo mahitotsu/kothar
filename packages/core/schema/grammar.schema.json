@@ -3,25 +3,97 @@
   "$id": "urn:kothar:schema:grammar",
   "title": "Kothar の文法",
   "type": "object",
-  "required": ["vocabulary", "flow", "regions", "styles", "edges"],
+  "required": [
+    "vocabulary",
+    "flow",
+    "regions",
+    "styles",
+    "edges"
+  ],
   "additionalProperties": false,
   "properties": {
-    "vocabulary": { "description": "語彙のファイルのパス（この文法のファイルからの相対パス）", "type": "string" },
-    "flow": { "description": "流れの向き", "enum": ["right"] },
+    "vocabulary": {
+      "description": "語彙のファイルのパス（この文法のファイルからの相対パス）",
+      "type": "string"
+    },
+    "flow": {
+      "description": "流れの向き",
+      "enum": [
+        "right"
+      ]
+    },
     "regions": {
       "description": "領域。上から順に当てはめる",
       "type": "array",
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["name", "place"],
+        "required": [
+          "name",
+          "place"
+        ],
         "additionalProperties": false,
         "properties": {
-          "name": { "type": "string" },
-          "place": { "enum": ["main", "below-main", "above-caller", "side-column"] },
-          "when": { "type": "object", "additionalProperties": { "type": "string" } },
-          "label": { "type": "string" }
-        }
+          "name": {
+            "type": "string"
+          },
+          "place": {
+            "enum": [
+              "main",
+              "below-main",
+              "above-caller",
+              "side-column",
+              "column",
+              "hidden"
+            ]
+          },
+          "when": {
+            "type": "object",
+            "properties": {
+              "inGroup": {
+                "description": "この属性を持つグループの中（入れ子を含む）にあるノードに当たる",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "label": {
+            "type": "string"
+          },
+          "column": {
+            "description": "place が column のときの列の番号。小さい番号から左に並べる",
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "place": {
+                  "const": "column"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "column"
+              ]
+            },
+            "else": {
+              "not": {
+                "required": [
+                  "column"
+                ]
+              }
+            }
+          }
+        ]
       }
     },
     "styles": {
@@ -29,12 +101,29 @@
       "type": "object",
       "additionalProperties": {
         "type": "object",
-        "required": ["line"],
+        "required": [
+          "line"
+        ],
         "additionalProperties": false,
         "properties": {
-          "line": { "enum": ["solid", "dashed", "dotted"] },
-          "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
-          "weight": { "enum": ["thin", "normal"] }
+          "line": {
+            "enum": [
+              "solid",
+              "dashed",
+              "dotted"
+            ]
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "weight": {
+            "enum": [
+              "thin",
+              "normal",
+              "thick"
+            ]
+          }
         }
       }
     },
@@ -44,18 +133,96 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["kind", "style", "exit", "enter"],
+        "required": [
+          "kind"
+        ],
         "additionalProperties": false,
         "properties": {
-          "kind": { "type": "string" },
-          "from": { "type": "string" },
-          "to": { "type": "string" },
-          "style": { "type": "string" },
-          "exit": { "enum": ["north", "south", "east", "west"] },
-          "enter": { "enum": ["north", "south", "east", "west"] },
-          "flow": { "type": "boolean" },
-          "route": { "enum": ["around"] }
-        }
+          "kind": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "style": {
+            "type": "string"
+          },
+          "exit": {
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west"
+            ]
+          },
+          "enter": {
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west"
+            ]
+          },
+          "flow": {
+            "type": "boolean"
+          },
+          "route": {
+            "enum": [
+              "around"
+            ]
+          },
+          "hidden": {
+            "description": "この規則に当たる線を出さない",
+            "const": true
+          },
+          "crosses": {
+            "description": "この属性を持つグループの枠を、片方の端だけが中にある線に当たる",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "required": [
+                "hidden"
+              ]
+            },
+            "then": {
+              "not": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "style"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "exit"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "enter"
+                    ]
+                  }
+                ]
+              }
+            },
+            "else": {
+              "required": [
+                "style",
+                "exit",
+                "enter"
+              ]
+            }
+          }
+        ]
       }
     }
   }

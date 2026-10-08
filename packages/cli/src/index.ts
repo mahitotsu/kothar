@@ -8,7 +8,16 @@ import { InputError, RULES, draw, type Violation } from "@kothar/core";
 const USAGE = `使い方:
   kothar render <モデル> --out <SVG のパス>   図を描き、SVG と配置の結果の JSON を書く
   kothar lint <モデル>                         配置を作り、文法の規則で検査する
-  kothar check <モデル> <SVG のパス>           SVG が、モデルから描いた図と同じかを確かめる`;
+  kothar check <モデル> <SVG のパス>           SVG が、モデルから描いた図と同じかを確かめる
+
+  どのコマンドにも --grammar <文法のパス> を付けられる。モデルが参照する文法の代わりに、その文法で描く`;
+
+// --name <値> の形の引数を取り出し、残りの引数とあわせて返す
+function option(args: string[], name: string): [string | undefined, string[]] {
+  const at = args.indexOf(name);
+  if (at < 0) return [undefined, args];
+  return [args[at + 1], args.filter((_, i) => i !== at && i !== at + 1)];
+}
 
 function fail(message: string): never {
   console.error(message);
@@ -24,13 +33,14 @@ function report(violations: Violation[]): string {
 }
 
 async function main(args: string[]): Promise<number> {
-  const [command, ...rest] = args;
+  const [command, ...given] = args;
+  const [grammar, rest0] = option(given, "--grammar");
+  if (given.includes("--grammar") && !grammar) fail(USAGE);
   if (command === "render") {
-    const outAt = rest.indexOf("--out");
-    const out = outAt >= 0 ? rest[outAt + 1] : undefined;
-    const model = rest.filter((_, i) => i !== outAt && i !== outAt + 1)[0];
+    const [out, rest] = option(rest0, "--out");
+    const model = rest[0];
     if (!model || !out) fail(USAGE);
-    const d = await draw(model);
+    const d = await draw(model, undefined, grammar);
     writeFileSync(out, d.svg);
     writeFileSync(jsonPathOf(out), d.json);
     const pinned = d.layout.nodes.filter((n) => n.pinned).map((n) => n.id);
@@ -39,14 +49,14 @@ async function main(args: string[]): Promise<number> {
     return 0;
   }
   if (command === "lint") {
-    const [model] = rest;
+    const [model] = rest0;
     if (!model) fail(USAGE);
-    const d = await draw(model);
+    const d = await draw(model, undefined, grammar);
     console.log(report(d.violations));
     return d.violations.length ? 1 : 0;
   }
   if (command === "check") {
-    const [model, svgPath] = rest;
+    const [model, svgPath] = rest0;
     if (!model || !svgPath) fail(USAGE);
     let committed: string;
     try {
@@ -54,12 +64,12 @@ async function main(args: string[]): Promise<number> {
     } catch {
       fail(`${svgPath}: ファイルを読めません。`);
     }
-    const d = await draw(model);
+    const d = await draw(model, undefined, grammar);
     if (committed === d.svg) {
       console.log(`${svgPath} は、モデルから描いた図と一致しています。`);
       return 0;
     }
-    console.log(`${svgPath} は、モデルから描いた図と一致しません。次のコマンドで描き直してください。\n  kothar render ${model} --out ${svgPath}`);
+    console.log(`${svgPath} は、モデルから描いた図と一致しません。次のコマンドで描き直してください。\n  kothar render ${model}${grammar ? ` --grammar ${grammar}` : ""} --out ${svgPath}`);
     return 1;
   }
   fail(USAGE);

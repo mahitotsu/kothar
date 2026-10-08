@@ -40,6 +40,9 @@ npm test
 node packages/cli/src/index.ts render benchmarks/sample-arch/model.yaml --out architecture.svg
 node packages/cli/src/index.ts lint benchmarks/sample-arch/model.yaml
 
+# 同じモデルを、別の文法（信頼境界の図）で描く
+node packages/cli/src/index.ts render benchmarks/sample-arch/model.yaml --grammar benchmarks/sample-arch/trust.yaml --out trust.svg
+
 # 約束、シナリオ、要件、仕様、テストの対応表と、対応の抜けを出力する
 # （npm run trace -- --stage <段階の番号> とすると、その段階までの出る条件に抜けがあれば失敗する）
 npm run trace

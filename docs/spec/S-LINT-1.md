@@ -16,6 +16,6 @@ lint は、モデルから配置を作り、配置の結果に対して次の2�
 
 文法によらない規則のうち、線と線や枠線の重なりは、平行に走る2本の間隔が 8px 未満で、並んで走る長さが 8px を超えるときに違反とする（[検証 0003](../spikes/0003-edge-overlap.md)）。
 
-規則の番号は、[benchmarks/sample-arch/grammar.md](../../benchmarks/sample-arch/grammar.md) の「期待する不変条件」の番号とする。
+規則の番号は、[benchmarks/sample-arch/grammar.md](../../benchmarks/sample-arch/grammar.md) の「期待する不変条件」の番号とする。同じ図のほかの文法の説明でも、同じ番号を使う。
 
 違反ごとに、規則の番号、対象のノードや線の ID、対象がピン留めされているか、何がどうなっているかの説明を報告する。違反が1件以上なら終了コード1、0件なら終了コード0で終わる。

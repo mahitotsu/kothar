@@ -23,6 +23,7 @@ export const RULES: Record<number, string> = {
   7: "グループの枠の横切り",
   8: "ノードを通る線",
   9: "線の重なり",
+  10: "列",
 };
 
 /** 平行に走る2本の線の間隔がこれ未満なら、重なっているとみなす（検証 0003） */
@@ -105,7 +106,7 @@ export function lint(c: Compiled, l: Layout): Violation[] {
         if (Math.abs(a[1] - b[1]) >= EPS) continue;
         const [x1, x2] = [Math.min(a[0], b[0]), Math.max(a[0], b[0])];
         for (const n of l.nodes)
-          if (["main", "below-main"].includes(n.region.place) && n.rect.x < x2 && n.rect.x + n.rect.w > x1 && n.rect.y + n.rect.h > a[1])
+          if (["main", "below-main", "column"].includes(n.region.place) && n.rect.x < x2 && n.rect.x + n.rect.w > x1 && n.rect.y + n.rect.h > a[1])
             above.add(n.id);
       }
       for (const id of above) add(6, [name, id], `線 ${name} が ${id} より上を通っている`);
@@ -149,6 +150,13 @@ export function lint(c: Compiled, l: Layout): Violation[] {
   const rest = [...main, ...top, ...bottom].map((n) => n.rect).concat(l.groups.map((g) => g.rect));
   const rightOfRest = rest.length ? Math.max(...rest.map((r) => r.x + r.w)) : -Infinity;
   for (const n of side) if (n.rect.x < rightOfRest) add(3, [n.id], `${n.id} は端の列なのに、ほかのすべてより右にない`);
+
+  // 10：ノードは割り当てた列にある。ある列のノードの中心は、それより左の列のどのノードの中心よりも右にある
+  const cols = l.nodes.filter((n) => n.region.place === "column");
+  for (const n of cols)
+    for (const m of cols)
+      if ((n.region.column ?? 0) < (m.region.column ?? 0) && cx(n.rect) >= cx(m.rect))
+        add(10, [n.id, m.id], `${m.id}（列 ${m.region.column}）が、${n.id}（列 ${n.region.column}）より右にない`);
 
   return out.sort((a, b) => a.rule - b.rule);
 }

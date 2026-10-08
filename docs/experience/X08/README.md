@@ -5,16 +5,7 @@
 | ファイル | 中身 |
 | --- | --- |
 | [model.yaml](../../../benchmarks/sample-arch/model.yaml)、[vocabulary.yaml](../../../benchmarks/sample-arch/vocabulary.yaml) | X01 と同じモデルと語彙。変えない |
-| 信頼境界の図の文法 | 下の表の約束事を書いた文法。文法の書き方（語彙）は、このサイクルの仕様で決めるので、決まったら YAML のファイルにする |
-
-信頼境界の図の文法に書く約束事：
-
-| 約束事 | 内容 |
-| --- | --- |
-| 流れの向き | 左から右 |
-| 列 | 左：`boundary: network` のグループの外にあり、`trust: external` でないノード。中央：`boundary: network` のグループの中のノード。右：`trust: external` のノード |
-| 出さないもの | `concern: cross-cutting` のノードと、`uses` の線 |
-| 線のスタイル | `boundary: network` のグループの枠をまたぐ線は、太い強調色の実線。またがない線は、細い灰色の線 |
+| [trust.yaml](../../../benchmarks/sample-arch/trust.yaml) | 信頼境界の図の文法。約束事の説明は [trust.md](../../../benchmarks/sample-arch/trust.md) にある |
 
 ## 期待する出力
 

@@ -1,8 +1,8 @@
 ---
 id: S-LAYOUT-5
-status: 仮説
+status: 確定
 satisfies: [R-VIEW-3]
-grounds: []
+grounds: [packages/core/test/views.test.ts]
 ---
 
 # S-LAYOUT-5：出さないノードと線

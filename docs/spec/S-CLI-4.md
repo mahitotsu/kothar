@@ -1,8 +1,8 @@
 ---
 id: S-CLI-4
-status: 仮説
+status: 確定
 satisfies: [R-VIEW-1]
-grounds: [docs/adr/0002-diagram-input.md, docs/adr/0009-attribute-vocabulary.md]
+grounds: [docs/adr/0002-diagram-input.md, docs/adr/0009-attribute-vocabulary.md, packages/core/test/views.test.ts, packages/cli/test/cli.test.ts]
 ---
 
 # S-CLI-4：別の文法で描く

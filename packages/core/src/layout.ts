@@ -56,6 +56,8 @@ export async function layout(c: Compiled): Promise<Layout> {
     if (!node) continue;
     const parent = c.parentOf.get(id);
     (parent ? elkNodes.get(parent)!.children : roots).push(node);
+    // 列：ルートの直下のノードとグループに、列の番号をパーティションとして付ける（S-LAYOUT-4、検証 0006）
+    if (c.columns && !parent) node.layoutOptions["elk.partitioning.partition"] = String(c.regionOf(id).column ?? 0);
   }
   const elkEdges: ElkNode[] = [];
   model.edges.forEach((e, k) => {
@@ -86,6 +88,7 @@ export async function layout(c: Compiled): Promise<Layout> {
       "elk.spacing.edgeLabel": "4",
       "elk.layered.considerModelOrder.strategy": "NODES_AND_EDGES",
       "elk.separateConnectedComponents": "false",
+      ...(c.columns ? { "elk.partitioning.activate": "true" } : {}),
     },
     children: roots,
     edges: elkEdges,

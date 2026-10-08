@@ -14,14 +14,14 @@ export { compile, layout, lint, loadInput, toJson, toSvg };
 
 export type Drawing = { input: Input; layout: Layout; svg: string; json: string; violations: Violation[] };
 
-/** モデルのファイルから、配置、SVG、JSON、検査の結果を作る */
-export async function draw(modelPath: string, cwd?: string): Promise<Drawing> {
-  return drawInput(loadInput(modelPath, cwd));
+/** モデルのファイルから、配置、SVG、JSON、検査の結果を作る。grammarPath を指定すると、その文法で描く */
+export async function draw(modelPath: string, cwd?: string, grammarPath?: string): Promise<Drawing> {
+  return drawInput(loadInput(modelPath, cwd, grammarPath));
 }
 
-/** 読み込んだ入力から、配置、SVG、JSON、検査の結果を作る */
+/** 読み込んだ入力から、配置、SVG、JSON、検査の結果を作る。返す input は、出さないノードと線を除いたあとのもの */
 export async function drawInput(input: Input): Promise<Drawing> {
   const c = compile(input);
   const l = await layout(c);
-  return { input, layout: l, svg: toSvg(c, l), json: toJson(l), violations: lint(c, l) };
+  return { input: c.input, layout: l, svg: toSvg(c, l), json: toJson(l), violations: lint(c, l) };
 }
