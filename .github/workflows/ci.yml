@@ -26,6 +26,7 @@ jobs:
         run: |
           npm run build:plugin
           git diff --exit-code plugins/kothar/engine
+          test -z "$(git status --porcelain plugins/kothar/engine)"
       - name: 文書に載せた図が、モデルから描いた図と一致するかを確かめる
         run: |
           node packages/cli/src/index.ts check benchmarks/process/model.yaml docs/images/process-cycle.svg
