@@ -9,7 +9,8 @@
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "trace": "node scripts/trace.ts",
-    "test": "node --test \"packages/*/test/*.test.ts\""
+    "test": "node --test \"packages/*/test/*.test.ts\"",
+    "build:plugin": "node scripts/build-plugin.ts"
   },
   "engines": {
     "node": ">=24"

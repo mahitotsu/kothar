@@ -22,6 +22,10 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
+      - name: プラグインに置いたエンジンが、ソースからまとめたものと一致するかを確かめる
+        run: |
+          npm run build:plugin
+          git diff --exit-code plugins/kothar/engine
       - name: 文書に載せた図が、モデルから描いた図と一致するかを確かめる
         run: |
           node packages/cli/src/index.ts check benchmarks/process/model.yaml docs/images/process-cycle.svg

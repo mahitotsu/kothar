@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kothar:schema:vocabulary",
+  "title": "Kothar の語彙",
+  "type": "object",
+  "required": ["attributes", "edgeKinds"],
+  "additionalProperties": false,
+  "properties": {
+    "attributes": {
+      "description": "属性のキーと、とりうる値",
+      "type": "object",
+      "additionalProperties": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true }
+    },
+    "edgeKinds": {
+      "description": "線の種類",
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  }
+}
