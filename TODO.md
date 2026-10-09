@@ -11,19 +11,12 @@
 
 AWS などのアイコンを同梱するか、利用者が用意するか。PR/FAQ の利用者向けの FAQ では「まだ決めていません。MVP では箱とラベルだけで描きます」と答えている。
 
-## T8：プラグインからエンジンを呼ぶ方式を決める
+## T9：CLI を npm に公開する
 
-- 関連：[ADR 0004](docs/adr/0004-engine-plugin-split.md)、[PR/FAQ](docs/prfaq.md) の P8
-- 完了条件：呼ぶ方式（CLI を呼ぶか、MCP サーバーを置くか）を決める ADR が承認されている
+- 関連：[ADR 0005](docs/adr/0005-implementation-language.md)、[ADR 0013](docs/adr/0013-plugin-engine-delivery.md)、[PR/FAQ](docs/prfaq.md)
+- 完了条件：扱うフェーズがゲートで決まっている
 
-P8 を扱うフェーズの収束のループで決める。
-
-## T9：npm に公開する前に、ビルドの手順が要るかを決める
-
-- 関連：[ADR 0005](docs/adr/0005-implementation-language.md)
-- 完了条件：ビルドの手順の要否が決まり、要る場合は手順がある
-
-開発中は Node.js の型の除去で `.ts` をそのまま実行している。npm のパッケージとして公開するときに、JavaScript に変換して配布する必要があるかを決める。
+PR/FAQ は `npx kothar` で CLI を使うと書いている。Node.js は `node_modules` の中の TypeScript を扱わないので、公開するには JavaScript にする手順が要る（検証 0007）。プラグインは、ADR 0013 で npm への公開を前提にしなくなった。
 
 ## T13：前回の配置を手がかりにして、線を足したときのノードの動きを小さくする
 
