@@ -1,0 +1,10 @@
+plugins: [{"name":"probe","path":"/home/akring/kothar/spikes/plugin-reach/probe","source":"probe@inline","version":"0.0.0"},{"name":"cc-plugin-agents-md","path":"builtin","source":"cc-plugin-agents-md@builtin"},{"name":"cc-plugin-telemetry","path":"builtin","source":"cc-plugin-telemetry@builtin"},{"name":"cc-plugin-plugin-authoring","path":"builtin","source":"cc-plugin-plugin-authoring@builtin"}] skills: ["probe:probe"]
+**出力1：**
+```
+BIN_OK
+```
+
+**出力2：**
+```
+ROOT_OK
+```

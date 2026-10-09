@@ -1,0 +1,1 @@
+    throw new ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING(filename);
