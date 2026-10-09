@@ -34,6 +34,7 @@ function ask(cwd: string, prompt: string): Run {
     timeout: 20 * 60 * 1000,
     maxBuffer: 64 * 1024 * 1024,
   });
+  if (r.error) throw new Error(`Claude Code を起動できない：${r.error.message}`);
   try {
     const j = JSON.parse(r.stdout);
     return { result: j.result ?? "", model: Object.keys(j.modelUsage ?? {}).join(","), cost: j.total_cost_usd ?? 0, ok: !j.is_error };
