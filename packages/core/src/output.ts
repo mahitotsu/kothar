@@ -41,7 +41,7 @@ export function toSvg(c: Compiled, l: Layout): string {
   const frame = sideFrame && { x: r2(sideFrame.rect.x - 16), y: r2(sideFrame.rect.y - 32), w: r2(sideFrame.rect.w + 32), h: r2(sideFrame.rect.h + 48) };
   const rects = [...l.nodes.map((n) => n.rect), ...l.groups.map((g) => g.rect), ...(frame ? [frame] : [])];
   const pts = l.edges.flatMap((e) => e.points);
-  const W = Math.ceil(Math.max(...rects.map((r) => r.x + r.w), ...pts.map((q) => q[0]), ...l.edges.flatMap((e) => (e.label ? [e.label.rect.x + e.label.rect.w] : [])))) + 20;
+  const W = Math.ceil(Math.max(...rects.map((r) => r.x + r.w), ...pts.map((q) => q[0]), ...l.edges.flatMap((e) => (e.label ? [e.label.rect.x + e.label.rect.w] : [])), ...l.columns.map((col) => col.rect.x + col.rect.w))) + 20;
   const H = Math.ceil(Math.max(...rects.map((r) => r.y + r.h), ...pts.map((q) => q[1]))) + 20;
 
   // 図に使う字だけのサブセットを埋め込む（ADR 0010）
@@ -50,6 +50,7 @@ export function toSvg(c: Compiled, l: Layout): string {
     ...l.groups.map((g) => g.label),
     ...l.edges.flatMap((e) => (e.label ? [e.label.text] : [])),
     ...l.regions.flatMap((r) => (r.region.label ? [r.region.label] : [])),
+    ...l.columns.map((col) => col.text),
   ];
   const fontData = Buffer.from(subsetFont(texts)).toString("base64");
   const o: string[] = [
@@ -63,6 +64,9 @@ export function toSvg(c: Compiled, l: Layout): string {
     if (!r.region.label) continue;
     if (r.label) o.push(`<text x="${r2(r.label.x + 3)}" y="${r2(r.label.y + 12)}" fill="#6b7280" font-size="${LABEL_FONT_SIZE}">${esc(r.region.label)}</text>`);
   }
+  // 列の名前
+  for (const col of l.columns)
+    o.push(`<text x="${col.rect.x}" y="${r2(col.rect.y + 12)}" fill="#374151" font-size="${LABEL_FONT_SIZE}">${esc(col.text)}</text>`);
   if (frame && sideFrame)
     o.push(
       `<rect x="${frame.x}" y="${frame.y}" width="${frame.w}" height="${frame.h}" rx="8" fill="none" stroke="#9ca3af" stroke-dasharray="4 4"/>`,

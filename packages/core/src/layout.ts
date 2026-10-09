@@ -227,7 +227,7 @@ export async function layout(c: Compiled): Promise<Layout> {
     return chosen;
   });
 
-  const regionRects = c.input.grammar.regions.flatMap((region) => {
+  const regionRects: Layout["regions"] = c.input.grammar.regions.flatMap((region): Layout["regions"] => {
     const members = model.nodes.filter((n) => c.regionOf(n.id) === region).map((n) => rects.get(n.id)!);
     if (!members.length) return [];
     const x = Math.min(...members.map((r) => r.x));
@@ -255,6 +255,29 @@ export async function layout(c: Compiled): Promise<Layout> {
     return [{ region, rect, label }];
   });
 
+  // 列の名前は、すべての列で高さをそろえ、列のノードとグループの上に置く。図の上に余白が足りなければ、図全体を下へずらす
+  const columnLabels: { column: number; text: string; rect: Rect }[] = [];
+  if (c.columns) {
+    const texts = new Map<number, string[]>();
+    for (const r of c.input.grammar.regions)
+      if (r.place === "column" && r.label) texts.set(r.column!, [...(texts.get(r.column!) ?? []), r.label]);
+    const roots = [...model.nodes.map((n) => n.id), ...groups.map((g) => g.id)].filter((id) => !c.parentOf.has(id));
+    const top = Math.min(...roots.map((id) => rects.get(id)!.y));
+    for (const [column, names] of [...texts].sort((a, b) => a[0] - b[0])) {
+      const items = roots.filter((id) => c.regionOf(id).column === column).map((id) => rects.get(id)!);
+      if (!items.length) continue;
+      const text = names.join("・");
+      const size = labelSize(text);
+      columnLabels.push({ column, text, rect: { x: Math.min(...items.map((r) => r.x)), y: r2(top - size.h - 8), w: size.w, h: size.h } });
+    }
+    const dy = columnLabels.length ? r2(MARGIN - Math.min(...columnLabels.map((l) => l.rect.y))) : 0;
+    if (dy > 0) {
+      const down = (r: Rect) => (r.y = r2(r.y + dy));
+      [...rects.values(), ...labelRects.flatMap((r) => (r ? [r] : [])), ...regionRects.flatMap((r) => [r.rect, ...(r.label ? [r.label] : [])]), ...columnLabels.map((l) => l.rect)].forEach(down);
+      points.forEach((p, k) => (points[k] = p?.map(([x, y]) => [x, r2(y + dy)] as Point)));
+    }
+  }
+
   return {
     nodes: model.nodes.map((n) => ({ id: n.id, label: n.label, region: c.regionOf(n.id), rect: rects.get(n.id)!, pinned: pinned.has(n.id) })),
     groups: groups.map((g) => ({ id: g.id, label: g.label, rect: rects.get(g.id)!, members: [...c.descendantsOf(g.id)] })),
@@ -267,6 +290,7 @@ export async function layout(c: Compiled): Promise<Layout> {
       ...(e.label ? { label: { text: e.label, rect: labelRects[k]! } } : {}),
     })),
     regions: regionRects,
+    columns: columnLabels,
   };
 }
 

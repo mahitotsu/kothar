@@ -4,7 +4,7 @@
       "id": "prfaq",
       "region": "promise",
       "x": 80,
-      "y": 66.67,
+      "y": 90.67,
       "width": 120,
       "height": 56,
       "pinned": false
@@ -13,7 +13,7 @@
       "id": "experience",
       "region": "experience",
       "x": 300,
-      "y": 57.33,
+      "y": 81.33,
       "width": 120,
       "height": 56,
       "pinned": false
@@ -22,7 +22,7 @@
       "id": "requirements",
       "region": "requirement",
       "x": 520,
-      "y": 57.33,
+      "y": 81.33,
       "width": 120,
       "height": 56,
       "pinned": false
@@ -31,7 +31,7 @@
       "id": "spec",
       "region": "specification",
       "x": 740,
-      "y": 48,
+      "y": 72,
       "width": 120,
       "height": 56,
       "pinned": false
@@ -40,7 +40,7 @@
       "id": "adr",
       "region": "record",
       "x": 960,
-      "y": 48,
+      "y": 72,
       "width": 120,
       "height": 56,
       "pinned": false
@@ -49,7 +49,7 @@
       "id": "report",
       "region": "record",
       "x": 1180,
-      "y": 48,
+      "y": 72,
       "width": 120,
       "height": 56,
       "pinned": false
@@ -58,7 +58,7 @@
       "id": "gate",
       "region": "record",
       "x": 960,
-      "y": 240,
+      "y": 264,
       "width": 120,
       "height": 56,
       "pinned": false
@@ -67,7 +67,7 @@
       "id": "tests",
       "region": "test",
       "x": 960,
-      "y": 144,
+      "y": 168,
       "width": 120,
       "height": 56,
       "pinned": false
@@ -82,11 +82,11 @@
       "points": [
         [
           140,
-          57.33
+          81.33
         ],
         [
           240,
-          57.33
+          81.33
         ]
       ]
     },
@@ -98,11 +98,11 @@
       "points": [
         [
           360,
-          57.33
+          81.33
         ],
         [
           460,
-          57.33
+          81.33
         ]
       ]
     },
@@ -114,11 +114,11 @@
       "points": [
         [
           580,
-          48
+          72
         ],
         [
           680,
-          48
+          72
         ]
       ]
     },
@@ -130,11 +130,11 @@
       "points": [
         [
           900,
-          48
+          72
         ],
         [
           800,
-          48
+          72
         ]
       ]
     },
@@ -146,11 +146,11 @@
       "points": [
         [
           1120,
-          48
+          72
         ],
         [
           1020,
-          48
+          72
         ]
       ]
     },
@@ -162,25 +162,25 @@
       "points": [
         [
           900,
-          240
+          264
         ],
         [
           150,
-          240
+          264
         ],
         [
           150,
-          76
+          100
         ],
         [
           140,
-          76
+          100
         ]
       ],
       "label": {
         "text": "見直す",
         "x": 505.5,
-        "y": 220,
+        "y": 244,
         "width": 39,
         "height": 16
       }
@@ -193,19 +193,19 @@
       "points": [
         [
           900,
-          144
+          168
         ],
         [
           590,
-          144
+          168
         ],
         [
           590,
-          66.67
+          90.67
         ],
         [
           580,
-          66.67
+          90.67
         ]
       ]
     }

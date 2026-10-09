@@ -60,4 +60,6 @@ export type Layout = {
   edges: { from: string; to: string; kind: string; rule: EdgeRuleDef; points: Point[]; label?: { text: string; rect: Rect } }[];
   /** 領域ごとの、ノードを囲む矩形と、帯の名前を書く矩形（上段と下段で名前があるとき） */
   regions: { region: RegionDef; rect: Rect; label?: Rect }[];
+  /** 列の名前（列で配置するとき）。同じ列に名前のある領域が複数あるときは、名前を「・」でつなぐ */
+  columns: { column: number; text: string; rect: Rect }[];
 };

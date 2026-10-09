@@ -6,12 +6,12 @@ vocabulary: vocabulary.yaml
 flow: right
 
 regions:
-  - { name: promise, place: column, column: 0, when: { doc: promise } }
-  - { name: experience, place: column, column: 1, when: { doc: experience } }
-  - { name: requirement, place: column, column: 2, when: { doc: requirement } }
-  - { name: specification, place: column, column: 3, when: { doc: specification } }
-  - { name: record, place: column, column: 4, when: { doc: record } }
-  - { name: test, place: column, column: 4, when: { doc: test } }
+  - { name: promise, place: column, column: 0, when: { doc: promise }, label: 約束 }
+  - { name: experience, place: column, column: 1, when: { doc: experience }, label: 体験 }
+  - { name: requirement, place: column, column: 2, when: { doc: requirement }, label: 要件 }
+  - { name: specification, place: column, column: 3, when: { doc: specification }, label: 仕様 }
+  - { name: record, place: column, column: 4, when: { doc: record }, label: 記録 }
+  - { name: test, place: column, column: 4, when: { doc: test }, label: テスト }
   - { name: other, place: hidden }   # 段階、作業、役割、決まりと道具は、この図には出さない
 
 styles:
