@@ -190,6 +190,12 @@ export async function layout(c: Compiled): Promise<Layout> {
   // ラベルは線分の横に置く。長い線分の中点から順に候補を作り、ノード、グループの枠線、先に置いたラベル、ほかの線と
   // 重ならない位置を選ぶ。どの候補も何かと重なるときは、重なりの重みの合計が最も小さい候補を選ぶ（ノードとの重なりを最も避ける）
   const placedLabels: Rect[] = [];
+  // ラベルを置いたときの重なりの重み。exclude の線は数えない
+  const labelCost = (r: Rect, exclude?: number) =>
+    100 * model.nodes.filter((n) => intersects(r, rects.get(n.id)!)).length +
+    10 * (model.groups ?? []).filter((g) => crossesFrame(r, rects.get(g.id)!)).length +
+    10 * placedLabels.filter((l) => intersects(r, l)).length +
+    points.filter((q, j): q is Point[] => j !== exclude && !!q).filter((q) => q.slice(1).some((z, i) => segmentHits(q[i], z, r))).length;
   const labelRects = model.edges.map((e, k) => {
     if (!e.label) return undefined;
     const p = points[k]!;
@@ -208,18 +214,12 @@ export async function layout(c: Compiled): Promise<Layout> {
         return rs.map((r) => ({ r, si }));
       }),
     );
-    const others = points.filter((q, j): q is Point[] => j !== k && !!q);
     // 自分の線のうち、ラベルを添える線分のほかの線分とも重ならないようにする
     const own = (r: Rect, si: number) => segments.filter((_, i) => i !== si).filter(([a, b]) => segmentHits(a, b, r)).length;
-    const cost = (r: Rect) =>
-      100 * model.nodes.filter((n) => intersects(r, rects.get(n.id)!)).length +
-      10 * (model.groups ?? []).filter((g) => crossesFrame(r, rects.get(g.id)!)).length +
-      10 * placedLabels.filter((l) => intersects(r, l)).length +
-      others.filter((q) => q.slice(1).some((z, i) => segmentHits(q[i], z, r))).length;
     let chosen = candidates[0].r;
     let best = Infinity;
     for (const { r, si } of candidates) {
-      const v = cost(r) + own(r, si);
+      const v = labelCost(r, k) + own(r, si);
       if (v < best) [chosen, best] = [r, v];
       if (v === 0) break;
     }
@@ -233,7 +233,26 @@ export async function layout(c: Compiled): Promise<Layout> {
     const x = Math.min(...members.map((r) => r.x));
     const y = Math.min(...members.map((r) => r.y));
     const rect = { x, y, w: r2(Math.max(...members.map((r) => r.x + r.w)) - x), h: r2(Math.max(...members.map((r) => r.y + r.h)) - y) };
-    return [{ region, rect }];
+    // 上段と下段の帯の名前は、帯のまわり（上、下、左、右）の、ほかと重ならない位置に置く
+    if (!region.label || !["above-caller", "below-main"].includes(region.place)) return [{ region, rect }];
+    const size = labelSize(region.label);
+    const candidates: Rect[] = [
+      { x, y: r2(y - size.h - 4), w: size.w, h: size.h },
+      { x: r2(x + rect.w - size.w), y: r2(y - size.h - 4), w: size.w, h: size.h },
+      { x, y: r2(y + rect.h + 4), w: size.w, h: size.h },
+      { x: r2(x + rect.w - size.w), y: r2(y + rect.h + 4), w: size.w, h: size.h },
+      { x: r2(x - size.w - 8), y: r2(y + rect.h / 2 - size.h / 2), w: size.w, h: size.h },
+      { x: r2(x + rect.w + 8), y: r2(y + rect.h / 2 - size.h / 2), w: size.w, h: size.h },
+    ];
+    let label = candidates[0];
+    let best = Infinity;
+    for (const r of candidates) {
+      const v = labelCost(r);
+      if (v < best) [label, best] = [r, v];
+      if (v === 0) break;
+    }
+    placedLabels.push(label);
+    return [{ region, rect, label }];
   });
 
   return {

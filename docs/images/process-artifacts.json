@@ -1,0 +1,218 @@
+{
+  "nodes": [
+    {
+      "id": "prfaq",
+      "region": "promise",
+      "x": 80,
+      "y": 66.67,
+      "width": 120,
+      "height": 56,
+      "pinned": false
+    },
+    {
+      "id": "experience",
+      "region": "experience",
+      "x": 300,
+      "y": 57.33,
+      "width": 120,
+      "height": 56,
+      "pinned": false
+    },
+    {
+      "id": "requirements",
+      "region": "requirement",
+      "x": 520,
+      "y": 57.33,
+      "width": 120,
+      "height": 56,
+      "pinned": false
+    },
+    {
+      "id": "spec",
+      "region": "specification",
+      "x": 740,
+      "y": 48,
+      "width": 120,
+      "height": 56,
+      "pinned": false
+    },
+    {
+      "id": "adr",
+      "region": "record",
+      "x": 960,
+      "y": 48,
+      "width": 120,
+      "height": 56,
+      "pinned": false
+    },
+    {
+      "id": "report",
+      "region": "record",
+      "x": 1180,
+      "y": 48,
+      "width": 120,
+      "height": 56,
+      "pinned": false
+    },
+    {
+      "id": "gate",
+      "region": "record",
+      "x": 960,
+      "y": 240,
+      "width": 120,
+      "height": 56,
+      "pinned": false
+    },
+    {
+      "id": "tests",
+      "region": "test",
+      "x": 960,
+      "y": 144,
+      "width": 120,
+      "height": 56,
+      "pinned": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "prfaq",
+      "to": "experience",
+      "kind": "derive",
+      "style": "derive",
+      "points": [
+        [
+          140,
+          57.33
+        ],
+        [
+          240,
+          57.33
+        ]
+      ]
+    },
+    {
+      "from": "experience",
+      "to": "requirements",
+      "kind": "derive",
+      "style": "derive",
+      "points": [
+        [
+          360,
+          57.33
+        ],
+        [
+          460,
+          57.33
+        ]
+      ]
+    },
+    {
+      "from": "requirements",
+      "to": "spec",
+      "kind": "derive",
+      "style": "derive",
+      "points": [
+        [
+          580,
+          48
+        ],
+        [
+          680,
+          48
+        ]
+      ]
+    },
+    {
+      "from": "adr",
+      "to": "spec",
+      "kind": "ground",
+      "style": "ground",
+      "points": [
+        [
+          900,
+          48
+        ],
+        [
+          800,
+          48
+        ]
+      ]
+    },
+    {
+      "from": "report",
+      "to": "adr",
+      "kind": "ground",
+      "style": "ground",
+      "points": [
+        [
+          1120,
+          48
+        ],
+        [
+          1020,
+          48
+        ]
+      ]
+    },
+    {
+      "from": "gate",
+      "to": "prfaq",
+      "kind": "ground",
+      "style": "ground",
+      "points": [
+        [
+          900,
+          240
+        ],
+        [
+          150,
+          240
+        ],
+        [
+          150,
+          76
+        ],
+        [
+          140,
+          76
+        ]
+      ],
+      "label": {
+        "text": "見直す",
+        "x": 505.5,
+        "y": 220,
+        "width": 39,
+        "height": 16
+      }
+    },
+    {
+      "from": "tests",
+      "to": "requirements",
+      "kind": "verify",
+      "style": "verify",
+      "points": [
+        [
+          900,
+          144
+        ],
+        [
+          590,
+          144
+        ],
+        [
+          590,
+          66.67
+        ],
+        [
+          580,
+          66.67
+        ]
+      ]
+    }
+  ],
+  "groups": [],
+  "pins": {
+    "count": 0,
+    "nodes": []
+  }
+}

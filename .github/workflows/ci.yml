@@ -22,6 +22,10 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
+      - name: 文書に載せた図が、モデルから描いた図と一致するかを確かめる
+        run: |
+          node packages/cli/src/index.ts check benchmarks/process/model.yaml docs/images/process-cycle.svg
+          node packages/cli/src/index.ts check benchmarks/process/model.yaml docs/images/process-artifacts.svg --grammar benchmarks/process/artifacts.yaml
       - name: サンプル構成図を描く
         run: node packages/cli/src/index.ts render benchmarks/sample-arch/model.yaml --out out-${{ matrix.os }}.svg
       - uses: actions/upload-artifact@v4

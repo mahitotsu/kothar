@@ -61,8 +61,7 @@ export function toSvg(c: Compiled, l: Layout): string {
   // 領域の名前。上段と下段は帯の名前を書き、端の列は破線の枠で囲む
   for (const r of l.regions) {
     if (!r.region.label) continue;
-    if (r.region.place === "above-caller" || r.region.place === "below-main")
-      o.push(`<text x="8" y="${r2(r.rect.y - 8)}" fill="#6b7280" font-size="${LABEL_FONT_SIZE}">${esc(r.region.label)}</text>`);
+    if (r.label) o.push(`<text x="${r2(r.label.x + 3)}" y="${r2(r.label.y + 12)}" fill="#6b7280" font-size="${LABEL_FONT_SIZE}">${esc(r.region.label)}</text>`);
   }
   if (frame && sideFrame)
     o.push(

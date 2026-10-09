@@ -58,5 +58,6 @@ export type Layout = {
   nodes: { id: string; label: string; region: RegionDef; rect: Rect; pinned: boolean }[];
   groups: { id: string; label: string; rect: Rect; members: string[] }[];
   edges: { from: string; to: string; kind: string; rule: EdgeRuleDef; points: Point[]; label?: { text: string; rect: Rect } }[];
-  regions: { region: RegionDef; rect: Rect }[];
+  /** 領域ごとの、ノードを囲む矩形と、帯の名前を書く矩形（上段と下段で名前があるとき） */
+  regions: { region: RegionDef; rect: Rect; label?: Rect }[];
 };
