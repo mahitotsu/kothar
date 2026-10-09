@@ -1,0 +1,84 @@
+# 作業プロセスのモデル。docs/process.md から下書きした。
+vocabulary: vocabulary.yaml
+grammar: grammar.yaml
+
+nodes:
+  # 段階（「サイクル」の節の表）
+  - { id: s1, label: 1. 約束, attrs: { element: stage } }
+  - { id: s2, label: 2. 体験, attrs: { element: stage } }
+  - { id: s3, label: 3. 要件, attrs: { element: stage } }
+  - { id: s4, label: 4. 仕様の仮説, attrs: { element: stage } }
+  - { id: s5, label: 5. 収束, attrs: { element: stage } }
+  - { id: s6, label: 6. ゲート, attrs: { element: stage } }
+
+  # 承認する人（「役割」の節と、「サイクル」の節の表の「承認」の列）
+  - { id: owner, label: 責任者, attrs: { element: role } }
+
+  # 収束のループの作業（「収束のループ」の節の表）
+  - { id: write_adr, label: ADR を書く, attrs: { element: activity } }
+  - { id: investigate, label: 検証を行う, attrs: { element: activity } }
+  - { id: implement, label: 実装し、要件の検証のテストを書く, attrs: { element: activity } }
+
+  # 参照する決まり
+  - { id: doc_system, label: 文書体系, attrs: { element: reference } }
+  - { id: plan, label: 計画, attrs: { element: reference } }
+
+  # 成果物（この文法では図に出さない）
+  - { id: prfaq, label: PR/FAQ, attrs: { element: artifact, doc: promise } }
+  - { id: scenario, label: シナリオ, attrs: { element: artifact, doc: experience } }
+  - { id: requirement, label: 要件, attrs: { element: artifact, doc: requirement } }
+  - { id: spec, label: 仕様, attrs: { element: artifact, doc: specification } }
+  - { id: adr, label: ADR, attrs: { element: artifact, doc: record } }
+  - { id: report, label: 検証の報告書, attrs: { element: artifact, doc: record } }
+  - { id: code_test, label: コードとテスト, attrs: { element: artifact, doc: test } }
+  - { id: gate_record, label: ゲートの記録, attrs: { element: artifact, doc: record } }
+
+groups:
+  - { id: promise_loop, label: 約束のループ, members: [s1, s2, s3], attrs: { loop: promise } }
+  - { id: converge_loop, label: 収束のループ, members: [s4, s5, write_adr, investigate, implement], attrs: { loop: converge } }
+
+edges:
+  # 段階の順
+  - { from: s1, to: s2, kind: next }
+  - { from: s2, to: s3, kind: next }
+  - { from: s3, to: s4, kind: next }
+  - { from: s4, to: s5, kind: next }
+  - { from: s5, to: s6, kind: next }
+
+  # 承認
+  - { from: s1, to: owner, kind: approve }
+  - { from: s2, to: owner, kind: approve }
+  - { from: s3, to: owner, kind: approve }
+  - { from: s5, to: owner, kind: approve, label: ADR ごと }
+  - { from: s6, to: owner, kind: approve }
+
+  # 収束のループで行うこと
+  - { from: s5, to: write_adr, kind: do }
+  - { from: s5, to: investigate, kind: do }
+  - { from: s5, to: implement, kind: do }
+
+  # 上流に戻るとき
+  - { from: s5, to: s4, kind: back, label: 仕様で要件を満たせない }
+  - { from: s5, to: s3, kind: back, label: 要件を満たせない、判断の基準を変えたい }
+  - { from: s3, to: s1, kind: back, label: 約束が果たせない（次のゲートで） }
+
+  # 参照
+  - { from: s6, to: plan, kind: refer, label: フェーズの順と判断の基準 }
+
+  # 成果物を作る
+  - { from: s1, to: prfaq, kind: produce }
+  - { from: s2, to: scenario, kind: produce }
+  - { from: s3, to: requirement, kind: produce }
+  - { from: s4, to: spec, kind: produce }
+  - { from: write_adr, to: adr, kind: produce }
+  - { from: investigate, to: report, kind: produce }
+  - { from: implement, to: code_test, kind: produce }
+  - { from: s6, to: gate_record, kind: produce }
+
+  # 成果物のつながり
+  - { from: prfaq, to: scenario, kind: derive }
+  - { from: scenario, to: requirement, kind: derive }
+  - { from: adr, to: spec, kind: ground }
+  - { from: report, to: adr, kind: ground }
+  - { from: report, to: spec, kind: ground }
+  - { from: code_test, to: requirement, kind: verify }

@@ -1,0 +1,89 @@
+vocabulary: vocabulary.yaml
+grammar: grammar.yaml
+
+nodes:
+  # 段階（サイクル）
+  - { id: s1, label: 1. 約束, attrs: { element: stage } }
+  - { id: s2, label: 2. 体験, attrs: { element: stage } }
+  - { id: s3, label: 3. 要件, attrs: { element: stage } }
+  - { id: s4, label: 4. 仕様の仮説, attrs: { element: stage } }
+  - { id: s5, label: 5. 収束, attrs: { element: stage } }
+  - { id: s6, label: 6. ゲート, attrs: { element: stage } }
+
+  # 承認する責任者（承認を求める段階ごと）
+  - { id: owner1, label: 責任者, attrs: { element: role } }
+  - { id: owner2, label: 責任者, attrs: { element: role } }
+  - { id: owner3, label: 責任者, attrs: { element: role } }
+  - { id: owner5, label: ADR ごとに責任者, attrs: { element: role } }
+  - { id: owner6, label: 責任者, attrs: { element: role } }
+
+  # 収束のループの作業
+  - { id: write_adr, label: ADR を書く, attrs: { element: activity } }
+  - { id: investigate, label: 検証を行う, attrs: { element: activity } }
+  - { id: implement, label: 実装し、要件の検証のテストを書く, attrs: { element: activity } }
+
+  # 参照する決まりと道具
+  - { id: doc_system, label: 文書体系, attrs: { element: reference } }
+  - { id: plan, label: 計画, attrs: { element: reference } }
+
+  # 成果物（この図には出さない）
+  - { id: prfaq, label: PR/FAQ, attrs: { element: artifact, doc: promise } }
+  - { id: scenario, label: シナリオ, attrs: { element: artifact, doc: experience } }
+  - { id: requirement, label: 要件, attrs: { element: artifact, doc: requirement } }
+  - { id: spec, label: 仕様, attrs: { element: artifact, doc: specification } }
+  - { id: adr, label: ADR, attrs: { element: artifact, doc: record } }
+  - { id: report, label: 検証の報告書, attrs: { element: artifact, doc: record } }
+  - { id: code_test, label: コードとテスト, attrs: { element: artifact, doc: test } }
+
+groups:
+  - { id: promise_loop, label: 約束のループ, members: [s1, s2, s3], attrs: { loop: promise } }
+  - { id: converge_loop, label: 収束のループ, members: [s4, s5, write_adr, investigate, implement], attrs: { loop: converge } }
+
+edges:
+  # 段階の流れ
+  - { from: s1, to: s2, kind: next }
+  - { from: s2, to: s3, kind: next }
+  - { from: s3, to: s4, kind: next }
+  - { from: s4, to: s5, kind: next }
+  - { from: s5, to: s6, kind: next }
+
+  # 承認
+  - { from: s1, to: owner1, kind: approve }
+  - { from: s2, to: owner2, kind: approve }
+  - { from: s3, to: owner3, kind: approve }
+  - { from: s5, to: owner5, kind: approve }
+  - { from: s6, to: owner6, kind: approve }
+
+  # 収束のループの作業
+  - { from: s5, to: write_adr, kind: do }
+  - { from: s5, to: investigate, kind: do }
+  - { from: s5, to: implement, kind: do }
+
+  # 上流に戻る
+  - { from: s5, to: s4, kind: back, label: 仕様で要件を満たせない }
+  - { from: s5, to: s3, kind: back, label: 仕様をどう変えても要件を満たせない }
+  - { from: s5, to: s3, kind: back, label: 判断の基準を変えたくなった }
+  - { from: s3, to: s1, kind: back, label: 要件を変えると約束が果たせなくなる }
+
+  # 参照
+  - { from: write_adr, to: doc_system, kind: refer, label: 規則 S3、S4 }
+  - { from: s6, to: plan, kind: refer }
+
+  # 成果物を作る
+  - { from: s1, to: prfaq, kind: produce }
+  - { from: s2, to: scenario, kind: produce }
+  - { from: s3, to: requirement, kind: produce }
+  - { from: s4, to: spec, kind: produce }
+  - { from: write_adr, to: adr, kind: produce }
+  - { from: investigate, to: report, kind: produce }
+  - { from: implement, to: code_test, kind: produce }
+
+  # 成果物のつながり（上流から下流へ）
+  - { from: prfaq, to: scenario, kind: derive }
+  - { from: scenario, to: requirement, kind: derive }
+  - { from: requirement, to: spec, kind: derive }
+  - { from: adr, to: spec, kind: ground }
+  - { from: report, to: adr, kind: ground }
+  - { from: report, to: spec, kind: ground }
+  - { from: requirement, to: adr, kind: ground }
+  - { from: code_test, to: requirement, kind: verify }
