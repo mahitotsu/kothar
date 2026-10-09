@@ -247787,12 +247787,31 @@ function routeEdges(c, rects, points, targets) {
     add(e.from, rule.exit, "s", t);
     add(e.to, rule.enter, "t", s);
   }
+  const occupied = /* @__PURE__ */ new Map();
+  points.forEach((p, k) => {
+    if (!p || targets.includes(k)) return;
+    const e = model.edges[k];
+    const rule = c.edgeRules[k];
+    for (const [id, side, q] of [[e.from, rule.exit, p[0]], [e.to, rule.enter, p.at(-1)]]) {
+      const key = `${id}:${side}`;
+      occupied.set(key, [...occupied.get(key) ?? [], side === "north" || side === "south" ? q[0] : q[1]]);
+    }
+  });
   const port = /* @__PURE__ */ new Map();
   for (const [key, list2] of ends) {
     const [id, side] = key.split(":");
     const r = rects.get(id);
     list2.sort((a, b) => a.along - b.along || a.k - b.k);
     const straightUp = side === "south" && c.nodes.has(id) && c.regionOf(id).place === "above-caller";
+    const horizontal = side === "north" || side === "south";
+    const [lo, hi] = horizontal ? [r.x + 4, r.x + r.w - 4] : [r.y + 4, r.y + r.h - 4];
+    const taken = [...occupied.get(key) ?? []];
+    const free = (v) => taken.every((t) => Math.abs(t - v) >= 12);
+    const settle = (v) => {
+      for (let d = 0; d <= hi - lo; d += 2)
+        for (const w of [v + d, v - d]) if (w >= lo && w <= hi && free(w)) return w;
+      return v;
+    };
     let last = -Infinity;
     list2.forEach((slot, i) => {
       const f = (i + 1) / (list2.length + 1);
@@ -247801,7 +247820,9 @@ function routeEdges(c, rects, points, targets) {
         along = Math.min(Math.max(slot.along, r.x + 8), r.x + r.w - 8);
         if (along - last < 12) along = Math.min(last + 12, r.x + r.w - 4);
         last = along;
-      } else along = side === "north" || side === "south" ? r.x + r.w * f : r.y + r.h * f;
+      } else along = horizontal ? r.x + r.w * f : r.y + r.h * f;
+      along = settle(along);
+      taken.push(along);
       const pt = side === "north" ? [r2(along), r.y] : side === "south" ? [r2(along), r2(r.y + r.h)] : side === "east" ? [r2(r.x + r.w), r2(along)] : [r.x, r2(along)];
       port.set(`${slot.k}.${slot.end}`, pt);
     });

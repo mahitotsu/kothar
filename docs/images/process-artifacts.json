@@ -39,7 +39,7 @@
     {
       "id": "adr",
       "region": "record",
-      "x": 960,
+      "x": 961,
       "y": 72,
       "width": 120,
       "height": 56,
@@ -48,7 +48,7 @@
     {
       "id": "report",
       "region": "record",
-      "x": 1180,
+      "x": 1182,
       "y": 72,
       "width": 120,
       "height": 56,
@@ -66,9 +66,9 @@
     {
       "id": "tests",
       "region": "test",
-      "x": 960,
+      "x": 961,
       "y": 168,
-      "width": 120,
+      "width": 122,
       "height": 56,
       "pinned": false
     }
@@ -129,7 +129,7 @@
       "style": "ground",
       "points": [
         [
-          900,
+          901,
           72
         ],
         [
@@ -145,11 +145,11 @@
       "style": "ground",
       "points": [
         [
-          1120,
+          1122,
           72
         ],
         [
-          1020,
+          1021,
           72
         ]
       ]

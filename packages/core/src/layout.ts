@@ -312,12 +312,33 @@ function routeEdges(c: Compiled, rects: Map<string, Rect>, points: (Point[] | un
     add(e.from, rule.exit, "s", t);
     add(e.to, rule.enter, "t", s);
   }
+  // すでに引いた線（ELK が引いた線と、先に経路探索で引いた線）が、どのノードのどの辺のどこから出入りしているか
+  const occupied = new Map<string, number[]>();
+  points.forEach((p, k) => {
+    if (!p || targets.includes(k)) return;
+    const e = model.edges[k];
+    const rule = c.edgeRules[k];
+    for (const [id, side, q] of [[e.from, rule.exit, p[0]], [e.to, rule.enter, p.at(-1)!]] as [string, Side, Point][]) {
+      const key = `${id}:${side}`;
+      occupied.set(key, [...(occupied.get(key) ?? []), side === "north" || side === "south" ? q[0] : q[1]]);
+    }
+  });
   const port = new Map<string, Point>();
   for (const [key, list] of ends) {
     const [id, side] = key.split(":") as [string, Side];
     const r = rects.get(id)!;
     list.sort((a, b) => a.along - b.along || a.k - b.k);
     const straightUp = side === "south" && c.nodes.has(id) && c.regionOf(id).place === "above-caller";
+    const horizontal = side === "north" || side === "south";
+    const [lo, hi] = horizontal ? [r.x + 4, r.x + r.w - 4] : [r.y + 4, r.y + r.h - 4];
+    // すでに出入りしている点から 12px 未満の点は使わない。近ければ、辺の中で最も近い空いた点にずらす
+    const taken = [...(occupied.get(key) ?? [])];
+    const free = (v: number) => taken.every((t) => Math.abs(t - v) >= 12);
+    const settle = (v: number) => {
+      for (let d = 0; d <= hi - lo; d += 2)
+        for (const w of [v + d, v - d]) if (w >= lo && w <= hi && free(w)) return w;
+      return v;
+    };
     let last = -Infinity;
     list.forEach((slot, i) => {
       const f = (i + 1) / (list.length + 1);
@@ -327,7 +348,9 @@ function routeEdges(c: Compiled, rects: Map<string, Rect>, points: (Point[] | un
         along = Math.min(Math.max(slot.along, r.x + 8), r.x + r.w - 8);
         if (along - last < 12) along = Math.min(last + 12, r.x + r.w - 4);
         last = along;
-      } else along = side === "north" || side === "south" ? r.x + r.w * f : r.y + r.h * f;
+      } else along = horizontal ? r.x + r.w * f : r.y + r.h * f;
+      along = settle(along);
+      taken.push(along);
       const pt: Point =
         side === "north" ? [r2(along), r.y]
         : side === "south" ? [r2(along), r2(r.y + r.h)]

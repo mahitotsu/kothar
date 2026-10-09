@@ -1,4 +1,5 @@
 # 作業プロセスのモデル。段階、成果物の種類、役割、決まりと道具のつながりだけを書く。
+# ラベルは docs/process.md の言葉を使う。docs/process.md に書かれていないものは書かない。
 # 個々の要件や仕様の項目は書かない（それらの対応は scripts/trace.ts が出す）。
 
 vocabulary: vocabulary.yaml
@@ -16,19 +17,20 @@ nodes:
   - { id: owner, label: 責任者, attrs: { element: role } }
   # 収束のループの作業
   - { id: write-adr, label: ADR を書く, attrs: { element: activity } }
-  - { id: run-spike, label: 検証する, attrs: { element: activity } }
-  - { id: implement, label: 実装しテストを書く, attrs: { element: activity } }
+  - { id: run-spike, label: 検証を行う, attrs: { element: activity } }
+  - { id: implement, label: 実装し、要件の検証のテストを書く, attrs: { element: activity } }
   # 成果物の種類
   - { id: prfaq, label: PR/FAQ, attrs: { element: artifact, doc: promise } }
-  - { id: experience, label: 体験, attrs: { element: artifact, doc: experience } }
+  - { id: experience, label: シナリオ, attrs: { element: artifact, doc: experience } }
   - { id: requirements, label: 要件, attrs: { element: artifact, doc: requirement } }
   - { id: spec, label: 仕様, attrs: { element: artifact, doc: specification } }
   - { id: adr, label: ADR, attrs: { element: artifact, doc: record } }
   - { id: report, label: 検証の報告書, attrs: { element: artifact, doc: record } }
   - { id: gate, label: ゲートの記録, attrs: { element: artifact, doc: record } }
-  - { id: tests, label: テスト, attrs: { element: artifact, doc: test } }
+  - { id: tests, label: コードとテスト, attrs: { element: artifact, doc: test } }
   # 参照する決まりと道具
   - { id: doc-system, label: 文書体系, attrs: { element: reference } }
+  - { id: plan, label: 計画, attrs: { element: reference } }
   - { id: todo, label: 作業項目の一覧, attrs: { element: reference } }
   - { id: trace, label: 対応表, attrs: { element: reference } }
 
@@ -60,6 +62,7 @@ edges:
   - { from: s6, to: s1, kind: back, label: 次のサイクル }
   # 決まりと道具
   - { from: cycle, to: doc-system, kind: refer }
+  - { from: cycle, to: plan, kind: refer }
   - { from: cycle, to: todo, kind: refer }
   - { from: cycle, to: trace, kind: refer }
   # 成果物を作る

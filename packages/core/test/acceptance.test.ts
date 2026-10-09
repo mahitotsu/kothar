@@ -164,3 +164,8 @@ test("R-DET-2: X06 で線を1本足しても、本流と下段のノードの左
       }
   assert.deepEqual(swapped, []);
 });
+
+test("R-LAYOUT-7: 同じ辺から ELK が引く線と経路探索で引く線が出ても、重ならない", async () => {
+  const d = await draw(new URL("./fixtures/shared-side.yaml", import.meta.url).pathname);
+  assert.deepEqual(d.violations.filter((v) => v.rule === 9), []);
+});
