@@ -5,7 +5,7 @@
 **読み手:** 新しい検証や調査の文書を書き始める人。このリポジトリを複製して、題材だけを替えて使う。
 
 ## 答え
-- **規則は 1 か所。** 読み手を決める、結論を先に書く、1 文書 1 役割、など。要約は [CLAUDE.md](CLAUDE.md)、スキルの形は [skill-draft/write-docs/SKILL.md](skill-draft/write-docs/SKILL.md)。
+- **規則は 1 か所。** 読み手を決める、結論を先に書く、1 文書 1 役割、など。要約は [CLAUDE.md](CLAUDE.md)、スキルの形は [skills/write-docs/SKILL.md](skills/write-docs/SKILL.md)。
 - **雛形は 9 つ。** README、報告書、構成、手順書、事実集、用語集、作業用の 3 つ（計画、経過、設計判断）。各雛形は、何を書くかを示す。
 - **図は SVG をコードで作る。** ライト・ダーク対応。`npm test` が、リンク、表の幅、読み手の行、図と生成物の一致を調べる。
 
@@ -35,6 +35,16 @@ npm run figures     # docs/figures/ の図を作り直す
 2. 各雛形の `<…>` を、題材の内容で埋める。使わない雛形は、削除する。
 3. 図は [scripts/](scripts/) の部品で作る。手順は CLAUDE.md の「図を足す」にある。
 
+## プラグインとして使う
+このリポジトリは、Claude Code のプラグインでもある。スキル `write-docs` が、規則と手順を提供する。
+
+```sh
+claude plugin marketplace add mahitotsu/kothar
+claude plugin install kothar@kothar
+```
+
+雛形（`docs/`）と図の部品（`scripts/`）は、プラグインと一緒に入る。スキルは、新しい文書を書くとき、それらを複製元として使う。
+
 ## 構成
 | パス | 中身 |
 |---|---|
@@ -42,4 +52,5 @@ npm run figures     # docs/figures/ の図を作り直す
 | `docs/figures/` | 生成した SVG（例の 4 枚）と、グラフの入力 JSON |
 | `scripts/` | 図の部品（`svg-parts.ts`）、構成図の例、グラフの部品と例、文書の検査の部品 |
 | `test/` | 文書と図の検査 |
-| `skill-draft/` | スキルの下書き。まだ `~/.claude/skills/` には置かない |
+| `skills/write-docs/` | プラグインのスキル。規則と手順を SKILL.md にしてある |
+| `.claude-plugin/` | プラグインの定義（`plugin.json`）と、マーケットプレイスの定義（`marketplace.json`） |

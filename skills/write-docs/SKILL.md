@@ -58,5 +58,10 @@ description: 人に伝える文書（README、報告書、構成、手順書、�
 - 図には、読み上げ用の title と desc を付ける。文書には、何の図かを 1 文で書く。
 - 生成物をリポジトリに置き、生成し直して一致することをテストで調べる。
 
-## 置き場所（将来）
-`~/.claude/skills/write-docs/SKILL.md` に置く。まだ置かない。置くときは、雛形のリポジトリの `docs/` と `scripts/` を参照先として、この文書の「図」の節に書き足す。
+## 雛形と図の部品（プラグインに同梱）
+プラグインとして入っているときは、`${CLAUDE_PLUGIN_ROOT}` が、次のものの場所を指す。
+- `docs/`: 文書の雛形（report、architecture、runbook、findings、glossary、internal/）。書く文書の雛形を、利用者のリポジトリに複製し、`<…>` を埋める。
+- `scripts/svg-parts.ts`、`example-figures.ts`、`chart-figures.ts`: 図の部品と例。複製して使う。`doc-checks.ts` と `test/` は、検査の部品。
+- `CLAUDE.md`: 利用者のリポジトリの CLAUDE.md に、規則の要約と更新先の表として写す。
+
+複製の前に、利用者のリポジトリに同名のファイルがないか確かめる。ある場合は、上書きせず、利用者に確認する。

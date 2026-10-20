@@ -5,7 +5,7 @@ import { describe, it } from "node:test";
 import { anchors, brokenLinks, hasReaderLine, headHas, slug, wideTables } from "../scripts/doc-checks.ts";
 
 const md = (dir: string) => (existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith(".md")).map((f) => `${dir}/${f}`) : []);
-const skills = existsSync("skill-draft") ? readdirSync("skill-draft").map((d) => `skill-draft/${d}/SKILL.md`).filter(existsSync) : [];
+const skills = existsSync("skills") ? readdirSync("skills").map((d) => `skills/${d}/SKILL.md`).filter(existsSync) : [];
 /** リンクを検査する文書。 */
 const all = ["README.md", "CLAUDE.md", ...md("docs"), ...md("docs/internal"), ...skills];
 /** 読み手の行を持つべき文書（README と CLAUDE.md、スキルの下書きを除く、docs/ の文書）。 */

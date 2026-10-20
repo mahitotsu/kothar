@@ -1,0 +1,12 @@
+{
+  "name": "kothar",
+  "description": "文書の書き方のプラグイン",
+  "owner": { "name": "akring" },
+  "plugins": [
+    {
+      "name": "kothar",
+      "source": "./",
+      "description": "人に伝える文書の規則・雛形・図の部品・検査（スキル write-docs）"
+    }
+  ]
+}

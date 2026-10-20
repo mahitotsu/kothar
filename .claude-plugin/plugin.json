@@ -1,0 +1,8 @@
+{
+  "name": "kothar",
+  "version": "0.1.0",
+  "description": "人に伝える文書の規則・雛形・図の部品・検査。読み手を決め、結論を先に書き、5 つの試験で確かめる。",
+  "author": { "name": "akring" },
+  "license": "MIT",
+  "keywords": ["documentation", "writing", "svg", "diagrams"]
+}
