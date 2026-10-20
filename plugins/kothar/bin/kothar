@@ -1,5 +1,0 @@
-#!/bin/sh
-# Kothar のエンジンの CLI を起動する（ADR 0012）。プラグインを有効にすると、Bash ツールの PATH に入る。
-# エンジンは、プラグインの中にまとめて置いてある（ADR 0013）。
-here=$(dirname "$0")
-exec node "$here/../engine/dist/kothar.mjs" "$@"

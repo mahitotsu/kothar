@@ -1,9 +1,3 @@
 node_modules/
-dist/
-# プラグインに置くまとめたエンジンは、コミットする（ADR 0013）
-!plugins/kothar/engine/dist/
 *.tsbuildinfo
 .DS_Store
-spikes/*/out/
-review/
-evals/out/

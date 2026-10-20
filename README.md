@@ -1,63 +1,45 @@
 # Kothar
 
-構成図に込めた意図を、描き手が確実に表し、読み手が正確に読み取れるようにするツール。配置の約束事を「空間の文法」として宣言し、構成図をその文法に従って生成し、検査する。開発の初期段階（フェーズ3）にある。
+人に伝える文書の、規則・雛形・図の部品・検査を 1 式にした、汎用のリポジトリ。名前は、ウガリット神話の工匠神コシャル・ワ・ハシスから取った。検証・調査・設計の文書を、同じ型で書くために使う。
 
-名前は、ウガリット神話の工匠神コシャル・ワ・ハシスから取った。
+**読み手:** 新しい検証や調査の文書を書き始める人。このリポジトリを複製して、題材だけを替えて使う。
 
-## 文書
+## 答え
+- **規則は 1 か所。** 読み手を決める、結論を先に書く、1 文書 1 役割、など。要約は [CLAUDE.md](CLAUDE.md)、スキルの形は [skill-draft/write-docs/SKILL.md](skill-draft/write-docs/SKILL.md)。
+- **雛形は 9 つ。** README、報告書、構成、手順書、事実集、用語集、作業用の 3 つ（計画、経過、設計判断）。各雛形は、何を書くかを示す。
+- **図は SVG をコードで作る。** ライト・ダーク対応。`npm test` が、リンク、表の幅、読み手の行、図と生成物の一致を調べる。
 
-文書の種類と書き方は [docs/README.md](docs/README.md) にまとめてある。まず読むものは次の4つ。
+## 読む順番
+| 知りたいこと | 読む文書 |
+|---|---|
+| 結論を伝える文書の型 | [docs/report.md](docs/report.md) |
+| 構成と仕様を書く型 | [docs/architecture.md](docs/architecture.md) |
+| 手順を書く型 | [docs/runbook.md](docs/runbook.md) |
+| 確かめた個別の事実を書く型 | [docs/findings.md](docs/findings.md) |
+| 用語の定義を書く型 | [docs/glossary.md](docs/glossary.md) |
+| 作業用の文書（計画、経過、設計判断） | [docs/internal/plan.md](docs/internal/plan.md)、[log.md](docs/internal/log.md)、[design-decisions.md](docs/internal/design-decisions.md) |
 
-- [PR/FAQ](docs/prfaq.md)：誰に何を約束するか
-- [計画](docs/plan.md)：どの順で作り、何で判断するか
-- [ADR](docs/adr/)：何をなぜそう決めたか
-- [作業プロセス](docs/process.md)：どの順で作業し、いつ誰が決めるか
+## 最短の使い方
+前提は Node.js 24 以上と npm。
+
+```sh
+npm install
+npm test            # 文書と図の検査
+npm run typecheck   # 型の検査
+npm run figures     # docs/figures/ の図を作り直す
+```
+
+使い始めるときは、次の順に進める。
+
+1. 題材を決め、[CLAUDE.md](CLAUDE.md) の 1 行目と「読み手」を書き替える。
+2. 各雛形の `<…>` を、題材の内容で埋める。使わない雛形は、削除する。
+3. 図は [scripts/](scripts/) の部品で作る。手順は CLAUDE.md の「図を足す」にある。
 
 ## 構成
-
 | パス | 中身 |
-| --- | --- |
-| `packages/core` | 入力の読み込みと検査、文法のコンパイラ、レイアウト、レンダラー、リンター。`schema/` に語彙、文法、モデルの JSON Schema、`fonts/` に同梱するフォント |
-| `packages/cli` | `kothar render / lint / check` |
-| `plugins/kothar` | Claude Code のプラグイン（未実装） |
-| `.claude-plugin/marketplace.json` | このリポジトリを Claude Code のマーケットプレイスとして公開する |
-| `benchmarks/` | 評価用の図。図ごとに、手で描いた元の図と、込めた文法を置く |
-| `spikes/` | 技術検証のコード。本実装には使わない。結果は `docs/spikes/` の報告書にある |
-| `scripts/` | 開発の補助のスクリプト |
-| `docs/` | PR/FAQ、体験、計画、作業プロセス、ADR、検証の報告書、ゲートの記録 |
-| `TODO.md` | 作業項目の一覧 |
-
-## 開発
-
-Node.js 24 以上が必要。TypeScript はビルドせず、Node の型の除去でそのまま実行する。
-
-```
-npm install
-npm run typecheck
-npm test
-
-# サンプル構成図を描き、検査する
-node packages/cli/src/index.ts render benchmarks/sample-arch/model.yaml --out architecture.svg
-node packages/cli/src/index.ts lint benchmarks/sample-arch/model.yaml
-
-# 同じモデルを、別の文法（信頼境界の図）で描く
-node packages/cli/src/index.ts render benchmarks/sample-arch/model.yaml --grammar benchmarks/sample-arch/trust.yaml --out trust.svg
-
-# 約束、シナリオ、要件、仕様、テストの対応表と、対応の抜けを出力する
-# （npm run trace -- --stage <段階の番号> とすると、その段階までの出る条件に抜けがあれば失敗する）
-npm run trace
-
-# ベンチマークの元の図を描く
-node benchmarks/sample-arch/handplaced.ts > benchmarks/sample-arch/handplaced.svg
-
-# レイアウトの検証を回す（spikes/<検証>/out/ に結果を書く。out/ はコミットしない。
-# 報告書の根拠は docs/spikes/evidence/ にある）
-node spikes/elk-layout/layout.ts
-node spikes/post-place/layout.ts
-node spikes/edge-overlap/layout.ts
-node spikes/font-metrics/measure.ts <フォントを置いたディレクトリ>  # フォントの取り方はコードの冒頭にある
-```
-
-## ライセンス
-
-[MIT](LICENSE)。同梱するフォント（`packages/core/fonts/BIZUDPGothic-Regular.ttf`）は SIL Open Font License 1.1 で、ライセンスの文書は [packages/core/fonts/OFL.txt](packages/core/fonts/OFL.txt) にある。
+|---|---|
+| `docs/` | 文書の雛形。作業用は `docs/internal/` |
+| `docs/figures/` | 生成した SVG（例の 4 枚）と、グラフの入力 JSON |
+| `scripts/` | 図の部品（`svg-parts.ts`）、構成図の例、グラフの部品と例、文書の検査の部品 |
+| `test/` | 文書と図の検査 |
+| `skill-draft/` | スキルの下書き。まだ `~/.claude/skills/` には置かない |

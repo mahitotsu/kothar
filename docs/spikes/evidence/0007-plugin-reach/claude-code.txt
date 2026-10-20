@@ -1,4 +1,0 @@
-**出力：**
-
-1. `probe-bin` → `BIN_OK`
-2. `/home/akring/kothar/spikes/plugin-reach/probe/scripts/root.sh` → `ROOT_OK`

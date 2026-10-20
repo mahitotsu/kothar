@@ -6,10 +6,9 @@
     "strict": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
-    "erasableSyntaxOnly": true,
-    "verbatimModuleSyntax": true,
+    "rewriteRelativeImportExtensions": true,
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["packages/*/src", "packages/*/test", "benchmarks", "spikes", "scripts", "evals"]
+  "include": ["scripts", "test"]
 }

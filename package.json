@@ -1,25 +1,18 @@
 {
-  "name": "kothar-monorepo",
+  "name": "kothar",
   "private": true,
   "license": "MIT",
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "trace": "node scripts/trace.ts",
-    "test": "node --test \"packages/*/test/*.test.ts\"",
-    "build:plugin": "node scripts/build-plugin.ts"
+    "test": "node --test \"test/*.test.ts\"",
+    "figures": "node scripts/example-figures.ts && node scripts/chart-figures.ts"
   },
   "engines": {
     "node": ">=24"
   },
   "devDependencies": {
-    "@types/fontkit": "^2.0.9",
     "@types/node": "^26.6.4",
-    "esbuild": "^0.28.2",
-    "typescript": "^7.0.2",
-    "yaml": "^2.9.1"
+    "typescript": "^7.0.2"
   }
 }
