@@ -5,7 +5,7 @@
 ## 要旨
 - **5 つの原則:** 読み手に要る、見つけられる、分かる、確かめられる、使える・保てる。ISO 24495-1 の 4 原則を土台にし、事実と推定を分ける「確かめられる」を足した。
 - **規則は原則から導く。** 既存の規則はすべて、いずれかの原則に割り付けられた。割り付けられない規則はなかった。
-- **支えの強さに差がある。** 公用文作成の考え方など、本文を読んだ出典が支える規則が多い。数字の上限と表の列数は、出典を確認できなかった（[未確認](#6-未確認)）。
+- **支えの強さに差がある。** 公用文作成の考え方など、本文を読んだ出典が支える規則が多い。数字の上限と表の列数は、出典を確認できなかった（[未確認](#7-未確認)）。
 - **機械で測れるのは一部。** 文の長さ、曖昧語などを警告にした。測れない原則（確かめられる、使える）は、出す前の確認に置いた。
 - **取得日:** 出典は 2026-10-22 に確かめた。
 
@@ -159,11 +159,71 @@
 - **数字の個数:** 段落ごとの個数は、番号や日付、版を誤って数える。試験 5 で人が確かめる。
 - **事実と推定の別:** 機械では判定できない。出す前の確認 1 で人が確かめる。
 
-## 6. 未確認
+## 6. 図の定石
+図の規則は、原則 1〜5 を図に当てはめたもの。図は、種類を選び、主張を書き、色以外の手がかりを足し、表を併記する。種類ごとの書式は [figures.md](../skills/write-docs/figures.md) にある。
+
+| 規則 | 導く原則 | 層 |
+|---|---|---|
+| 図は、文章では伝えにくいときだけ使う。数字が 1 つなら、数字で書く | 1 | ③ |
+| 1 図 1 主張。題名に種類と範囲、説明（`desc`）に要点を書く | 2、3 | ①③ |
+| 矢印は 1 方向で、ラベルを付ける。要素の種類を示し、凡例を付ける | 3 | ③ |
+| 色だけに頼らない。記号、ラベル、位置を併用する | 3 | ① |
+| 棒は 0 から始める。差が小さいときは、ダンベルか折れ線にする | 4 | ①③ |
+| 色で区別する系列は 3 つまで。それ以上は、強調（1 つだけ色を付ける）か分割 | 3 | ①③ |
+| 図の隣に、データの表を置く | 3、5 | ① |
+| 長さと位置で比べる。円グラフと二軸は使わない | 3、4 | ②③ |
+| 目印の色は、背景に対して 3:1 以上。値は文字でも示す | 3 | ① |
+
+<details>
+<summary>根拠</summary>
+
+- GOV.UK Analysis Function, Data visualisation: charts（①）: 「All charts need at least one title, but it is considered best practice to give them two」。棒グラフの軸を切るのは「problematic and highly controversial」。「In general, we should not rely on colour as the only way to match labels to data」。「If you expect a non-disabled user to read the data from the chart, give a table」。積み上げは 4 カテゴリまで、折れ線は 4 本を超えると煩雑。https://analysisfunction.civilservice.gov.uk/policy-store/data-visualisation-charts/ （本文を読んだ）
+- C4 model, Notation（③）: 「Every diagram should have a title describing the diagram type and scope」「Every diagram should have a key/legend」「Every line should represent a unidirectional relationship」「Every line should be labelled」（「Uses」のような 1 語を避ける）。https://c4model.com/diagrams/notation （本文を読んだ）
+- Datawrapper Academy（③）: 棒グラフは 0 から始める。切った軸は、誤解を招く。代わりに、ドットプロットか折れ線を使う。折れ線は 0 から始めなくてよいが、0 に近いなら 0 基線を足す。重要でない線は灰色にする。https://www.datawrapper.de/academy/why-our-column-and-bar-charts-start-at-zero 、https://www.datawrapper.de/academy/what-to-consider-when-creating-line-charts （本文を読んだ）
+- WCAG 2.2, 1.4.11 非テキストのコントラスト（①）: 理解に要るグラフィックは、隣接色に対して 3:1。ラベルと値を文字で示せば、グラフィック自体は必須でなくなりうる。https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html （本文を読んだ）
+- WCAG 2.2, 1.4.1 色の使用（①）: 色だけで情報を伝えない。https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html （検索結果の要約）
+- W3C WAI, Complex images（①）: グラフや図は、短い alt と、要点の長い説明を用意する。https://www.w3.org/WAI/tutorials/images/complex/ （本文を読んだ）
+- Google developer documentation style guide, Images（③）: 画像は、文章では説明しにくいものを見せるときに使う。新しい情報は、図ではなく文章で伝える。図中の文字は短くする。https://developers.google.com/style/images （本文を読んだ）
+- Cleveland & McGill, Graphical Perception（1984、②、二次資料経由）: 共通の目盛り上の位置が最も正確で、長さ、角度、面積の順に落ちる。Heer & Bostock の再現で大筋が確かめられた。異論もある。https://info3312.infosci.cornell.edu/slides/04-graphical-perception.html
+- Few, 二軸の批判（②、二次資料経由）: 二軸を正当化できる場面は見つからないと結論した。https://peltiertech.com/secondary-axes-in-charts-2/ 。本文は未取得
+- UML のシーケンス図（③④、複数の二次資料）: ライフラインは縦の破線で、時間は下へ進む。戻りのメッセージは破線。https://learn.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2012/dd409377(v=vs.110) ほか
+- フローチャート記号（④）: 端子は楕円か角丸の長方形、処理は長方形、判断はひし形。ISO 5807:1985。https://creately.com/guides/flowchart-symbols/
+- ガント図（④、2 件の資料）: 水平の棒は期間、ひし形は節目、縦線は今日、矢印は依存。https://www.instagantt.com/guides/gantt-chart-best-practices
+- 2x2 マトリクス（④）: 軸を定義し、向きを明示する。象限の名前を揃える。https://roadmunk.com/product-management-blog/impact-effort-matrix
+- ColorBrewer（②、二次資料経由）: 順序のあるデータには、明から暗の単色階調。https://en.wikipedia.org/wiki/ColorBrewer
+
+</details>
+
+図の種類ごとに採ったものと、判断した点を示す。
+
+- **横棒:** 位置と長さで比べる。値は先端に書く。強調は、重要な棒だけに色を付け、残りは灰色にする。
+- **折れ線:** 推移を見る。線は 2px。終端にラベルを置き、衝突したら凡例だけにする。
+- **ダンベル:** 前後の 2 点を結ぶ。棒の軸を切らずに、小さな差を見せる。
+- **ヒートマップ:** 単色階調で濃さを表す。値を文字でも書く。階調は 3:1 の対象外とされるが、値の文字で補う。
+- **KPI タイル:** 数字が主張のとき、グラフにしない。状態は、記号と文字を併記する。
+- **シーケンス、フローチャート、タイムライン:** 時間は下か右へ進む。判断の枝にはラベルを付ける。今日の線を引く。
+- **比較（Before/After）:** 追加と削除に、色と記号（＋、−）を併用する。この記法の出典は確認できなかった。WCAG 1.4.1 に従った設計判断で、推定。
+
+図の規則でも、出典どうしが食い違った。
+
+| 論点 | 一方の出典 | もう一方の出典 | 採った側 |
+|---|---|---|---|
+| 凡例か、直接ラベルか | GOV.UK: 凡例は必要なときだけ | 色の対応を凡例で示す定石 | 2 系列以上は凡例を置き、直接ラベルを併用する |
+| 線や系列の数 | GOV.UK: 4 まで | Datawrapper の資料: 5〜7 | 3 つまで。それ以上は強調か分割。色の見分けやすさを優先する |
+| 折れ線を 0 から始めるか | GOV.UK、Datawrapper: 棒は 0 から | Datawrapper: 折れ線は 0 でなくてよい | 棒は 0 から。折れ線は 0 に近いときだけ 0 を足す |
+| 図の中の文字 | Google: 短くする | C4: 要素に短い説明を付ける | 名前と 1 行の補足まで。説明は文章で書く |
+
+図に関して、測らないものも決めた。
+
+- **描かないもの:** 円グラフ、二軸グラフ、3D、虹色。位置と長さで比べられない、または誤読を招く。
+- **対話:** ホバーなどの対話は扱わない。図は、文書に載せる静的な SVG で、表を併記して補う。
+
+## 7. 未確認
 次の出典は、本文を読めなかった。規則の支えとして使った場合は、二次資料に拠っている。
 
 - **有料の規格:** ISO 24495-1、ISO/IEC/IEEE 29148、ISO/IEC/IEEE 29119-3。IEEE 829 の原文。
 - **書籍:** 木下是雄『理科系の作文技術』、本多勝一『日本語の作文技術』。Minto『The Pyramid Principle』、Bryar & Carr『Working Backwards』も、書籍は未確認。
 - **指針の本文:** INCOSE Guide to Writing Requirements、JTCA『日本語スタイルガイド』、AR 25-50 の原文、ISO 704。
 - **規則の出典:** 「数字は 1 段落に 3 個まで」「表は 5 列まで」。既存の規則として保つ。出典を探す作業は残る。
+- **図の出典:** Tufte の本文、Few の仕様書、FT Visual Vocabulary、ISO 5807 の本文、UML 仕様の原文。Now/Next/Later の出典。差分表示（追加・削除）の記法の出典。
 - **確認の方法:** 有料の規格は、購入するか、公開された目次と要約で確かめる。書籍は、図書館で確かめる。
