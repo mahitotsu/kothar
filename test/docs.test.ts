@@ -2,7 +2,9 @@
 import assert from "node:assert/strict";
 import { existsSync, readdirSync } from "node:fs";
 import { describe, it } from "node:test";
-import { anchors, brokenLinks, checkDocs, collectMarkdown, hasReaderLine, placeholders, slug, wideTables } from "../scripts/doc-checks.ts";
+import {
+  aiSubject, anchors, brokenLinks, checkDocs, collectMarkdown, hasReaderLine, longSentences, placeholders, slug, summaryLength, vagueHeadings, vagueWords, warnDocs, wideTables,
+} from "../scripts/doc-checks.ts";
 
 const skills = existsSync("skills") ? readdirSync("skills").flatMap((d) => collectMarkdown([`skills/${d}`])) : [];
 const own = [...collectMarkdown(["README.md", "CLAUDE.md", "docs"]), ...skills];
@@ -28,8 +30,12 @@ describe("雛形", () => {
 
 describe("このプラグイン自身の文書", () => {
   for (const f of own) {
-    it(`${f}: 問題がない（埋め残しも含む）`, () => assert.deepEqual(checkDocs([f]), []));
+    it(`${f}: 誤りも警告もない（埋め残しも含む）`, () => assert.deepEqual([...checkDocs([f]), ...warnDocs([f])], []));
   }
+});
+
+describe("雛形の警告", () => {
+  it("雛形は、警告も出さない", () => assert.deepEqual(warnDocs(templates, {}), []));
 });
 
 describe("検査の部品", () => {
@@ -42,5 +48,25 @@ describe("検査の部品", () => {
   it("hasReaderLine は、読み手の行のない文書を見つける", () => {
     assert.equal(hasReaderLine("test/fixtures/wide-table.md"), false);
     assert.equal(hasReaderLine("test/fixtures/placeholder.md"), true);
+  });
+  it("longSentences は、80 字を超える本文の文だけを見つける（表、details の中は除く）", () => {
+    assert.equal(longSentences("test/fixtures/warnings.md").length, 1);
+    assert.equal(longSentences("test/fixtures/warnings.md", 200).length, 0);
+  });
+  it("vagueWords は、コードの外の曖昧語を見つける（「適切に」「必要に応じて」「なるべく」）", () => {
+    assert.equal(vagueWords("test/fixtures/warnings.md").length, 3);
+  });
+  it("summaryLength は、3〜5 項目の外の要旨を見つける", () => {
+    assert.equal(summaryLength("test/fixtures/warnings.md").length, 1);
+    assert.equal(summaryLength("test/fixtures/placeholder.md").length, 0);
+  });
+  it("vagueHeadings は、「概要」のような見出しを見つける（番号つきも）", () => {
+    assert.equal(vagueHeadings("test/fixtures/warnings.md").length, 1);
+  });
+  it("aiSubject は、一人称の主語を見つける", () => assert.equal(aiSubject("test/fixtures/warnings.md").length, 1));
+  it("warnDocs は、警告を `file:line 警告` の形で返す", () => {
+    const w = warnDocs(["test/fixtures/warnings.md"]);
+    assert.equal(w.length, 1 + 3 + 1 + 1 + 1);
+    assert.ok(w.every((x) => /^test\/fixtures\/warnings\.md:\d+ 警告 /.test(x)));
   });
 });

@@ -163,7 +163,7 @@
 次の出典は、本文を読めなかった。規則の支えとして使った場合は、二次資料に拠っている。
 
 - **有料の規格:** ISO 24495-1、ISO/IEC/IEEE 29148、ISO/IEC/IEEE 29119-3。IEEE 829 の原文。
-- **書籍:** 木下是雄『理科系の作文技術』、本多勝一『日本語の作文技術』、Minto『The Pyramid Principle』、Bryar & Carr『Working Backwards』。
+- **書籍:** 木下是雄『理科系の作文技術』、本多勝一『日本語の作文技術』。Minto『The Pyramid Principle』、Bryar & Carr『Working Backwards』も、書籍は未確認。
 - **指針の本文:** INCOSE Guide to Writing Requirements、JTCA『日本語スタイルガイド』、AR 25-50 の原文、ISO 704。
 - **規則の出典:** 「数字は 1 段落に 3 個まで」「表は 5 列まで」。既存の規則として保つ。出典を探す作業は残る。
 - **確認の方法:** 有料の規格は、購入するか、公開された目次と要約で確かめる。書籍は、図書館で確かめる。
