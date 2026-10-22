@@ -1,0 +1,24 @@
+{
+  "kind": "grid",
+  "title": "応答が遅いときの切り分け（例）",
+  "desc": "応答が遅いとき、まず再現するかを確かめ、再現すれば DB の時間を調べ、再現しなければ経路を調べる。",
+  "nodes": [
+    { "id": "start", "row": 0, "col": 0, "shape": "terminator", "lines": ["応答が遅い"] },
+    { "id": "repro", "row": 1, "col": 0, "shape": "decision", "lines": ["同じ要求で", "再現するか"] },
+    { "id": "net", "row": 1, "col": 1, "lines": ["経路を調べる", "DNS、接続、TLS"] },
+    { "id": "db", "row": 2, "col": 0, "shape": "decision", "lines": ["DB の時間が", "長いか"] },
+    { "id": "idx", "row": 2, "col": 1, "lines": ["クエリを調べる", "索引、実行計画"] },
+    { "id": "app", "row": 3, "col": 0, "lines": ["アプリを調べる", "プロファイル"] },
+    { "id": "done", "row": 3, "col": 1, "shape": "terminator", "lines": ["原因を記録する"] }
+  ],
+  "edges": [
+    { "from": "start", "to": "repro" },
+    { "from": "repro", "to": "net", "label": "いいえ" },
+    { "from": "repro", "to": "db", "label": "はい" },
+    { "from": "db", "to": "idx", "label": "はい" },
+    { "from": "db", "to": "app", "label": "いいえ" },
+    { "from": "net", "to": "done", "dashed": true },
+    { "from": "idx", "to": "done" },
+    { "from": "app", "to": "done" }
+  ]
+}

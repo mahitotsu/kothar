@@ -7,14 +7,14 @@
 ## 答え
 - **規則は 5 つの原則から導く。** 読み手に要る、見つけられる、分かる、確かめられる、使える・保てる。規則と試験の正本は [skills/write-docs/SKILL.md](skills/write-docs/SKILL.md)、出典つきの根拠は [docs/principles.md](docs/principles.md)。
 - **雛形は 21。** 調査・検証、開発、単発の文書まで。雛形ごとの定石と落とし穴を、[catalog.md](skills/write-docs/catalog.md) に置いた。本体は [templates/](templates/)。
-- **図と検査は、複製なしで使う。** 図は JSON の仕様から SVG を作り、`check-docs.ts` がリンク、表の幅、読み手の行、埋め残し、図の一致を調べ、長い文や曖昧語を警告する。依存なし、Node.js 24 以上。
+- **図と検査は、複製なしで使う。** 図は、構造・流れの 6 種とグラフ 8 種を、JSON の仕様から SVG にする（配置は自動）。`check-docs.ts` は、リンク、表の幅、読み手の行、埋め残し、図の一致を調べ、長い文や曖昧語を警告する。依存はなく、Node.js 24 以上で動く。
 
 ## 読む順番
 | 知りたいこと | 読む文書 |
 |---|---|
 | 文書を書く手順と規則 | [skills/write-docs/SKILL.md](skills/write-docs/SKILL.md) |
 | どの雛形を使うか | [skills/write-docs/catalog.md](skills/write-docs/catalog.md) |
-| 図の仕様の書き方 | [skills/write-docs/figures.md](skills/write-docs/figures.md) |
+| 図の選び方と、仕様の書き方 | [skills/write-docs/figures.md](skills/write-docs/figures.md) |
 | 既存の文書の点検 | [skills/review-docs/SKILL.md](skills/review-docs/SKILL.md) |
 | 規則の根拠と出典 | [docs/principles.md](docs/principles.md) |
 | 設計の判断と理由 | [docs/design-decisions.md](docs/design-decisions.md) |
@@ -34,6 +34,7 @@ claude plugin install kothar@kothar
 ```sh
 node <プラグインの場所>/scripts/check-docs.ts docs               # 文書を検査する
 node <プラグインの場所>/scripts/figure.ts docs/figures/x.fig.json  # 仕様から SVG を作る
+node <プラグインの場所>/scripts/figure.ts --table docs/figures/x.fig.json  # 図の隣に置く表を作る
 ```
 
 ## 構成

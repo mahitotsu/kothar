@@ -1,0 +1,90 @@
+{
+  "kind": "compare",
+  "title": "キャッシュの追加（例）",
+  "desc": "変更前は、API が毎回データベースを引く。変更後は、API とデータベースの間にキャッシュを置き、先にキャッシュを引く。",
+  "before": {
+    "label": "変更前",
+    "nodes": [
+      {
+        "id": "api",
+        "row": 0,
+        "col": 0,
+        "cls": "k1",
+        "lines": [
+          "API",
+          "毎回 DB を引く"
+        ]
+      },
+      {
+        "id": "db",
+        "row": 0,
+        "col": 1,
+        "shape": "store",
+        "lines": [
+          "DB"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "db",
+        "label": "読む"
+      }
+    ]
+  },
+  "after": {
+    "label": "変更後",
+    "nodes": [
+      {
+        "id": "api",
+        "row": 0,
+        "col": 0,
+        "cls": "k1",
+        "lines": [
+          "API"
+        ]
+      },
+      {
+        "id": "cache",
+        "row": 0,
+        "col": 1,
+        "diff": "add",
+        "lines": [
+          "キャッシュ",
+          "60 秒"
+        ]
+      },
+      {
+        "id": "db",
+        "row": 0,
+        "col": 2,
+        "shape": "store",
+        "lines": [
+          "DB"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "cache",
+        "label": "先に読む",
+        "diff": "add"
+      },
+      {
+        "from": "cache",
+        "to": "db",
+        "label": "なければ",
+        "diff": "add"
+      },
+      {
+        "from": "api",
+        "to": "db",
+        "label": "直接読む",
+        "diff": "remove"
+      }
+    ]
+  },
+  "note": "DB への直接の読み出しは、なくなる。"
+}

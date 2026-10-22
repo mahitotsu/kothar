@@ -1,0 +1,11 @@
+{
+  "kind": "tiles",
+  "title": "今週の要点（例）",
+  "desc": "例示用の架空の値。応答時間は前週より 12 % 短くなり、エラー率は注意の水準、費用は正常、という KPI タイルの読み方の例。",
+  "tiles": [
+    { "label": "応答時間（中央値）", "value": "70 ms", "delta": "−12 %", "deltaDir": "down", "deltaGood": true, "compare": "前週比", "spark": [120, 119, 96, 74, 71, 70] },
+    { "label": "エラー率", "value": "0.8 %", "delta": "+0.3 pt", "deltaDir": "up", "deltaGood": false, "compare": "前週比", "status": "warn", "statusText": "注意" },
+    { "label": "週の費用", "value": "$42", "delta": "±0 %", "deltaDir": "flat", "compare": "前週比", "status": "ok", "statusText": "正常" }
+  ],
+  "note": "値は例示用。"
+}

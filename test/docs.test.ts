@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { existsSync, readdirSync } from "node:fs";
 import { describe, it } from "node:test";
 import {
-  aiSubject, anchors, brokenLinks, checkDocs, collectMarkdown, hasReaderLine, longSentences, placeholders, slug, summaryLength, vagueHeadings, vagueWords, warnDocs, wideTables,
+  aiSubject, anchors, figureWithoutDesc, brokenLinks, checkDocs, collectMarkdown, hasReaderLine, longSentences, placeholders, slug, summaryLength, vagueHeadings, vagueWords, warnDocs, wideTables,
 } from "../scripts/doc-checks.ts";
 
 const skills = existsSync("skills") ? readdirSync("skills").flatMap((d) => collectMarkdown([`skills/${d}`])) : [];
@@ -69,4 +69,5 @@ describe("検査の部品", () => {
     assert.equal(w.length, 1 + 3 + 1 + 1 + 1);
     assert.ok(w.every((x) => /^test\/fixtures\/warnings\.md:\d+ 警告 /.test(x)));
   });
+  it("figureWithoutDesc は、説明（desc）が 10 字未満の図を見つける", () => assert.equal(figureWithoutDesc("test/fixtures/short-desc.md").length, 1));
 });

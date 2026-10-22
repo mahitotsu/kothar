@@ -1,0 +1,17 @@
+{
+  "kind": "dumbbell",
+  "title": "変更の前後の比較（例）",
+  "desc": "例示用の架空の値。5 つの処理のうち、検索の改善が最も大きく、ログインはほとんど変わらない、という前後比較の読み方の例。",
+  "axisLabel": "応答時間の中央値（ms）",
+  "beforeName": "変更前",
+  "afterName": "変更後",
+  "unit": "ms",
+  "items": [
+    { "label": "検索", "before": 182, "after": 70 },
+    { "label": "注文の確定", "before": 96, "after": 61 },
+    { "label": "在庫の照会", "before": 64, "after": 52 },
+    { "label": "ログイン", "before": 41, "after": 40 },
+    { "label": "商品の一覧", "before": 38, "after": 44 }
+  ],
+  "note": "値は例示用。差の大きい順に並べる。"
+}

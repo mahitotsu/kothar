@@ -1,0 +1,20 @@
+{
+  "kind": "grid",
+  "title": "システムコンテキスト図（例）",
+  "desc": "利用者は、注文 API に要求を送り、注文 API は、在庫システムと決済サービスを呼ぶ。システムの境界は注文 API とデータベースの内側。",
+  "nodes": [
+    { "id": "user", "row": 0, "col": 0, "shape": "actor", "lines": ["利用者", "ブラウザから注文する"] },
+    { "id": "api", "row": 0, "col": 1, "cls": "k1", "lines": ["注文 API", "要求を受けて処理する"] },
+    { "id": "db", "row": 1, "col": 1, "shape": "store", "lines": ["データベース", "注文の記録"] },
+    { "id": "stock", "row": 0, "col": 2, "lines": ["在庫システム", "外部。社内"] },
+    { "id": "pay", "row": 1, "col": 2, "lines": ["決済サービス", "外部。他社"] }
+  ],
+  "groups": [{ "label": "このシステムの境界", "nodes": ["api", "db"] }],
+  "edges": [
+    { "from": "user", "to": "api", "label": "注文する" },
+    { "from": "api", "to": "db", "label": "記録する" },
+    { "from": "api", "to": "stock", "label": "在庫を引く" },
+    { "from": "api", "to": "pay", "label": "支払いを依頼する" }
+  ],
+  "note": "矢印は、要求の向き。外部のシステムは、境界の外に置く。"
+}

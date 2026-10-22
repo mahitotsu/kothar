@@ -74,7 +74,22 @@
 | minutes | 決まったこと、決まらなかったこと、宿題（動詞、担当、期限） | 発言の書き起こしになる |
 | weekly | 進んだこと、遅れ、助けが要ること、決めてほしいこと。次の報告日 | 作業の列挙になり、判断が求められない |
 
-## 4. 置き場所の目安
+## 4. 雛形に向く図
+図は、主張があるときだけ足す。種類の選び方と書式は [figures.md](figures.md)。雛形には、向く図の例（`templates/figures/`）が入っている。
+
+| 雛形 | 向く図 | 例（kind） |
+|---|---|---|
+| report | 項目の比較、前後の差、内訳 | `bars`、`dumbbell`、`stacked` |
+| architecture | 外との関係、層の構成、ビルドの流れ | `grid`（コンテキスト、レイヤー）、`diagram` |
+| design | 変更の前後、要求の流れ | `compare`、`sequence` |
+| proposal | 案の違い、案の位置づけ、費用の比較 | `compare`、`matrix`、`columns` |
+| planning | 日程と節目 | `timeline` |
+| runbook | 切り分けの分岐 | `grid`（`decision`） |
+| test-results | 観点 × 条件の網羅 | `heatmap` |
+| weekly | 今週の数字、推移、上限に対する割合 | `tiles`、`lines`、`meter` |
+| log | 経過の年表 | `timeline` |
+
+## 5. 置き場所の目安
 - 入口の readme は、リポジトリの直下。それ以外は `docs/`。
 - 作業用の記録（plan、log、design-decisions、minutes、weekly）は `docs/internal/` に分けてもよい。分けたら、雛形内のリンクを直す。
 - 図は文書の隣の `figures/` に置く。仕様（`*.fig.json`）とできた SVG を、一緒に置く。

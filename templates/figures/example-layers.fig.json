@@ -1,0 +1,98 @@
+{
+  "kind": "grid",
+  "title": "レイヤー構成（例）",
+  "desc": "上から、画面、API、業務ロジック、データの 4 層。上の層は、すぐ下の層だけを呼ぶ。",
+  "nodes": [
+    {
+      "id": "ui",
+      "row": 0,
+      "col": 0,
+      "colSpan": 3,
+      "cls": "k1",
+      "lines": [
+        "画面",
+        "ブラウザで動く"
+      ]
+    },
+    {
+      "id": "api",
+      "row": 1,
+      "col": 0,
+      "colSpan": 3,
+      "lines": [
+        "API",
+        "要求の検証と、応答の整形"
+      ]
+    },
+    {
+      "id": "order",
+      "row": 2,
+      "col": 0,
+      "lines": [
+        "注文",
+        "確定と取消"
+      ]
+    },
+    {
+      "id": "stock",
+      "row": 2,
+      "col": 1,
+      "lines": [
+        "在庫",
+        "引当と戻し"
+      ]
+    },
+    {
+      "id": "price",
+      "row": 2,
+      "col": 2,
+      "lines": [
+        "価格",
+        "割引の計算"
+      ]
+    },
+    {
+      "id": "db",
+      "row": 3,
+      "col": 0,
+      "colSpan": 3,
+      "shape": "box",
+      "lines": [
+        "データ",
+        "データベースとキャッシュ"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "ui",
+      "to": "api",
+      "label": "HTTPS"
+    },
+    {
+      "from": "api",
+      "to": "order"
+    },
+    {
+      "from": "api",
+      "to": "stock"
+    },
+    {
+      "from": "api",
+      "to": "price"
+    },
+    {
+      "from": "order",
+      "to": "db"
+    },
+    {
+      "from": "stock",
+      "to": "db"
+    },
+    {
+      "from": "price",
+      "to": "db"
+    }
+  ],
+  "note": "層をまたぐ呼び出しは、すぐ下の層だけにする。"
+}

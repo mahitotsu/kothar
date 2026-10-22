@@ -1,39 +1,89 @@
-# 図の仕様の書き方
+# 図の選び方と、仕様の書き方
 
-**この文書の読み手:** 文書に図を足す Claude と人。図の仕様（JSON）を書き、SVG を作り、確かめるまでの手順を示す。
+**この文書の読み手:** 文書に図を足す Claude と人。図が要るかを決め、種類を選び、仕様（JSON）を書き、画像で確かめるまでの手順を示す。根拠は [principles.md](../../docs/principles.md) の「図の定石」にある。
 
 ## 要旨
-- 図は、仕様（`*.fig.json`）から SVG を作る。コードは複製しない。
-- 種類は 3 つ: `diagram`（構成図）、`columns`（棒）、`stacked`（積み上げ棒）。
-- 例は `${CLAUDE_PLUGIN_ROOT}/templates/figures/` の 4 つ。写して書き替える。
+- **図は、文章では伝えにくいときだけ使う。** 数字が 1 つなら、数字で書く。
+- **種類は目的で選ぶ。** 構造・流れの図 6 種と、グラフ 8 種がある（[2](#2-目的から種類を選ぶ)）。
+- **仕様（`*.fig.json`）から SVG を作る。** コードは複製しない。例は `${CLAUDE_PLUGIN_ROOT}/templates/figures/` にある。
+- **1 図 1 主張。** 題名（`title`）に種類と範囲、説明（`desc`）に要点を書く。グラフは、隣に表を置く。
+- **画像にして、目で確かめる。** はみ出しと重なりは、ライトとダークの両方で見る。
 
 ## 1. 手順
-1. 文書の隣の `figures/` に、`名前.fig.json` を書く。例を写すのが早い。
-2. `node ${CLAUDE_PLUGIN_ROOT}/scripts/figure.ts figures/名前.fig.json` で、隣に `名前.svg` を作る。
-3. SVG を画像にして、はみ出し、重なり、矢印の向きを目で確かめる。ライトとダークの両方を見る。
-4. 文書に `![何の図か 1 文で](figures/名前.svg)` で載せる。
-5. `check-docs.ts` が、図の title、ダーク対応、仕様との一致を調べる。`figure.ts --check` でも、一致だけ調べられる。
+1. 図が要るかを決める。文章で言えるなら、書かない。主張を 1 文にする。
+2. [2](#2-目的から種類を選ぶ) の表で、種類を選ぶ。例の仕様を、文書の隣の `figures/` に写す。
+3. `title`（題名）と `desc`（要点）を書く。値や名前を、自分の題材に替える。
+4. `node ${CLAUDE_PLUGIN_ROOT}/scripts/figure.ts figures/名前.fig.json` で、隣に `名前.svg` を作る。はみ出す入力は、エラーになる。直して、作り直す。
+5. SVG を画像にして見る（[5](#5-画像で確かめる)）。
+6. 文書に `![何の図か 1 文で](figures/名前.svg)` で載せる。グラフは、隣に表を置く（`figure.ts --table 仕様` で作る）。
+7. `check-docs.ts` が、図の title、desc、ダーク対応、仕様との一致を調べる。
 
-## 2. 構成図（diagram）
-`parts` に、部品を描く順に並べる。座標は 720 幅の中で、手で決める。
+## 2. 目的から種類を選ぶ
+| 伝えたいこと | 種類（kind） | 向かない場合 |
+|---|---|---|
+| 数字が 1 つ、または少数の要点 | `tiles`（KPI タイル）、`meter`（上限に対する割合） | 値を比べるなら、棒 |
+| 項目の大小、順位 | `bars`（横棒）。1 つだけ強調するなら `highlight` | 負の値は描けない。前後なら `dumbbell` |
+| 前後の差 | `dumbbell` | 項目が 1 つなら、文章 |
+| 時間の推移 | `lines`（折れ線） | 項目の比較なら、棒 |
+| 群ごとの比較、内訳 | `columns`（棒）、`stacked`（積み上げ棒） | 内訳が 4 つ以上なら、表 |
+| 観点 × 条件の網羅 | `heatmap` | 値が 7 段以上の意味を持つなら、表 |
+| システムと外の関係、層、構成 | `grid`（格子の図） | 構成の細部は、表 |
+| 判断の分岐、切り分け | `grid`（`decision` と `terminator`） | 分岐が多いなら、表 |
+| 要求の流れ（時間順） | `sequence` | 参加者が 6 以上なら、分ける |
+| 日程、節目 | `timeline` | 項目が 12 以上なら、分ける |
+| 案の違い（追加・削除） | `compare` | 案が 3 つ以上なら、表 |
+| 2 つの軸での位置づけ | `matrix` | 点が 8 以上なら、表 |
+| 上のどれにも当たらない構成図 | `diagram`（手書き座標） | 座標を手で決めるため、最後の手段 |
 
-| 部品 | 書き方 |
-|---|---|
-| 箱 | `{"box": [x, y, 幅, 高さ], "lines": ["太字の 1 行目", "補足"], "cls": "k1"}`（cls は省略可。`k1` `k2` で色分け） |
-| 枠 | `{"group": [x, y, 幅, 高さ], "label": "名前"}`（箱をまとめる） |
-| 矢印 | `{"arrow": [x1, y1, x2, y2, …], "dashed": false}`（折れ線は直交する点を与える。終点に矢じり） |
-| 文字 | `{"text": [x, y], "value": "…", "anchor": "start"}`（`cls`、`size` は省略可） |
+円グラフ、二軸グラフ、3D、虹色は、作らない。位置と長さで比べられない、または誤読を招く。
 
-トップレベルは `kind`、`title`、`desc`（読み上げ用）、`height`。
+## 3. 構造・流れの図
+座標を手で書くのは `diagram` だけ。ほかは、行・列や日付などの意味を書くと、配置と矢印が決まる。同じ入力から、同じ出力ができる。
 
-## 3. グラフ（columns、stacked）
-- 傾向・差・例外が主張のときに使う。値を引くだけなら表にする。
-- 系列の色は `s1`〜`s5` を順に使い、系列は 3 つまでにする。
-- `columns` は群ごとの棒。`groups`、`series`（`name`、`cls`、`values`）、`yMax`、`ticks`、`yLabel`、`decimals`（値の小数桁。省略で整数表示）、`note`。
-- `stacked` は横の積み上げ。`bars`（`label`、`segments`）、`xMax`、`unit`、`axisLabel`、`note`。
-- 例の値は架空。実際の図の値は、測定や集計のファイルから写す。
+### 3-1. 格子の図（grid）
+- `nodes`: `{id, row, col, lines, shape?, cls?, colSpan?}`。`lines` の 1 行目が太字。`shape` は `box`（既定）、`terminator`（開始・終了）、`decision`（判断）、`actor`（人）、`store`（データベース）。`colSpan` で、横に広げる（レイヤーの帯）。
+- `edges`: `{from, to, label?, dashed?}`。矢印は 1 方向で、ラベルを付ける（「使う」だけの語は避け、「在庫を引く」のように動詞で書く）。
+- `groups`: `{label, nodes}`。システムの境界など。メンバーでない節点を含めない。
+- `legend`: 色や線に意味を持たせたときだけ。`cls` は `k1` `k2`（意味のある色）。
+- コンテキスト図は、境界の枠に内側の節点を入れ、利用者（`actor`）と外部システムを、枠の外に置く。
 
-## 4. 規則
-- 図には読み上げ用の `title` と `desc` を付ける。文書には、何の図かを 1 文で書く。
+### 3-2. シーケンス図（sequence）
+- `participants`: `{id, name, sub?, cls?}`。`sub` に技術や役割を書く。
+- `items`: メッセージ `{from, to, label, type?}`（`type` は `call`、`return`（破線）、`self`）と、注記 `{note: {over: [id…], text}}`。上から下が時間順。
+
+### 3-3. タイムライン（timeline）
+- `start` `end`: 軸の範囲（YYYY-MM-DD）。`today`: 今日の線。実行日に依存しないよう、図に日付を書く。
+- `lanes`: `{name, items}`。期間は `{label, start, end, cls?}`、節目は `{label, date, milestone: true}`。重なる期間は、自動で段を分ける。
+
+### 3-4. 比較図（compare）と、2x2 マトリクス（matrix）
+- `compare`: `before` と `after` に、格子の図の `nodes` `edges` を書く。追加は `diff: "add"`、削除は `diff: "remove"`。色（緑、赤の破線）と記号（＋、−）を併用する。
+- `matrix`: `xAxis` `yAxis`（`name` `low` `high`）、`quadrants`（左上、右上、左下、右下の名前）、`points`（`label` `x` `y`、0〜1）。強調は `highlight: true`。軸の向きを、必ず書く。
+
+## 4. グラフ
+- 棒は、0 から始める。差が小さいときは、`dumbbell` か `lines` にする。
+- 色で区別する系列は 3 つまで。それ以上は、強調（1 つだけ色を付け、残りは灰色）にするか、図を分ける。
+- 値は、文字でも書く。色だけで読ませない。
+- 注目させたい側を、濃くする（`heatmap`）。良い値を濃くすると、問題が薄くなる。
+- `bars`: `items`（`label` `value`）、`axisLabel`、`highlight`（ラベルの配列）、`sort`、`unit`、`decimals`。
+- `lines`: `xLabels`、`series`（`name` `values`。欠測は null）、`highlight`（系列名）、`yMin` `yMax`。終端のラベルが重なると、凡例だけにする。
+- `dumbbell`: `items`（`label` `before` `after`）、`beforeName` `afterName`、`xMin` `xMax`。点の図なので、軸は 0 でなくてよい。
+- `heatmap`: `rows` `cols` `values`（測っていないセルは null）、`min` `max`、`legendName`。階調は 5 段。
+- `tiles`: `tiles`（`label` `value` `delta` `deltaDir` `deltaGood` `compare` `status` `statusText` `spark`）。状態には、`statusText` が要る。`meter`: `meters`（`label` `value` `max` `warnAt` `badAt`）。
+- `columns` `stacked`: 既存の例を写す。
+
+## 5. 画像で確かめる
+SVG を PNG にして、ライトとダークで、次を見る。
+- ラベルがはみ出さず、切れていない。
+- 線と文字が重なっていない。矢印の向きが正しい。
+- 暗い背景で、線と文字が読める。
+- 色を取り去っても（灰色にしても）、意味が分かる。記号、ラベル、位置で伝わっている。
+
+画像にする道具は、環境に合わせて選ぶ（例: `resvg`、ブラウザ）。ダーク表示は `prefers-color-scheme` で切り替わるので、道具が対応しないときは、`<style>` の `@media` の中身を外に出して見る。
+
+## 6. 規則
+- 図には、読み上げ用の `title` と `desc` を付ける。`desc` は、図の要点を書く（10 字以上）。文書には、何の図かを 1 文で書く。
+- 図の中の文字は、名前と 1 行の補足まで。説明は、文章で書く。
 - Mermaid は使わない（表示できない環境がある）。
-- 配色は、部品側（`scripts/svg-parts.ts`）にだけある。仕様に色を書かない。
+- 配色は、部品側（`scripts/svg-parts.ts`）にだけある。仕様に色を書かない。`cls` は、意味を表す名前（`k1` `k2` など）から選ぶ。
+- 状態の色（緑、黄、赤）は、状態にだけ使い、記号と文字を併記する。系列の色には使わない。
+- 青緑（`s3`）は、ライトの背景でコントラストが 3:1 に届かない。値を文字で書くか、表を置く。

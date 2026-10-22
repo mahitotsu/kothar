@@ -192,7 +192,7 @@ export function aiSubject(f: string): string[] {
   return out;
 }
 
-/** 読み上げ用の説明（desc）がない図。 */
+/** 読み上げ用の説明（desc）がない図、または 10 字未満の図。要点を書く欄なので、短すぎるものは足りない。 */
 export function figureWithoutDesc(f: string): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
@@ -201,7 +201,9 @@ export function figureWithoutDesc(f: string): string[] {
       const svg = path.normalize(path.join(path.dirname(f), m[1]));
       if (seen.has(svg) || !existsSync(svg)) continue;
       seen.add(svg);
-      if (!text(svg).includes("<desc")) out.push(`${f}:${no} 警告 ${m[1]} に <desc> がない`);
+      const d = /<desc[^>]*>([^<]*)<\/desc>/.exec(text(svg));
+      if (!d) out.push(`${f}:${no} 警告 ${m[1]} に <desc> がない`);
+      else if ([...d[1].trim()].length < 10) out.push(`${f}:${no} 警告 ${m[1]} の <desc> が短い（図の要点を書く）`);
     }
   }
   return out;

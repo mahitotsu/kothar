@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 728 496" width="728" height="496" role="img" aria-labelledby="t d">
+<title id="t">注文の確定の流れ（例）</title><desc id="d">利用者の注文を、API が在庫システムで確認し、決済サービスで支払い、データベースに記録して、完了を返す。</desc>
+<style>
+  svg { font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif; }
+  .bg { fill: #fcfcfb; } .ink { fill: #0b0b0b; } .ink2 { fill: #52514e; } .ink3 { fill: #898781; } .grid { stroke: #e1e0d9; stroke-width: 1; } .axis { stroke: #c3c2b7; stroke-width: 1; }
+  .box { fill: #ffffff; stroke: #c3c2b7; stroke-width: 1; } .grp { fill: #f4f3f0; stroke: #e1e0d9; stroke-width: 1; } .track { fill: #e1e0d9; }
+  .k1 { fill: #e8f0fb; stroke: #2a78d6; stroke-width: 1.5; } .k2 { fill: #fdeee7; stroke: #eb6834; stroke-width: 1.5; }
+  .kadd { fill: #e6f6ef; stroke: #1baf7a; stroke-width: 1.5; } .krem { fill: #fdeceb; stroke: #e34948; stroke-width: 1.5; stroke-dasharray: 5 3; }
+  .line { stroke: #52514e; stroke-width: 1.5; fill: none; } .dash { stroke: #9a9992; stroke-width: 1; stroke-dasharray: 4 3; fill: none; } .head { fill: #52514e; }
+  .ladd { stroke: #1baf7a; stroke-width: 2; fill: none; } .lrem { stroke: #e34948; stroke-width: 1.5; stroke-dasharray: 5 3; fill: none; } .hadd { fill: #1baf7a; } .hrem { fill: #e34948; }
+  .l1, .l2, .l3, .lg { stroke-width: 2; fill: none; stroke-linejoin: round; stroke-linecap: round; } .l1 { stroke: #2a78d6; } .l2 { stroke: #eb6834; } .l3 { stroke: #1baf7a; } .lg { stroke: #898781; }
+  .link { stroke: #c3c2b7; stroke-width: 3; stroke-linecap: round; } .ring { stroke: #fcfcfb; stroke-width: 2; } .mark { stroke: #0b0b0b; stroke-width: 1.5; } .today { stroke: #0b0b0b; stroke-width: 1.5; }
+  .s1 { fill: #2a78d6; } .s2 { fill: #eb6834; } .s3 { fill: #1baf7a; } .s4 { fill: #eda100; } .s5 { fill: #e87ba4; } .gray { fill: #898781; } .onfill { fill: #0b0b0b; }
+  .h1 { fill: #cde2fb; } .h2 { fill: #86b6ef; } .h3 { fill: #3987e5; } .h4 { fill: #1c5cab; } .h5 { fill: #0d366b; }
+  .t1, .t2, .t3 { fill: #0b0b0b; } .t4, .t5 { fill: #ffffff; }
+  .ok { fill: #0ca30c; } .warn { fill: #fab219; } .bad { fill: #d03b3b; } .glyph { stroke: #ffffff; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  @media (prefers-color-scheme: dark) {
+    .bg { fill: #1a1a19; } .ink { fill: #f0efec; } .ink2 { fill: #c3c2b7; } .ink3 { fill: #898781; } .grid { stroke: #2c2c2a; } .axis { stroke: #383835; }
+    .box { fill: #242422; stroke: #4a4a46; } .grp { fill: #20201f; stroke: #2c2c2a; } .track { fill: #2c2c2a; }
+    .k1 { fill: #17263a; stroke: #3987e5; } .k2 { fill: #3a2218; stroke: #d95926; }
+    .kadd { fill: #12281f; stroke: #199e70; } .krem { fill: #3a1c1c; stroke: #e66767; }
+    .line { stroke: #c3c2b7; } .dash { stroke: #7a7972; } .head { fill: #c3c2b7; }
+    .ladd { stroke: #199e70; } .lrem { stroke: #e66767; } .hadd { fill: #199e70; } .hrem { fill: #e66767; }
+    .l1 { stroke: #3987e5; } .l2 { stroke: #d95926; } .l3 { stroke: #199e70; }
+    .link { stroke: #5a5a55; } .ring { stroke: #1a1a19; } .mark { stroke: #f0efec; } .today { stroke: #f0efec; }
+    .s1 { fill: #3987e5; } .s2 { fill: #d95926; } .s3 { fill: #199e70; } .s4 { fill: #c98500; } .s5 { fill: #d55181; }
+    .h1 { fill: #0d366b; } .h2 { fill: #184f95; } .h3 { fill: #256abf; } .h4 { fill: #3987e5; } .h5 { fill: #9ec5f4; }
+    .t1, .t2, .t3 { fill: #f0efec; } .t4, .t5 { fill: #0b0b0b; }
+  }
+</style>
+<rect class="bg" width="728" height="496"/>
+<line class="dash" x1="76" x2="76" y1="60" y2="458"/><line class="dash" x1="196" x2="196" y1="60" y2="458"/><line class="dash" x1="324" x2="324" y1="60" y2="458"/><line class="dash" x1="444" x2="444" y1="60" y2="458"/><line class="dash" x1="564" x2="564" y1="60" y2="458"/><rect class="box" x="24" y="16" width="104" height="44" rx="6"/><text x="76" y="34" class="ink" font-size="12" text-anchor="middle" font-weight="600">利用者</text><text x="76" y="50" class="ink2" font-size="11" text-anchor="middle" font-weight="400">ブラウザ</text><rect class="k1" x="144" y="16" width="104" height="44" rx="6"/><text x="196" y="34" class="ink" font-size="12" text-anchor="middle" font-weight="600">注文 API</text><text x="196" y="50" class="ink2" font-size="11" text-anchor="middle" font-weight="400">実装 A</text><rect class="box" x="272" y="16" width="104" height="44" rx="6"/><text x="324" y="42" class="ink" font-size="12" text-anchor="middle" font-weight="600">在庫システム</text><rect class="box" x="392" y="16" width="104" height="44" rx="6"/><text x="444" y="42" class="ink" font-size="12" text-anchor="middle" font-weight="600">決済サービス</text><rect class="box" x="512" y="16" width="104" height="44" rx="6"/><text x="564" y="42" class="ink" font-size="12" text-anchor="middle" font-weight="600">データベース</text><polyline class="line" points="78,90 194,90"/><polygon class="head" points="194,90 186.6,86.9 186.6,93.1"/><text x="136" y="83" class="ink" font-size="12" text-anchor="middle" font-weight="400">注文を確定する</text><polyline class="line" points="198,130 322,130"/><polygon class="head" points="322,130 314.6,126.9 314.6,133.1"/><text x="260" y="123" class="ink" font-size="12" text-anchor="middle" font-weight="400">在庫を引き当てる</text><polyline class="dash" points="322,170 198,170"/><polyline class="line" points="205.2,173.5 198,170 205.2,166.5"/><text x="260" y="163" class="ink" font-size="12" text-anchor="middle" font-weight="400">引当の結果</text><rect class="grp" x="188" y="196" width="264" height="26" rx="4"/><text x="320" y="214" class="ink2" font-size="11" text-anchor="middle" font-weight="400">在庫がなければ、ここで中止して 409 を返す</text><polyline class="line" points="198,250 442,250"/><polygon class="head" points="442,250 434.6,246.9 434.6,253.1"/><text x="320" y="243" class="ink" font-size="12" text-anchor="middle" font-weight="400">支払いを依頼する</text><polyline class="dash" points="442,290 198,290"/><polyline class="line" points="205.2,293.5 198,290 205.2,286.5"/><text x="320" y="283" class="ink" font-size="12" text-anchor="middle" font-weight="400">承認</text><polyline class="line" points="198,330 562,330"/><polygon class="head" points="562,330 554.6,326.9 554.6,333.1"/><text x="380" y="323" class="ink" font-size="12" text-anchor="middle" font-weight="400">注文を記録する</text><polyline class="line" points="196,364 232,364 232,380 196,380"/><polygon class="head" points="196,380 203.4,383.1 203.4,376.9"/><text x="240" y="378" class="ink" font-size="12" text-anchor="start" font-weight="400">確認メールを積む</text><polyline class="dash" points="194,410 78,410"/><polyline class="line" points="85.2,413.5 78,410 85.2,406.5"/><text x="136" y="403" class="ink" font-size="12" text-anchor="middle" font-weight="400">完了を返す</text><text x="24" y="486" class="ink2" font-size="11" text-anchor="start" font-weight="400">実線は呼び出し、破線は戻り。</text>
+</svg>

@@ -1,0 +1,24 @@
+{
+  "kind": "sequence",
+  "title": "注文の確定の流れ（例）",
+  "desc": "利用者の注文を、API が在庫システムで確認し、決済サービスで支払い、データベースに記録して、完了を返す。",
+  "participants": [
+    { "id": "user", "name": "利用者", "sub": "ブラウザ" },
+    { "id": "api", "name": "注文 API", "sub": "実装 A", "cls": "k1" },
+    { "id": "stock", "name": "在庫システム" },
+    { "id": "pay", "name": "決済サービス" },
+    { "id": "db", "name": "データベース" }
+  ],
+  "items": [
+    { "from": "user", "to": "api", "label": "注文を確定する" },
+    { "from": "api", "to": "stock", "label": "在庫を引き当てる" },
+    { "from": "stock", "to": "api", "label": "引当の結果", "type": "return" },
+    { "note": { "over": ["api", "pay"], "text": "在庫がなければ、ここで中止して 409 を返す" } },
+    { "from": "api", "to": "pay", "label": "支払いを依頼する" },
+    { "from": "pay", "to": "api", "label": "承認", "type": "return" },
+    { "from": "api", "to": "db", "label": "注文を記録する" },
+    { "from": "api", "to": "api", "label": "確認メールを積む", "type": "self" },
+    { "from": "api", "to": "user", "label": "完了を返す", "type": "return" }
+  ],
+  "note": "実線は呼び出し、破線は戻り。"
+}

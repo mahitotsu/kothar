@@ -1,6 +1,6 @@
 // グラフの部品（棒、積み上げ）。出力は SVG。同じ入力なら同じ出力。仕様（JSON）からの作り方は render-figure.ts。
 // 配色の使い方: 系列には s1〜s5 を順に使う。系列の数は 3 つまで（凡例なしで区別できる限度）。傾向・差・例外を主張する図に使う。
-import { W, frame, r1, text } from "./svg-parts.ts";
+import { W, frame, legend, r1, text } from "./svg-parts.ts";
 
 /** 下が四角で、データ側の端が 4px の丸い棒。 */
 function column(x: number, base: number, h: number, w: number, cls: string): string {
@@ -41,11 +41,7 @@ export function groupedColumns(c: ColumnChart): string {
   for (const t of c.ticks) body += `<line class="grid" x1="${left}" x2="${W - right}" y1="${r1(y(t))}" y2="${r1(y(t))}"/>` + text(left - 8, y(t) + 4, c.fmt(t), "ink2", 11, "end");
   body += `<line class="axis" x1="${left}" x2="${W - right}" y1="${base}" y2="${base}"/>`;
   body += text(left, 22, c.yLabel, "ink2", 12, "start");
-  let lx = left;
-  for (const s of c.series) {
-    body += `<rect class="${s.cls}" x="${lx}" y="34" width="10" height="10" rx="2"/>` + text(lx + 16, 43, s.name, "ink", 12, "start");
-    lx += 16 + s.name.length * 13 + 24;
-  }
+  body += legend(left, 34, c.series.map((s) => ({ cls: s.cls, name: s.name })));
   c.groups.forEach((lines, gi) => {
     const cx = left + slot * gi + slot / 2;
     const present = c.series.filter((s) => s.values[gi] !== null);
@@ -84,12 +80,7 @@ export function stackedBars(c: StackChart): string {
   const left = 96, right = 64, top = 64;
   const perUnit = (W - left - right) / c.xMax;
   let body = text(left, 22, c.axisLabel, "ink2", 12, "start");
-  let lx = left;
-  const names = [...new Map(c.bars.flatMap((b) => b.segments).map((s) => [s.name, s.cls])).entries()];
-  for (const [name, cls] of names) {
-    body += `<rect class="${cls}" x="${lx}" y="34" width="10" height="10" rx="2"/>` + text(lx + 16, 43, name, "ink", 12, "start");
-    lx += 16 + name.length * 13 + 24;
-  }
+  body += legend(left, 34, [...new Map(c.bars.flatMap((b) => b.segments).map((s) => [s.name, s.cls])).entries()].map(([name, cls]) => ({ cls, name })));
   c.bars.forEach((b, bi) => {
     const y = top + bi * 56;
     body += text(left - 10, y + 17, b.label, "ink", 13, "end", 600);
@@ -111,3 +102,15 @@ export function stackedBars(c: StackChart): string {
   if (c.note) body += text(left, H - 10, c.note, "ink2", 11, "start");
   return frame(c.title, c.desc, H, body);
 }
+
+const mdTable = (head: string[], rows: string[][]) => [`| ${head.join(" | ")} |`, `|${head.map(() => "---").join("|")}|`, ...rows.map((r) => `| ${r.join(" | ")} |`)].join("\n");
+
+/** 表の双子: 群ごとの値。 */
+export const columnsTable = (c: Omit<ColumnChart, "fmt"> & { decimals?: number }) =>
+  mdTable(["", ...c.series.map((s) => s.name)], c.groups.map((g, i) => [g.join(" "), ...c.series.map((s) => (s.values[i] === null ? "–" : String(s.values[i])))]));
+
+/** 表の双子: 項目ごとの内訳と合計。 */
+export const stackedTable = (c: StackChart) => {
+  const names = [...new Set(c.bars.flatMap((b) => b.segments.map((s) => s.name)))];
+  return mdTable(["", ...names, `合計（${c.unit}）`], c.bars.map((b) => [b.label, ...names.map((n) => String(b.segments.find((s) => s.name === n)?.value ?? "–")), b.segments.reduce((a, s) => a + s.value, 0).toFixed(1)]));
+};

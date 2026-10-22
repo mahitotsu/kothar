@@ -24,8 +24,9 @@ Kothar は、人に伝える文書の書き方を、規則・雛形・図の部�
 5. 5 つの試験と、出す前の確認を通し、`npm test` を通す。
 
 ## 図の部品を変える
-- 配色は `scripts/svg-parts.ts` の `STYLE` にだけ書く。変えるときは、dataviz のスキルの検証をやり直す。
-- 部品を変えたら `npm run figures` で例を作り直し、画像にして、はみ出し、重なり、矢印の向きを、ライトとダークで目で確かめる。`npm test` が、置いた SVG と生成物の一致を調べる。
+- 配色は `scripts/svg-parts.ts` の `STYLE` にだけ書く。値は、dataviz のスキルの `palette.md` のものを使う。変えるときは、同スキルの `scripts/validate_palette.js` を、ライトとダークで回す。
+- 種類を足すときは、`scripts/` に部品を書き、`scripts/render-figure.ts` の登録表（`KINDS`）と `figureTable` に足す。ラベルが収まらない入力は、描かずにエラーにする（`fit`）。例の仕様を `templates/figures/` に足し、`test/figures.test.ts` に、入力の検査と表の双子のテストを足す。
+- 部品を変えたら `npm run figures` で例を作り直し、画像にして、はみ出し、重なり、矢印の向きを、ライトとダークで目で確かめる。画像にする道具は、環境に入れる（例: scratchpad の venv に `resvg-py`）。リポジトリには、置かない。`npm test` が、置いた SVG と生成物の一致を調べる。
 
 ## 承認が要る操作
 - コミット: 区切りのよいところで、ユーザーに確認してから行う。

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 244" width="720" height="244" role="img" aria-labelledby="t d">
+<title id="t">応答時間の中央値の比較（例）</title><desc id="d">例示用の架空の値。5 つの処理のうち、検索が最も遅く、実装 B の変更はその 1 つだけに効く、という強調つき横棒の読み方の例。</desc>
+<style>
+  svg { font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif; }
+  .bg { fill: #fcfcfb; } .ink { fill: #0b0b0b; } .ink2 { fill: #52514e; } .ink3 { fill: #898781; } .grid { stroke: #e1e0d9; stroke-width: 1; } .axis { stroke: #c3c2b7; stroke-width: 1; }
+  .box { fill: #ffffff; stroke: #c3c2b7; stroke-width: 1; } .grp { fill: #f4f3f0; stroke: #e1e0d9; stroke-width: 1; } .track { fill: #e1e0d9; }
+  .k1 { fill: #e8f0fb; stroke: #2a78d6; stroke-width: 1.5; } .k2 { fill: #fdeee7; stroke: #eb6834; stroke-width: 1.5; }
+  .kadd { fill: #e6f6ef; stroke: #1baf7a; stroke-width: 1.5; } .krem { fill: #fdeceb; stroke: #e34948; stroke-width: 1.5; stroke-dasharray: 5 3; }
+  .line { stroke: #52514e; stroke-width: 1.5; fill: none; } .dash { stroke: #9a9992; stroke-width: 1; stroke-dasharray: 4 3; fill: none; } .head { fill: #52514e; }
+  .ladd { stroke: #1baf7a; stroke-width: 2; fill: none; } .lrem { stroke: #e34948; stroke-width: 1.5; stroke-dasharray: 5 3; fill: none; } .hadd { fill: #1baf7a; } .hrem { fill: #e34948; }
+  .l1, .l2, .l3, .lg { stroke-width: 2; fill: none; stroke-linejoin: round; stroke-linecap: round; } .l1 { stroke: #2a78d6; } .l2 { stroke: #eb6834; } .l3 { stroke: #1baf7a; } .lg { stroke: #898781; }
+  .link { stroke: #c3c2b7; stroke-width: 3; stroke-linecap: round; } .ring { stroke: #fcfcfb; stroke-width: 2; } .mark { stroke: #0b0b0b; stroke-width: 1.5; } .today { stroke: #0b0b0b; stroke-width: 1.5; }
+  .s1 { fill: #2a78d6; } .s2 { fill: #eb6834; } .s3 { fill: #1baf7a; } .s4 { fill: #eda100; } .s5 { fill: #e87ba4; } .gray { fill: #898781; } .onfill { fill: #0b0b0b; }
+  .h1 { fill: #cde2fb; } .h2 { fill: #86b6ef; } .h3 { fill: #3987e5; } .h4 { fill: #1c5cab; } .h5 { fill: #0d366b; }
+  .t1, .t2, .t3 { fill: #0b0b0b; } .t4, .t5 { fill: #ffffff; }
+  .ok { fill: #0ca30c; } .warn { fill: #fab219; } .bad { fill: #d03b3b; } .glyph { stroke: #ffffff; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  @media (prefers-color-scheme: dark) {
+    .bg { fill: #1a1a19; } .ink { fill: #f0efec; } .ink2 { fill: #c3c2b7; } .ink3 { fill: #898781; } .grid { stroke: #2c2c2a; } .axis { stroke: #383835; }
+    .box { fill: #242422; stroke: #4a4a46; } .grp { fill: #20201f; stroke: #2c2c2a; } .track { fill: #2c2c2a; }
+    .k1 { fill: #17263a; stroke: #3987e5; } .k2 { fill: #3a2218; stroke: #d95926; }
+    .kadd { fill: #12281f; stroke: #199e70; } .krem { fill: #3a1c1c; stroke: #e66767; }
+    .line { stroke: #c3c2b7; } .dash { stroke: #7a7972; } .head { fill: #c3c2b7; }
+    .ladd { stroke: #199e70; } .lrem { stroke: #e66767; } .hadd { fill: #199e70; } .hrem { fill: #e66767; }
+    .l1 { stroke: #3987e5; } .l2 { stroke: #d95926; } .l3 { stroke: #199e70; }
+    .link { stroke: #5a5a55; } .ring { stroke: #1a1a19; } .mark { stroke: #f0efec; } .today { stroke: #f0efec; }
+    .s1 { fill: #3987e5; } .s2 { fill: #d95926; } .s3 { fill: #199e70; } .s4 { fill: #c98500; } .s5 { fill: #d55181; }
+    .h1 { fill: #0d366b; } .h2 { fill: #184f95; } .h3 { fill: #256abf; } .h4 { fill: #3987e5; } .h5 { fill: #9ec5f4; }
+    .t1, .t2, .t3 { fill: #f0efec; } .t4, .t5 { fill: #0b0b0b; }
+  }
+</style>
+<rect class="bg" width="720" height="244"/>
+<text x="24" y="22" class="ink2" font-size="12" text-anchor="start" font-weight="400">応答時間の中央値（ms）</text><text x="89" y="63" class="ink" font-size="13" text-anchor="end" font-weight="600">検索</text><path class="s1" d="M103,48 L643,48 A4,4 0 0 1 647,52 L647,64 A4,4 0 0 1 643,68 L103,68 Z"/><text x="655" y="62" class="ink" font-size="12" text-anchor="start" font-weight="700">182 ms</text><text x="89" y="95" class="ink" font-size="13" text-anchor="end" font-weight="600">注文の確定</text><path class="gray" d="M103,80 L385.9,80 A4,4 0 0 1 389.9,84 L389.9,96 A4,4 0 0 1 385.9,100 L103,100 Z"/><text x="397.9" y="94" class="ink" font-size="12" text-anchor="start" font-weight="400">96 ms</text><text x="89" y="127" class="ink" font-size="13" text-anchor="end" font-weight="600">在庫の照会</text><path class="gray" d="M103,112 L290.3,112 A4,4 0 0 1 294.3,116 L294.3,128 A4,4 0 0 1 290.3,132 L103,132 Z"/><text x="302.3" y="126" class="ink" font-size="12" text-anchor="start" font-weight="400">64 ms</text><text x="89" y="159" class="ink" font-size="13" text-anchor="end" font-weight="600">ログイン</text><path class="gray" d="M103,144 L221.5,144 A4,4 0 0 1 225.5,148 L225.5,160 A4,4 0 0 1 221.5,164 L103,164 Z"/><text x="233.5" y="158" class="ink" font-size="12" text-anchor="start" font-weight="400">41 ms</text><text x="89" y="191" class="ink" font-size="13" text-anchor="end" font-weight="600">商品の一覧</text><path class="gray" d="M103,176 L212.6,176 A4,4 0 0 1 216.6,180 L216.6,192 A4,4 0 0 1 212.6,196 L103,196 Z"/><text x="224.6" y="190" class="ink" font-size="12" text-anchor="start" font-weight="400">38 ms</text><line class="axis" x1="103" x2="103" y1="42" y2="202"/><text x="24" y="234" class="ink2" font-size="11" text-anchor="start" font-weight="400">値は例示用。強調は、結論に関わる 1 本だけ。</text>
+</svg>
