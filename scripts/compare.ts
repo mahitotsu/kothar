@@ -13,6 +13,9 @@ export interface CompareSpec {
   note?: string;
 }
 
+/** 配置の警告（矢印の交差、節点の横切り）。 */
+export const compareWarnings = (c: CompareSpec): string[] => [...layoutGrid(c.before).warnings.map((w) => `変更前の図: ${w}`), ...layoutGrid(c.after).warnings.map((w) => `変更後の図: ${w}`)];
+
 export function compare(c: CompareSpec): string {
   const [b, a] = [layoutGrid(c.before), layoutGrid(c.after)];
   const gap = 48, m = 20, head = 28;

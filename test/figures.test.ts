@@ -3,9 +3,11 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import { groupedColumns, stackedBars } from "../scripts/chart-figures.ts";
+import { arrange } from "../scripts/arrange.ts";
 import { niceTicks } from "../scripts/charts-more.ts";
 import { generate, stale, svgPath, tableOf } from "../scripts/figure.ts";
-import { figureTable, renderFigure, type FigureSpec } from "../scripts/render-figure.ts";
+import { figureTable, lintFigure, renderFigure, type FigureSpec } from "../scripts/render-figure.ts";
+import type { GridSpec } from "../scripts/grid.ts";
 import { textWidth } from "../scripts/svg-parts.ts";
 
 const specs = readdirSync("templates/figures").filter((f) => f.endsWith(".fig.json")).map((f) => `templates/figures/${f}`);
@@ -157,4 +159,39 @@ describe("例の図は、機能を使っている", () => {
   });
   it("折れ線は、終端に丸い印（リング）を付ける", () => assert.ok(svg("example-trend").includes("ring")));
   it("強調した横棒は、強調以外が灰色", () => assert.ok(svg("example-ranking").includes('class="gray"')));
+});
+
+describe("配置の警告と自動調整", () => {
+  const n = (id: string, row: number, col: number) => ({ id, row, col, lines: [id] });
+  /** a→d と c→b が、同じ通路を共有して、X 字に交差する配置。 */
+  const crossing: GridSpec = {
+    ...base, kind: "grid",
+    nodes: [n("a", 0, 0), n("b", 0, 1), n("c", 1, 0), n("d", 1, 1)],
+    edges: [{ from: "a", to: "d" }, { from: "c", to: "b" }],
+  };
+  it("例の図は、警告が 0 件", () => {
+    for (const f of specs) assert.deepEqual(lintFigure(JSON.parse(readFileSync(f, "utf8")) as FigureSpec), [], f);
+  });
+  it("交差する矢印を、警告で指す（矢印の両端の id が入る）", () => {
+    const w = lintFigure(crossing);
+    assert.equal(w.length, 1);
+    assert.ok(w[0].includes("a→d") && w[0].includes("c→b") && w[0].includes("交差"));
+  });
+  it("allowCrossings なら、警告が出ない", () => assert.deepEqual(lintFigure({ ...crossing, allowCrossings: true }), []));
+  it("arrange: 同じ行の節点を入れ替えて、交差を 0 にする。同じ入力から、同じ結果", () => {
+    const r = arrange(crossing);
+    assert.equal(r.before, 1);
+    assert.equal(r.after, 0);
+    assert.deepEqual(lintFigure(r.spec), []);
+    assert.deepEqual(arrange(crossing).spec, r.spec);
+    assert.equal(crossing.nodes[0].col, 0, "元の仕様は変えない");
+  });
+  it("arrange: 行をまたぐ入れ替えはしない（行の順を保つ）", () => {
+    const r = arrange(crossing);
+    for (const node of r.spec.nodes) assert.equal(node.row, crossing.nodes.find((m) => m.id === node.id)!.row);
+  });
+  it("compare の警告は、変更前・変更後を区別する", () => {
+    const w = lintFigure({ ...base, kind: "compare", before: crossing, after: { nodes: [n("a", 0, 0)] } } as FigureSpec);
+    assert.ok(w[0].startsWith("変更前の図:"));
+  });
 });

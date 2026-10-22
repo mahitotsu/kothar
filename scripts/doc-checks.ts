@@ -1,7 +1,7 @@
 // 文書の検査の部品。check-docs.ts（CLI）と test/ が使う。リンクとアンカー、表の幅、読み手の行、埋め残し、図を調べる。
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
-import { generate, svgPath } from "./figure.ts";
+import { generate, lintOf, svgPath } from "./figure.ts";
 
 const text = (f: string) => readFileSync(f, "utf8");
 
@@ -90,6 +90,21 @@ export function figureProblems(f: string): string[] {
       if (!body.includes("prefers-color-scheme: dark")) out.push(`${f}:${no} ${m[1]} がダーク表示に対応していない`);
       const spec = svg.replace(/\.svg$/, ".fig.json");
       if (existsSync(spec) && generate(spec) !== body) out.push(`${f}:${no} ${m[1]} が ${path.basename(spec)} の生成物と違う`);
+    }
+  }
+  return out;
+}
+
+/** 文書が参照する図の仕様の、配置の警告（矢印の交差など）。 */
+export function figureLayout(f: string): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const { line, no } of proseLines(f)) {
+    for (const m of line.replace(/`[^`]*`/g, "").matchAll(/!?\[[^\]]*\]\(([^)\s#]+\.svg)\)/g)) {
+      const spec = path.normalize(path.join(path.dirname(f), m[1])).replace(/\.svg$/, ".fig.json");
+      if (seen.has(spec) || !existsSync(spec)) continue;
+      seen.add(spec);
+      out.push(...lintOf(spec).map((w) => `${f}:${no} ${w}`));
     }
   }
   return out;
@@ -239,7 +254,7 @@ export function headHas(f: string, needle: string, n = 14): boolean {
 export function warnDocs(files: string[], opt: CheckOptions = {}): string[] {
   const out: string[] = [];
   for (const f of files) {
-    out.push(...longSentences(f, opt.maxSentence ?? 80), ...vagueWords(f), ...summaryLength(f), ...vagueHeadings(f), ...figureWithoutDesc(f));
+    out.push(...longSentences(f, opt.maxSentence ?? 80), ...vagueWords(f), ...summaryLength(f), ...vagueHeadings(f), ...figureWithoutDesc(f), ...figureLayout(f));
     if (!instructionFile.test(f)) out.push(...aiSubject(f));
   }
   return out;

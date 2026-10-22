@@ -38,6 +38,8 @@ export interface GridSpec extends GridParts {
   desc: string;
   legend?: { cls: BoxClass; name: string }[];
   note?: string;
+  /** 交差を承知で残すときだけ true にする。警告が出なくなる。 */
+  allowCrossings?: boolean;
 }
 
 interface Rect {
@@ -61,7 +63,7 @@ const sizeOf = (n: GridNode): { w: number; h: number } => {
 };
 
 /** 格子の図の中身（SVG の断片）と、大きさを返す。比較（compare）からも使う。 */
-export function layoutGrid(p: GridParts): { body: string; w: number; h: number } {
+export function layoutGrid(p: GridParts, allowCrossings = false): { body: string; w: number; h: number; warnings: string[] } {
   need(p.nodes.length >= 1, "grid: nodes が空");
   const byId = new Map<string, GridNode>();
   for (const n of p.nodes) {
@@ -142,17 +144,20 @@ export function layoutGrid(p: GridParts): { body: string; w: number; h: number }
   // 経路
   const lanesX = colX.map((x, c) => ({ left: x + dx - colGap / 2, right: x + colW[c] + dx + colGap / 2 }));
   const lanesY = rowY.map((y, r) => ({ top: y + dy - rowGap / 2, bottom: y + rowH[r] + dy + rowGap / 2 }));
-  const hits = (pts: number[], skip: string[]): boolean => {
+  /** 経路が横切る節点の id（端の 2 つを除く）。 */
+  const hitIds = (pts: number[], skip: string[]): string[] => {
+    const out = new Set<string>();
     for (let i = 0; i + 3 < pts.length; i += 2) {
       const [x1, y1, x2, y2] = [pts[i], pts[i + 1], pts[i + 2], pts[i + 3]];
       const [ax, bx, ay2, by] = [Math.min(x1, x2), Math.max(x1, x2), Math.min(y1, y2), Math.max(y1, y2)];
       for (const [id, r] of R) {
         if (skip.includes(id)) continue;
-        if (bx > r.x - 4 && ax < r.x + r.w + 4 && by > r.y - 4 && ay2 < r.y + r.h + 4) return true;
+        if (bx > r.x - 4 && ax < r.x + r.w + 4 && by > r.y - 4 && ay2 < r.y + r.h + 4) out.add(id);
       }
     }
-    return false;
+    return [...out];
   };
+  const hits = (pts: number[], skip: string[]): boolean => hitIds(pts, skip).length > 0;
   const route = (a: Rect, b: Rect, ida: string, idb: string): number[] => {
     const right = b.cx > a.cx, down = b.cy > a.cy;
     const ap = { r: [a.x + a.w, a.cy], l: [a.x, a.cy], b: [a.cx, a.y + a.h], t: [a.cx, a.y] };
@@ -199,6 +204,39 @@ export function layoutGrid(p: GridParts): { body: string; w: number; h: number }
     }
     return out;
   };
+  // 検出: 節点を横切る矢印と、矢印どうしの交差
+  const warnings: string[] = [];
+  const paths = ordered.map(({ e, pts }) => ({ e, t: tidy(pts) }));
+  const nm = (e: GridEdge) => `${e.from}→${e.to}`;
+  for (const { e, t } of paths) {
+    const ids = hitIds(t, [e.from, e.to]);
+    if (ids.length) warnings.push(`grid: 矢印「${nm(e)}」が、節点「${ids.join("」「")}」を横切る。row と col を見直し、間に節点がない配置にする`);
+  }
+  const segsOf = (t: number[]) => {
+    const out: { x1: number; y1: number; x2: number; y2: number }[] = [];
+    for (let i = 0; i + 3 < t.length; i += 2) out.push({ x1: t[i], y1: t[i + 1], x2: t[i + 2], y2: t[i + 3] });
+    return out;
+  };
+  const inside = (v: number, a: number, b: number) => v > Math.min(a, b) + 0.5 && v < Math.max(a, b) - 0.5;
+  if (!allowCrossings)
+    for (let i = 0; i < paths.length; i++) for (let j = i + 1; j < paths.length; j++) {
+      const [a, b] = [paths[i], paths[j]];
+      if (a.e.from === b.e.from || a.e.to === b.e.to || a.e.from === b.e.to || a.e.to === b.e.from) continue;
+      let crossed = false;
+      for (const s1 of segsOf(a.t)) for (const s2 of segsOf(b.t)) {
+        const h1 = s1.y1 === s1.y2, h2 = s2.y1 === s2.y2;
+        if (h1 === h2) {
+          // 同じ通路を共有して、重なる（X 字に見える）
+          const [lo1, hi1, lo2, hi2] = h1 ? [Math.min(s1.x1, s1.x2), Math.max(s1.x1, s1.x2), Math.min(s2.x1, s2.x2), Math.max(s2.x1, s2.x2)] : [Math.min(s1.y1, s1.y2), Math.max(s1.y1, s1.y2), Math.min(s2.y1, s2.y2), Math.max(s2.y1, s2.y2)];
+          const same = h1 ? Math.abs(s1.y1 - s2.y1) < 0.5 : Math.abs(s1.x1 - s2.x1) < 0.5;
+          if (same && Math.min(hi1, hi2) - Math.max(lo1, lo2) > 2) crossed = true;
+          continue;
+        }
+        const [hs, vs] = h1 ? [s1, s2] : [s2, s1];
+        if (inside(vs.x1, hs.x1, hs.x2) && inside(hs.y1, vs.y1, vs.y2)) crossed = true;
+      }
+      if (crossed) warnings.push(`grid: 矢印「${nm(a.e)}」と「${nm(b.e)}」が交差する（または同じ通路で重なる）。節点の row と col を入れ替えるか、figure.ts --arrange で自動調整する`);
+    }
   let body = "";
   for (const b of boxes) body += group(r1(b.x + dx), r1(b.y + dy), r1(b.w), r1(b.h), b.g.label);
   for (const { e, pts } of ordered) {
@@ -221,7 +259,7 @@ export function layoutGrid(p: GridParts): { body: string; w: number; h: number }
     const seg = segs[0].len >= need_ + 8 ? segs[0] : [...segs].sort((a, b) => b.len - a.len)[0];
     body += lineLabel((seg.x1 + seg.x2) / 2, (seg.y1 + seg.y2) / 2, e.label);
   }
-  return { body, w: r1(maxX + dx), h: r1(maxY + dy) };
+  return { body, w: r1(maxX + dx), h: r1(maxY + dy), warnings };
 }
 
 /** 追加（＋）・削除（−）の印。円の中に、記号を線で描く。色だけに頼らない。 */
@@ -234,7 +272,7 @@ export function badge(x: number, y: number, kind: "add" | "remove"): string {
 
 export function grid(c: GridSpec): string {
   const m = 20;
-  const { body, w, h } = layoutGrid(c);
+  const { body, w, h } = layoutGrid(c, c.allowCrossings);
   const W2 = Math.max(720, Math.ceil(w + m * 2));
   need(W2 <= 960, `grid: 図が広すぎる（${W2}px）。列を減らす`);
   let out = `<g transform="translate(${r1((W2 - w) / 2)},${m})">${body}</g>`;

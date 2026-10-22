@@ -5,8 +5,8 @@ import { bars, barsTable, dumbbell, dumbbellTable, heatmap, heatmapTable, lines,
 import type { BarsSpec, DumbbellSpec, HeatmapSpec, LinesSpec, MeterSpec, TilesSpec } from "./charts-more.ts";
 import { columnsTable, groupedColumns, stackedBars, stackedTable, type ColumnChart, type StackChart } from "./chart-figures.ts";
 import { diagram, type DiagramSpec } from "./diagram.ts";
-import { compare, type CompareSpec } from "./compare.ts";
-import { grid, type GridSpec } from "./grid.ts";
+import { compare, compareWarnings, type CompareSpec } from "./compare.ts";
+import { grid, layoutGrid, type GridSpec } from "./grid.ts";
 import { matrix, matrixTable, type MatrixSpec } from "./matrix.ts";
 import { sequence, type SequenceSpec } from "./sequence.ts";
 import { timeline, timelineTable, type TimelineSpec } from "./timeline.ts";
@@ -89,5 +89,17 @@ export function figureTable(spec: FigureSpec): string | null {
       return matrixTable(spec);
     default:
       return null;
+  }
+}
+
+/** 配置の警告（矢印の交差、節点の横切り）。エージェントは、0 件になるまで、仕様の row と col を直す。 */
+export function lintFigure(spec: FigureSpec): string[] {
+  switch (spec.kind) {
+    case "grid":
+      return layoutGrid(spec, spec.allowCrossings).warnings;
+    case "compare":
+      return compareWarnings(spec);
+    default:
+      return [];
   }
 }

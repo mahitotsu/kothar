@@ -45,7 +45,7 @@ node <Kothar のパス>/scripts/figure.ts docs/figures/名前.fig.json          
 node <Kothar のパス>/scripts/figure.ts --table docs/figures/名前.fig.json  # 図の隣に置く表を作る
 node <Kothar のパス>/scripts/figure.ts --check docs/figures/*.fig.json      # 置いた SVG が仕様と一致するか調べる
 ```
-図は、仕様（`*.fig.json`）と SVG を一緒に置く。画像にして、ライトとダークで確かめる。
+図は、仕様（`*.fig.json`）と SVG を一緒に置く。矢印の交差などの警告は、`figure.ts --arrange` と仕様の修正で 0 件にする。画像にして、ライトとダークで確かめる。
 
 ## 承認が要る操作
 - コミット: 区切りのよいところで、ユーザーに確認してから行う。
