@@ -3,9 +3,9 @@
 **この文書の読み手:** <このリポジトリのコードと構成を、調べに来た人>。「何が、どう作られているか」の事実の一覧。
 
 関連する文書:
-- 設計の理由: [design-decisions.md](internal/design-decisions.md)
+- 設計の理由: [design-decisions.md](design-decisions.md)
 - 動かし方: [runbook.md](runbook.md)
-- 設計と進め方: [plan.md](internal/plan.md)
+- 設計と進め方: [plan.md](plan.md)
 - 確かめた事実: [findings.md](findings.md)
 - 用語: [用語集](glossary.md)
 

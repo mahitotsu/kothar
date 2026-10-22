@@ -1,56 +1,48 @@
 # Kothar
 
-人に伝える文書の、規則・雛形・図の部品・検査を 1 式にした、汎用のリポジトリ。名前は、ウガリット神話の工匠神コシャル・ワ・ハシスから取った。検証・調査・設計の文書を、同じ型で書くために使う。
+人に伝える文書の、規則・雛形・図の部品・検査を 1 式にした、汎用のリポジトリ。名前は、ウガリット神話の工匠神コシャル・ワ・ハシスから取った。Claude Code のプラグインとして入れると、どのリポジトリでも、読み手を決めた文書を書き、検査で確かめられる。
 
-**読み手:** 新しい検証や調査の文書を書き始める人。このリポジトリを複製して、題材だけを替えて使う。
+**読み手:** 文書を書く人と、文書づくりを Claude Code に任せる人。プラグインを入れ、文書の種類を選んで書き始めるまでを、この文書で示す。
 
 ## 答え
-- **規則は 1 か所。** 読み手を決める、結論を先に書く、1 文書 1 役割、など。要約は [CLAUDE.md](CLAUDE.md)、スキルの形は [skills/write-docs/SKILL.md](skills/write-docs/SKILL.md)。
-- **雛形は 9 つ。** README、報告書、構成、手順書、事実集、用語集、作業用の 3 つ（計画、経過、設計判断）。各雛形は、何を書くかを示す。
-- **図は SVG をコードで作る。** ライト・ダーク対応。`npm test` が、リンク、表の幅、読み手の行、図と生成物の一致を調べる。
+- **規則は 1 か所。** 読み手を決める、結論を先に書く、1 文書 1 役割、5 つの試験。正本は [skills/write-docs/SKILL.md](skills/write-docs/SKILL.md)。
+- **雛形は 21。** 調査・検証、開発、単発の文書まで。選び方は [catalog.md](skills/write-docs/catalog.md)、雛形の本体は [templates/](templates/)。
+- **図と検査は、複製なしで使う。** 図は JSON の仕様から SVG を作り、`check-docs.ts` がリンク、表の幅、読み手の行、埋め残し、図の一致を調べる。依存なし、Node.js 24 以上。
 
 ## 読む順番
 | 知りたいこと | 読む文書 |
 |---|---|
-| 結論を伝える文書の型 | [docs/report.md](docs/report.md) |
-| 構成と仕様を書く型 | [docs/architecture.md](docs/architecture.md) |
-| 手順を書く型 | [docs/runbook.md](docs/runbook.md) |
-| 確かめた個別の事実を書く型 | [docs/findings.md](docs/findings.md) |
-| 用語の定義を書く型 | [docs/glossary.md](docs/glossary.md) |
-| 作業用の文書（計画、経過、設計判断） | [docs/internal/plan.md](docs/internal/plan.md)、[log.md](docs/internal/log.md)、[design-decisions.md](docs/internal/design-decisions.md) |
+| 文書を書く手順と規則 | [skills/write-docs/SKILL.md](skills/write-docs/SKILL.md) |
+| どの雛形を使うか | [skills/write-docs/catalog.md](skills/write-docs/catalog.md) |
+| 図の仕様の書き方 | [skills/write-docs/figures.md](skills/write-docs/figures.md) |
+| 既存の文書の点検 | [skills/review-docs/SKILL.md](skills/review-docs/SKILL.md) |
+| 設計の判断と理由 | [docs/design-decisions.md](docs/design-decisions.md) |
 
 ## 最短の使い方
-前提は Node.js 24 以上と npm。
-
-```sh
-npm install
-npm test            # 文書と図の検査
-npm run typecheck   # 型の検査
-npm run figures     # docs/figures/ の図を作り直す
-```
-
-使い始めるときは、次の順に進める。
-
-1. 題材を決め、[CLAUDE.md](CLAUDE.md) の 1 行目と「読み手」を書き替える。
-2. 各雛形の `<…>` を、題材の内容で埋める。使わない雛形は、削除する。
-3. 図は [scripts/](scripts/) の部品で作る。手順は CLAUDE.md の「図を足す」にある。
-
-## プラグインとして使う
-このリポジトリは、Claude Code のプラグインでもある。スキル `write-docs` が、規則と手順を提供する。
+Claude Code に、プラグインを入れる。
 
 ```sh
 claude plugin marketplace add mahitotsu/kothar
 claude plugin install kothar@kothar
 ```
 
-雛形（`docs/`）と図の部品（`scripts/`）は、プラグインと一緒に入る。スキルは、新しい文書を書くとき、それらを複製元として使う。
+入れたあとは、Claude Code に「要件定義を書いて」「議事録を整えて」「この文書を点検して」と頼む。スキル `write-docs` が、読み手を決め、雛形を写し、検査を回す。スキル `review-docs` は、既存の文書を点検する。
+
+検査と図は、プラグインのスクリプトを直接実行できる。`<プラグインの場所>` は、プラグインを入れた場所（Claude Code では `${CLAUDE_PLUGIN_ROOT}`）。
+
+```sh
+node <プラグインの場所>/scripts/check-docs.ts docs               # 文書を検査する
+node <プラグインの場所>/scripts/figure.ts docs/figures/x.fig.json  # 仕様から SVG を作る
+```
 
 ## 構成
 | パス | 中身 |
 |---|---|
-| `docs/` | 文書の雛形。作業用は `docs/internal/` |
-| `docs/figures/` | 生成した SVG（例の 4 枚）と、グラフの入力 JSON |
-| `scripts/` | 図の部品（`svg-parts.ts`）、構成図の例、グラフの部品と例、文書の検査の部品 |
-| `test/` | 文書と図の検査 |
-| `skills/write-docs/` | プラグインのスキル。規則と手順を SKILL.md にしてある |
-| `.claude-plugin/` | プラグインの定義（`plugin.json`）と、マーケットプレイスの定義（`marketplace.json`） |
+| `skills/` | スキル `write-docs`（書く）と `review-docs`（点検する） |
+| `templates/` | 文書の雛形 20 と、CLAUDE.md の雛形。図の例（`figures/`）も入る |
+| `scripts/` | 検査（`check-docs.ts`）、図の CLI（`figure.ts`）、図の部品 |
+| `test/` | 検査と図の部品のテスト |
+| `docs/` | このプラグイン自身の設計判断 |
+| `.claude-plugin/` | プラグインの定義と、マーケットプレイスの定義 |
+
+このリポジトリを開発するときの約束事は [CLAUDE.md](CLAUDE.md)。

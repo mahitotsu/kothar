@@ -1,0 +1,13 @@
+{
+  "kind": "stacked",
+  "title": "応答時間の内訳（例）",
+  "desc": "例示用の架空の値。A と B の差は、すべて DB の時間にある、という積み上げ棒の読み方の例。",
+  "axisLabel": "応答時間の中央値（ms）の内訳",
+  "unit": "ms",
+  "bars": [
+    { "label": "実装 A", "segments": [{ "name": "経路", "cls": "s3", "value": 3 }, { "name": "アプリ", "cls": "s4", "value": 4 }, { "name": "DB", "cls": "s5", "value": 6 }] },
+    { "label": "実装 B", "segments": [{ "name": "経路", "cls": "s3", "value": 3 }, { "name": "アプリ", "cls": "s4", "value": 4 }, { "name": "DB", "cls": "s5", "value": 2 }] }
+  ],
+  "xMax": 18,
+  "note": "値は例示用。"
+}

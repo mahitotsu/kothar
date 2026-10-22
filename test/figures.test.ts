@@ -1,23 +1,42 @@
-// 図の検査。生成したものが SVG として整っていることと、リポジトリに置いた図が生成物と一致すること。
+// 図の検査。仕様（*.fig.json）から作った SVG が整っていることと、置いた SVG が生成物と一致すること。
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync } from "node:fs";
 import { describe, it } from "node:test";
-import { figures as charts, groupedColumns, stackedBars, type ExampleData } from "../scripts/chart-figures.ts";
-import { figures as diagrams } from "../scripts/example-figures.ts";
+import { groupedColumns, stackedBars } from "../scripts/chart-figures.ts";
+import { generate, stale, svgPath } from "../scripts/figure.ts";
+import { renderFigure } from "../scripts/render-figure.ts";
 
-const data = JSON.parse(readFileSync("docs/figures/example-data.json", "utf8")) as ExampleData;
-const generated = { ...diagrams(), ...charts(data) };
+const specs = readdirSync("templates/figures").filter((f) => f.endsWith(".fig.json")).map((f) => `templates/figures/${f}`);
 
-describe("置いた図は、生成物と一致する", () => {
-  for (const [name, svg] of Object.entries(generated)) {
-    it(`${name}: 整った SVG で、ダーク対応で、docs/figures/ のファイルと同じ`, () => {
-      assert.ok(svg.startsWith("<svg"));
-      assert.ok(svg.includes("<title"));
-      assert.ok(svg.includes("prefers-color-scheme: dark"));
-      assert.equal(readFileSync(`docs/figures/${name}`, "utf8"), svg);
+describe("置いた図は、仕様の生成物と一致する", () => {
+  it("例の仕様が 4 つある", () => assert.equal(specs.length, 4));
+  for (const f of specs) {
+    it(`${svgPath(f)}: 整った SVG で、ダーク対応で、置いたファイルと同じ`, () => {
+      const svg = generate(f);
+      assert.ok(svg.startsWith("<svg") && svg.includes("<title") && svg.includes("prefers-color-scheme: dark"));
+      assert.deepEqual(stale([f]), []);
     });
   }
-  it("同じ入力から、同じ図ができる", () => assert.deepEqual(charts(data), charts(data)));
+  it("同じ入力から、同じ図ができる", () => assert.equal(generate(specs[0]), generate(specs[0])));
+  it("生成物と違う SVG は、stale が見つける", () => assert.deepEqual(stale(["test/fixtures/stale.fig.json"]), ["test/fixtures/stale.fig.json"]));
+});
+
+describe("renderFigure", () => {
+  it("知らない kind は、エラーにする", () => assert.throws(() => renderFigure({ kind: "pie" } as never), /kind/));
+  it("diagram は、箱・枠・矢印・文字を描く", () => {
+    const svg = renderFigure({
+      kind: "diagram", title: "t", desc: "d", height: 100,
+      parts: [
+        { box: [0, 0, 50, 30], lines: ["a", "b"] }, { group: [0, 0, 60, 40], label: "g" },
+        { arrow: [0, 0, 20, 0] }, { text: [5, 5], value: "x<y" },
+      ],
+    });
+    assert.ok(svg.includes('class="box"') && svg.includes('class="grp"') && svg.includes("<polyline") && svg.includes("x&lt;y"));
+  });
+  it("columns の decimals は、値の桁を決める", () => {
+    const c = { kind: "columns" as const, title: "t", desc: "d", yLabel: "y", groups: [["A"]], series: [{ name: "X", cls: "s1" as const, values: [1.5] }], yMax: 2, ticks: [0, 2], decimals: 1 };
+    assert.ok(renderFigure(c).includes(">1.5<") && renderFigure(c).includes(">2.0<"));
+  });
 });
 
 describe("groupedColumns", () => {

@@ -1,60 +1,29 @@
 # CLAUDE.md
 
-<題材を 1 行で。例: 小さな Web API の 2 つの実装を、性能で比べる検証>。Kothar は、人に伝える文書の書き方を、規則・雛形・図・検査にしたもの。文書の雛形は、`docs/` にある。概要は [README.md](README.md)。
+Kothar は、人に伝える文書の書き方を、規則・雛形・図の部品・検査にした Claude Code のプラグイン。入口は [README.md](README.md)。このファイルには、このリポジトリを開発するときの約束事と、つまずきやすい点だけを置く。コードや git から分かることは書かない。
 
-コードや git から分かることは書かない。ここには、作業の約束事と、つまずきやすい点だけを置く。
+## 規則の置き場所（更新先を迷わないために）
+文書の書き方の規則は、[skills/write-docs/SKILL.md](skills/write-docs/SKILL.md) が正本。規則を変えるときは、SKILL.md と、利用者に写す [templates/CLAUDE.md](templates/CLAUDE.md) の要約を、同じ内容に保つ。
 
-## 文書の役割（更新先を迷わないために）
-読み手は <読み手を、前提知識と一緒に書く>。1 つの文書に 1 つの役割を持たせ、混ぜない。
-
-| 書くこと | 更新先 |
+| 変えること | 更新先 |
 |---|---|
-| 答え 3 行、何を調べたか、読む順番、最短の使い方 | [README.md](README.md)（入口） |
-| 結論を伝える。要旨 → 結論 → 理由 → 信頼できる範囲 → 付録 | [docs/report.md](docs/report.md)（主役） |
-| 構成と仕様の事実の一覧 | [docs/architecture.md](docs/architecture.md) |
-| 動かし方、後片付け、つまずきやすい点 | [docs/runbook.md](docs/runbook.md) |
-| 確かめた個別の事実。結論と根拠（コマンド・出典・取得日）を分ける | [docs/findings.md](docs/findings.md) |
-| 用語と、構成名の呼び名の対応 | [docs/glossary.md](docs/glossary.md) |
-| 計画: なぜ・何を・どう測るか。予測と基準。状況や実績は書かない | [docs/internal/plan.md](docs/internal/plan.md) |
-| 経過: 日付つきの実施、判断、費用の実績、次の候補 | [docs/internal/log.md](docs/internal/log.md) |
-| 設計の判断と、その理由 | [docs/internal/design-decisions.md](docs/internal/design-decisions.md) |
+| 規則、5 つの試験、手順 | [skills/write-docs/SKILL.md](skills/write-docs/SKILL.md)、[templates/CLAUDE.md](templates/CLAUDE.md) |
+| 雛形の足し方、文書の組、役割の表 | [skills/write-docs/catalog.md](skills/write-docs/catalog.md)、`templates/` |
+| 図の仕様 | [skills/write-docs/figures.md](skills/write-docs/figures.md)、`scripts/render-figure.ts` |
+| 設計の判断と理由 | [docs/design-decisions.md](docs/design-decisions.md) |
 
-- `docs/internal/` の読み手は、この検証を進める人。それ以外は、検証を知らない人。
-- 人が読む文書は日本語。AI を主語にしない（「私」「Claude」「ユーザー確認済み」と書かない）。
+- 人が読む文書は日本語。AI を主語にしない（「私」「Claude」と書かない）。
+- このリポジトリの文書にも、規則を適用する。`npm test` が、README.md、CLAUDE.md、`docs/`、`skills/` を検査する。
 
-## 文書の書き方（人が読む文書は、すべてこの規則で書く）
-- **冒頭に、読み手と目的を 1〜2 行で書く。** 結論を先に書く。要旨は 3〜5 行。構成は 要旨 → 本文 → 付録。
-- **1 文書 1 役割。** 書く場所に迷ったら、上の表で決める。同じ内容を 2 か所に書かず、リンクする。
-- **見出しは、言いたいことを書く。** 見出しだけ並べて筋が通る。「一般」「範囲」のような曖昧な見出しを使わない。
-- **1 段落 1 主題、第一文に要点。** 1 文 1 義。「これ」「それ」を避け、名詞を繰り返す。
-- **事実・推定・意見を分ける。** 推定は「推定」と書き、根拠を添える。
-- **用語は初出で定義するか、用語集にリンクする。** 同じ概念は同じ語で書く。本文では構成名を役割で呼び、コード上の名前は付録と用語集に置く。
-- **数字は、本文では 1 段落に 3 個まで。** 丸めて代表値を書く。ばらつきは付録に置く。同じ数字を複数の場所に書かず、リンクする。
-- **表は、値を引く・少数を比べるときに使う。1 表 1 メッセージ、5 列以内。** 傾向・差・例外が主張なら図にする。
-- **日付・状況・費用の実績は、設計や結論の文書に書かない。** 経過（log）に書く。
-- **図は SVG で作り、生成するコードをリポジトリに置く。** Mermaid は使わない（表示できない環境がある）。
-
-### 書き終えたら通す 5 つの試験
-1. **30 秒:** タイトルと冒頭だけで、何の文書で、結論が何か分かる。
-2. **見出し:** 見出しだけ読んで、筋が通る。
-3. **第一文:** 各段落の第一文だけ読んで、要約になる。
-4. **用語:** 初出の略語・構成名・ケース名に、定義かリンクがある。
-5. **数字:** 結論の段落の数字が 3 個以内。
-
-## 新しい文書を足す
-1. 上の表で、既存の文書に入らないことを確かめる。入るなら、その文書に書く。
-2. `docs/` に置く（作業用は `docs/internal/`）。冒頭に、タイトル、読み手の行（「**この文書の読み手:**」）、要旨を書く。
-3. 上の表と、README の「読む順番」に 1 行足す。
+## 雛形を足す
+1. [catalog.md](skills/write-docs/catalog.md) の表で、既存の雛形に入らないことを確かめる。
+2. `templates/` に置く。冒頭に、タイトル、読み手の行（「**この文書の読み手:**」）、要旨を書く。`<…>` は、日本語で、埋める内容を書く。
+3. catalog.md の「文書の組」と「雛形ごとの役割」に 1 行足し、`test/docs.test.ts` の雛形の数を直す。
 4. 5 つの試験を通し、`npm test` を通す。
 
-## 図を足す
-1. 構成図（箱と矢印）は [scripts/example-figures.ts](scripts/example-figures.ts) をまねて、`scripts/` に関数を足す。部品は [scripts/svg-parts.ts](scripts/svg-parts.ts)（`box` `group` `arrow` `text` `frame`）。
-2. グラフは [scripts/chart-figures.ts](scripts/chart-figures.ts) の `groupedColumns`（棒）か `stackedBars`（積み上げ）を使い、入力は JSON に置く。系列の色は `s1`〜`s5` を順に使い、3 系列までにする。
-3. 生成する関数を、そのファイルの `figures()` に足し、`npm run figures` で `docs/figures/` に書き出す。
-4. 図を画像にして、はみ出し、重なり、矢印の向きを目で確かめる。ライトとダークの両方を見る。
-5. 文書に `![何の図か 1 文で](figures/<名前>.svg)` で載せる。`npm test` が、置いた図と生成物の一致を調べる。
-
-配色を変えるときは、dataviz のスキルの検証をやり直す。色は `svg-parts.ts` の `STYLE` にだけ書く。
+## 図の部品を変える
+- 配色は `scripts/svg-parts.ts` の `STYLE` にだけ書く。変えるときは、dataviz のスキルの検証をやり直す。
+- 部品を変えたら `npm run figures` で例を作り直し、画像にして、はみ出し、重なり、矢印の向きを、ライトとダークで目で確かめる。`npm test` が、置いた SVG と生成物の一致を調べる。
 
 ## 承認が要る操作
 - コミット: 区切りのよいところで、ユーザーに確認してから行う。
@@ -62,6 +31,6 @@
 - 数値、認証情報、アカウント ID、メールアドレスは、文書にもコードにも書かない。
 
 ## 開発
-- Node.js 24 以上。TypeScript はビルドせず、Node の型の除去で実行する（import は `.ts` 拡張子つき）。
-- `npm install` のあと、`npm test`（文書と図の検査）と `npm run typecheck`。
-- `npm test` が調べること: リンクとアンカーの行き先、表の幅（README と report）、読み手の行（`docs/` の全文書）、図と生成物の一致。
+- Node.js 24 以上。TypeScript はビルドせず、Node の型の除去で実行する（import は `.ts` 拡張子つき）。実行時の依存はない。
+- `npm install` のあと、`npm test`（文書、雛形、図の検査）と `npm run typecheck`。
+- `npm run check` は、このリポジトリの文書に `check-docs.ts` をかける。`npm run figures` は、`templates/figures/` の SVG を作り直す。

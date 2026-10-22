@@ -1,6 +1,6 @@
 # 運用の手順
 
-**この文書の読み手:** <このリポジトリを動かす人。確認、実行、後片付けまで>。構成の事実は [architecture.md](architecture.md)、設計は [plan.md](internal/plan.md)、用語は [用語集](glossary.md)。
+**この文書の読み手:** <このリポジトリを動かす人。確認、実行、後片付けまで>。構成の事実は [architecture.md](architecture.md)、設計は [plan.md](plan.md)、用語は [用語集](glossary.md)。
 
 **実行前の約束**
 - <費用や影響が出る操作は、見積もりを出して承認を得る>
@@ -12,9 +12,7 @@
 
 ## ローカルでの確認
 ```sh
-npm install
-npm test
-npm run typecheck
+<確認のコマンド。例: テストと型の検査>
 ```
 期待する結果: <何が出れば成功か>。
 

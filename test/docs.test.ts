@@ -1,15 +1,12 @@
-// 人が読む文書の検査。リンクとアンカーの行き先、表の幅、読み手の行。規則は CLAUDE.md の「文書の書き方」。
+// 文書の検査。雛形（templates/）と、このプラグイン自身の文書（README.md、docs/）に、check-docs の検査をかける。規則は skills/write-docs/SKILL.md。
 import assert from "node:assert/strict";
 import { existsSync, readdirSync } from "node:fs";
 import { describe, it } from "node:test";
-import { anchors, brokenLinks, hasReaderLine, headHas, slug, wideTables } from "../scripts/doc-checks.ts";
+import { anchors, brokenLinks, checkDocs, collectMarkdown, hasReaderLine, placeholders, slug, wideTables } from "../scripts/doc-checks.ts";
 
-const md = (dir: string) => (existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith(".md")).map((f) => `${dir}/${f}`) : []);
-const skills = existsSync("skills") ? readdirSync("skills").map((d) => `skills/${d}/SKILL.md`).filter(existsSync) : [];
-/** リンクを検査する文書。 */
-const all = ["README.md", "CLAUDE.md", ...md("docs"), ...md("docs/internal"), ...skills];
-/** 読み手の行を持つべき文書（README と CLAUDE.md、スキルの下書きを除く、docs/ の文書）。 */
-const readerDocs = [...md("docs"), ...md("docs/internal")];
+const skills = existsSync("skills") ? readdirSync("skills").flatMap((d) => collectMarkdown([`skills/${d}`])) : [];
+const own = [...collectMarkdown(["README.md", "CLAUDE.md", "docs"]), ...skills];
+const templates = collectMarkdown(["templates"]);
 
 describe("slug", () => {
   it("GitHub と同じ: 記号は消え、空白はハイフンになり、日本語は残る", () => {
@@ -19,37 +16,31 @@ describe("slug", () => {
   });
 });
 
-describe("リンクとアンカー", () => {
-  for (const f of all) {
-    it(`${f}: 相対リンクとアンカーの行き先がある`, () => assert.deepEqual(brokenLinks(f), []));
+describe("雛形", () => {
+  it("雛形が 21 ある（文書の雛形 20 と、CLAUDE.md の雛形）", () => assert.equal(templates.length, 21));
+  for (const f of templates) {
+    it(`${f}: 埋め残し以外の問題がない（リンク、表の幅、読み手の行、図）`, () => assert.deepEqual(checkDocs([f], { allowPlaceholders: true }), []));
   }
-  it("検査が効く: 行き先のない見出しは、アンカーの集合にない", () => {
-    assert.equal(anchors("README.md").has("存在しない見出し"), false);
+  it("雛形には、埋め残しの <…> がある（埋めて使うため）", () => {
+    assert.ok(placeholders("templates/report.md").length > 0);
   });
 });
 
-describe("最初に読まれる文書", () => {
-  for (const f of ["README.md", "docs/report.md"]) {
-    it(`${f}: 5 列を超える表がない`, () => assert.deepEqual(wideTables(f), []));
-  }
-  it("report.md は、冒頭に読み手と要旨がある", () => {
-    assert.ok(headHas("docs/report.md", "読み手"));
-    assert.ok(headHas("docs/report.md", "## 要旨"));
-  });
-  it("README.md は、冒頭に読み手を書く", () => assert.ok(hasReaderLine("README.md", 10)));
-});
-
-describe("読み手の行", () => {
-  for (const f of readerDocs) {
-    it(`${f}: 冒頭に読み手を書いてある`, () => assert.ok(hasReaderLine(f), `${f} の冒頭 14 行に「読み手」がない`));
+describe("このプラグイン自身の文書", () => {
+  for (const f of own) {
+    it(`${f}: 問題がない（埋め残しも含む）`, () => assert.deepEqual(checkDocs([f]), []));
   }
 });
 
 describe("検査の部品", () => {
-  it("wideTables は 6 列の表を見つける", () => {
-    assert.ok(wideTables("test/fixtures/wide-table.md").length > 0);
+  it("wideTables は 6 列の表を見つける", () => assert.ok(wideTables("test/fixtures/wide-table.md").length > 0));
+  it("brokenLinks は、ないファイルとないアンカーを見つける", () => assert.equal(brokenLinks("test/fixtures/broken-links.md").length, 2));
+  it("brokenLinks は、行き先のない見出しを見つける", () => assert.equal(anchors("README.md").has("存在しない見出し"), false));
+  it("placeholders は、本文の <…> だけを見つける（コードとタグは除く）", () => {
+    assert.deepEqual(placeholders("test/fixtures/placeholder.md").length, 1);
   });
-  it("brokenLinks は、ないファイルとないアンカーを見つける", () => {
-    assert.equal(brokenLinks("test/fixtures/broken-links.md").length, 2);
+  it("hasReaderLine は、読み手の行のない文書を見つける", () => {
+    assert.equal(hasReaderLine("test/fixtures/wide-table.md"), false);
+    assert.equal(hasReaderLine("test/fixtures/placeholder.md"), true);
   });
 });

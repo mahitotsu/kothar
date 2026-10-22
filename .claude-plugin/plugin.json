@@ -1,8 +1,18 @@
 {
   "name": "kothar",
-  "version": "0.1.0",
-  "description": "人に伝える文書の規則・雛形・図の部品・検査。読み手を決め、結論を先に書き、5 つの試験で確かめる。",
-  "author": { "name": "akring" },
+  "version": "0.2.0",
+  "description": "人に伝える文書の規則・雛形（調査、開発、単発の 21 種）・図の部品・検査。読み手を決め、結論を先に書き、5 つの試験と検査で確かめる。",
+  "author": {
+    "name": "akring"
+  },
   "license": "MIT",
-  "keywords": ["documentation", "writing", "svg", "diagrams"]
+  "keywords": [
+    "documentation",
+    "writing",
+    "templates",
+    "svg",
+    "diagrams",
+    "requirements",
+    "specification"
+  ]
 }

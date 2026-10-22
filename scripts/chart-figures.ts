@@ -1,9 +1,5 @@
-// グラフの部品（棒、積み上げ）と、その例（docs/figures/example-*.svg）。入力は JSON、出力は SVG。同じ入力なら同じ出力。
-// 使い方: npm run figures   /   node scripts/chart-figures.ts [入力のJSON] [出力先]
+// グラフの部品（棒、積み上げ）。出力は SVG。同じ入力なら同じ出力。仕様（JSON）からの作り方は render-figure.ts。
 // 配色の使い方: 系列には s1〜s5 を順に使う。系列の数は 3 つまで（凡例なしで区別できる限度）。傾向・差・例外を主張する図に使う。
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import path from "node:path";
-import { pathToFileURL } from "node:url";
 import { W, frame, r1, text } from "./svg-parts.ts";
 
 /** 下が四角で、データ側の端が 4px の丸い棒。 */
@@ -114,56 +110,4 @@ export function stackedBars(c: StackChart): string {
   body += `<line class="axis" x1="${left}" x2="${left}" y1="${top - 6}" y2="${top + c.bars.length * 56 - 12}"/>`;
   if (c.note) body += text(left, H - 10, c.note, "ink2", 11, "start");
   return frame(c.title, c.desc, H, body);
-}
-
-// ---- 例: 入力の JSON から図を作る ----
-export interface ExampleData {
-  cost: { unit: string; cases: string[]; a: number[]; b: number[] };
-  latency: Record<"a" | "b", { network: number; app: number; db: number }>;
-}
-
-export function figures(d: ExampleData): Record<string, string> {
-  const seg = (v: { network: number; app: number; db: number }): StackSegment[] => [
-    { name: "経路", cls: "s3", value: v.network },
-    { name: "アプリ", cls: "s4", value: v.app },
-    { name: "DB", cls: "s5", value: v.db },
-  ];
-  return {
-    "example-cost.svg": groupedColumns({
-      title: "コストの比較（例）",
-      desc: "例示用の架空の値。ケース 1 と 3 で A と B が逆転する、というグラフの読み方の例。",
-      yLabel: d.cost.unit,
-      groups: d.cost.cases.map((c) => [c]),
-      series: [
-        { name: "実装 A", cls: "s1", values: d.cost.a },
-        { name: "実装 B", cls: "s2", values: d.cost.b },
-      ],
-      yMax: 16,
-      ticks: [0, 4, 8, 12, 16],
-      fmt: (n) => String(n),
-      note: "値は例示用。実際の図では、測定の結果のファイルから作る。",
-    }),
-    "example-latency.svg": stackedBars({
-      title: "応答時間の内訳（例）",
-      desc: "例示用の架空の値。A と B の差は、すべて DB の時間にある、という積み上げ棒の読み方の例。",
-      axisLabel: "応答時間の中央値（ms）の内訳",
-      unit: "ms",
-      bars: [
-        { label: "実装 A", segments: seg(d.latency.a) },
-        { label: "実装 B", segments: seg(d.latency.b) },
-      ],
-      xMax: 18,
-      note: "値は例示用。",
-    }),
-  };
-}
-
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const [input = "docs/figures/example-data.json", outDir = "docs/figures"] = process.argv.slice(2);
-  const data = JSON.parse(readFileSync(input, "utf8")) as ExampleData;
-  mkdirSync(outDir, { recursive: true });
-  for (const [name, svg] of Object.entries(figures(data))) {
-    writeFileSync(path.join(outDir, name), svg);
-    console.log(`wrote ${path.join(outDir, name)}`);
-  }
 }

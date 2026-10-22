@@ -6,7 +6,8 @@
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node --test \"test/*.test.ts\"",
-    "figures": "node scripts/example-figures.ts && node scripts/chart-figures.ts"
+    "check": "node scripts/check-docs.ts README.md CLAUDE.md docs skills",
+    "figures": "node scripts/figure.ts templates/figures/*.fig.json"
   },
   "engines": {
     "node": ">=24"
