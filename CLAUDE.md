@@ -3,11 +3,11 @@
 Kothar は、人に伝える文書の書き方を、規則・雛形・図の部品・検査にした Claude Code のプラグイン。入口は [README.md](README.md)。このファイルには、このリポジトリを開発するときの約束事と、つまずきやすい点だけを置く。コードや git から分かることは書かない。
 
 ## 規則の置き場所（更新先を迷わないために）
-文書の書き方の規則は、[skills/write-docs/SKILL.md](skills/write-docs/SKILL.md) が正本。規則を変えるときは、SKILL.md と、利用者に写す [templates/CLAUDE.md](templates/CLAUDE.md) の要約を、同じ内容に保つ。規則は原則から導く。変えるときは、[docs/principles.md](docs/principles.md) に出典を足し、出典がない規則は「未確認」に書く。
+文書の書き方の規則は、[skills/write-docs/SKILL.md](skills/write-docs/SKILL.md) が正本。規則を変えるときは、SKILL.md を直す。利用者に写す [templates/CLAUDE.md](templates/CLAUDE.md) には規則を写さず、スキルを参照させる（写しは持たない）。規則は原則から導く。変えるときは、[docs/principles.md](docs/principles.md) に出典を足し、出典がない規則は「未確認」に書く。
 
 | 変えること | 更新先 |
 |---|---|
-| 原則、規則、試験、手順 | [skills/write-docs/SKILL.md](skills/write-docs/SKILL.md)、[templates/CLAUDE.md](templates/CLAUDE.md) |
+| 原則、規則、試験、手順 | [skills/write-docs/SKILL.md](skills/write-docs/SKILL.md) |
 | 規則の根拠、出典、食い違い、検査の閾値 | [docs/principles.md](docs/principles.md) |
 | 雛形の足し方、文書の組、役割の表 | [skills/write-docs/catalog.md](skills/write-docs/catalog.md)、`templates/` |
 | 図の仕様 | [skills/write-docs/figures.md](skills/write-docs/figures.md)、`scripts/render-figure.ts` |

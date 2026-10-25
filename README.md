@@ -29,7 +29,9 @@ claude plugin install kothar@kothar
 
 入れたあとは、Claude Code に「要件定義を書いて」「議事録を整えて」「この文書を点検して」と頼む。スキル `write-docs` が、読み手を決め、雛形を写し、検査を回す。スキル `review-docs` は、既存の文書を点検する。
 
-検査と図は、プラグインのスクリプトを直接実行できる。`<プラグインの場所>` は、プラグインを入れた場所（Claude Code では `${CLAUDE_PLUGIN_ROOT}`）。
+自分のリポジトリの CLAUDE.md には、規則（原則、試験）も、プラグインのパスも写さない。「人が読む文書は、スキル `write-docs` に従う」と書くだけにする（[雛形](templates/CLAUDE.md)）。規則を写すと、スキルが起動されず、規則が古くなる。パスは版ごとに変わる。
+
+検査と図は、手で実行することもできる。`<プラグインの場所>` は、プラグインを入れた場所（Claude Code では `${CLAUDE_PLUGIN_ROOT}`）。
 
 ```sh
 node <プラグインの場所>/scripts/check-docs.ts docs               # 文書を検査する

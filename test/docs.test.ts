@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { existsSync, readdirSync } from "node:fs";
 import { describe, it } from "node:test";
 import {
-  aiSubject, anchors, figureWithoutDesc, brokenLinks, checkDocs, collectMarkdown, hasReaderLine, longSentences, placeholders, slug, summaryLength, vagueHeadings, vagueWords, warnDocs, wideTables,
+  aiSubject, anchors, figureWithoutDesc, brokenLinks, checkDocs, collectMarkdown, hasReaderLine, longSentences, placeholders, slug, summaryLength, vagueHeadings, vagueWords, warnDocs, warnDocsDetailed, wideTables,
 } from "../scripts/doc-checks.ts";
 
 const skills = existsSync("skills") ? readdirSync("skills").flatMap((d) => collectMarkdown([`skills/${d}`])) : [];
@@ -68,6 +68,13 @@ describe("検査の部品", () => {
     const w = warnDocs(["test/fixtures/warnings.md"]);
     assert.equal(w.length, 1 + 3 + 1 + 1 + 1);
     assert.ok(w.every((x) => /^test\/fixtures\/warnings\.md:\d+ 警告 /.test(x)));
+  });
+  it("抑制: 理由つきのコメントは次の行と行末の警告を抑え、理由のないものは警告になる", () => {
+    const r = warnDocsDetailed(["test/fixtures/suppressed.md"]);
+    assert.equal(r.suppressed, 2);
+    assert.equal(r.warnings.length, 2); // 理由のない抑制と、抑えられなかった「なるべく」
+    assert.ok(r.warnings.some((w) => w.includes("抑制に理由がない")));
+    assert.deepEqual(checkDocs(["test/fixtures/suppressed.md"]), []); // コメントは埋め残しにならない
   });
   it("figureWithoutDesc は、説明（desc）が 10 字未満の図を見つける", () => assert.equal(figureWithoutDesc("test/fixtures/short-desc.md").length, 1));
 });

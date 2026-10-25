@@ -70,7 +70,7 @@ export function hasReaderLine(f: string, n = 14): boolean {
 export function placeholders(f: string): string[] {
   const out: string[] = [];
   for (const { line, no } of proseLines(f)) {
-    const m = line.replace(/`[^`]*`/g, "").match(/<[^<>\n]*[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}][^<>\n]*>/u);
+    const m = line.replace(/`[^`]*`/g, "").replace(/<!--.*?-->/g, "").match(/<[^<>\n]*[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}][^<>\n]*>/u);
     if (m) out.push(`${f}:${no} 埋め残し ${m[0]}`);
   }
   return out;
@@ -250,12 +250,45 @@ export function headHas(f: string, needle: string, n = 14): boolean {
   return text(f).split("\n").slice(0, n).join("\n").includes(needle);
 }
 
-/** 警告（規則の目安。誤検知がありうる）を `file:line 警告 内容` で返す。 */
-export function warnDocs(files: string[], opt: CheckOptions = {}): string[] {
-  const out: string[] = [];
+/** 警告の抑制: `<!-- check-docs: 残す 理由 -->`。単独の行なら次の空でない行、行末なら、その行の警告を抑える。理由がなければ抑えず、警告にする。 */
+const SUPPRESS = /<!--\s*check-docs:\s*残す(?:\s+(.*?))?\s*-->/;
+export function suppressions(f: string): { lines: Set<number>; problems: string[] } {
+  const lines = new Set<number>();
+  const problems: string[] = [];
+  const prose = proseLines(f);
+  prose.forEach(({ line, no }, i) => {
+    const m = SUPPRESS.exec(line);
+    if (!m) return;
+    if (!m[1]?.trim()) {
+      problems.push(`${f}:${no} 警告 抑制に理由がない（\`<!-- check-docs: 残す 理由 -->\` の形で書く）`);
+      return;
+    }
+    if (line.replace(SUPPRESS, "").trim()) lines.add(no);
+    else {
+      const next = prose.slice(i + 1).find((l) => l.line.trim());
+      if (next) lines.add(next.no);
+    }
+  });
+  return { lines, problems };
+}
+
+/** 警告（規則の目安。誤検知がありうる）を `file:line 警告 内容` で返す。抑制された警告は除き、その件数を添える。 */
+export function warnDocsDetailed(files: string[], opt: CheckOptions = {}): { warnings: string[]; suppressed: number } {
+  const warnings: string[] = [];
+  let suppressed = 0;
   for (const f of files) {
-    out.push(...longSentences(f, opt.maxSentence ?? 80), ...vagueWords(f), ...summaryLength(f), ...vagueHeadings(f), ...figureWithoutDesc(f), ...figureLayout(f));
-    if (!instructionFile.test(f)) out.push(...aiSubject(f));
+    const found = [...longSentences(f, opt.maxSentence ?? 80), ...vagueWords(f), ...summaryLength(f), ...vagueHeadings(f), ...figureWithoutDesc(f), ...figureLayout(f)];
+    if (!instructionFile.test(f)) found.push(...aiSubject(f));
+    const { lines, problems } = suppressions(f);
+    for (const w of found) {
+      if (lines.has(Number(w.slice(f.length + 1).split(" ")[0]))) suppressed++;
+      else warnings.push(w);
+    }
+    warnings.push(...problems);
   }
-  return out;
+  return { warnings, suppressed };
+}
+
+export function warnDocs(files: string[], opt: CheckOptions = {}): string[] {
+  return warnDocsDetailed(files, opt).warnings;
 }
