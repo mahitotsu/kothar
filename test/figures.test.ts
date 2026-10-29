@@ -120,6 +120,7 @@ describe("入力の検査", () => {
     bad({ ...base, kind: "grid", nodes: [n("a", 0, 0)], edges: [{ from: "a", to: "z" }] }, /nodes にない/);
     bad({ ...base, kind: "grid", nodes: [n("a", 0, 0), n("b", 0, 0)] }, /同じセル/);
     bad({ ...base, kind: "grid", nodes: [n("a", 0, 0), n("b", 0, 1), n("c", 0, 2)], groups: [{ label: "g", nodes: ["a", "c"] }] }, /含む/);
+    bad({ ...base, kind: "grid", nodes: [n("a", 0, 0), n("b", 0, 1)], edges: [{ from: "a", to: "b", dashed: true, dotted: true }] }, /両方/);
   });
   it("sequence: 知らない参加者はエラー。timeline: 軸の外の日付はエラー。matrix: 座標は 0〜1", () => {
     bad({ ...base, kind: "sequence", participants: [{ id: "a", name: "A" }, { id: "b", name: "B" }], items: [{ from: "a", to: "z", label: "x" }] }, /participants にない/);
@@ -158,6 +159,10 @@ describe("例の図は、機能を使っている", () => {
     assert.ok(s.includes("注意") && s.includes("正常") && s.includes("glyph"));
   });
   it("折れ線は、終端に丸い印（リング）を付ける", () => assert.ok(svg("example-trend").includes("ring")));
+  it("構成図は、実線と点線を使い分ける", () => {
+    const s = svg("example-context");
+    assert.ok(s.includes('class="line"') && s.includes('class="dot"'));
+  });
   it("強調した横棒は、強調以外が灰色", () => assert.ok(svg("example-ranking").includes('class="gray"')));
 });
 

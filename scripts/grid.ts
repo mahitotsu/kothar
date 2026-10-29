@@ -21,6 +21,8 @@ export interface GridEdge {
   to: string;
   label?: string;
   dashed?: boolean;
+  /** 点線。破線と形・太さ・濃さで区別する。dashed と同時には使えない。 */
+  dotted?: boolean;
   diff?: "add" | "remove";
 }
 export interface GridGroup {
@@ -71,7 +73,10 @@ export function layoutGrid(p: GridParts, allowCrossings = false): { body: string
     need(Number.isInteger(n.row) && Number.isInteger(n.col) && n.row >= 0 && n.col >= 0, `grid: 節点「${n.id}」の row と col は 0 以上の整数`);
     byId.set(n.id, n);
   }
-  for (const e of p.edges ?? []) need(byId.has(e.from) && byId.has(e.to), `grid: 矢印の端「${e.from}」→「${e.to}」が nodes にない`);
+  for (const e of p.edges ?? []) {
+    need(byId.has(e.from) && byId.has(e.to), `grid: 矢印の端「${e.from}」→「${e.to}」が nodes にない`);
+    need(!(e.dashed && e.dotted), `grid: 矢印「${e.from}」→「${e.to}」に dashed と dotted の両方がある`);
+  }
   for (const g of p.groups ?? []) for (const id of g.nodes) need(byId.has(id), `grid: 枠「${g.label}」の節点「${id}」が nodes にない`);
   const cell = new Set<string>();
   for (const n of p.nodes) for (let c = n.col; c < n.col + (n.colSpan ?? 1); c++) {
@@ -241,7 +246,7 @@ export function layoutGrid(p: GridParts, allowCrossings = false): { body: string
   for (const b of boxes) body += group(r1(b.x + dx), r1(b.y + dy), r1(b.w), r1(b.h), b.g.label);
   for (const { e, pts } of ordered) {
     const t = tidy(pts);
-    body += e.diff === "add" ? arrow(t, false, "ladd", "hadd") : e.diff === "remove" ? arrow(t, true, "lrem", "hrem") : arrow(t, e.dashed);
+    body += e.diff === "add" ? arrow(t, false, "ladd", "hadd") : e.diff === "remove" ? arrow(t, true, "lrem", "hrem") : arrow(t, e.dashed, e.dotted ? "dot" : "");
   }
   for (const n of p.nodes) {
     const r = R.get(n.id) as Rect;
