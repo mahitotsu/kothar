@@ -5,9 +5,9 @@
 **読み手:** 文書を書く人と、文書づくりを Claude Code に任せる人。プラグインを入れ、文書の種類を選んで書き始めるまでを、この文書で示す。
 
 ## 答え
-- **規則は 5 つの原則から導く。** 読み手に要る、見つけられる、分かる、確かめられる、使える・保てる。規則と試験の正本は [skills/write-docs/SKILL.md](skills/write-docs/SKILL.md)、出典つきの根拠は [docs/principles.md](docs/principles.md)。
+- **規則は 5 つの原則から導く。** 「読み手に要る」「見つけられる」「分かる」「確かめられる」「使える・保てる」の 5 つ。規則と試験の正本は [skills/write-docs/SKILL.md](skills/write-docs/SKILL.md)、出典つきの根拠は [docs/principles.md](docs/principles.md)。
 - **雛形は 21。** 調査・検証、開発、単発の文書まで。雛形ごとの定石と落とし穴を、[catalog.md](skills/write-docs/catalog.md) に置いた。本体は [templates/](templates/)。
-- **図と検査は、複製なしで使う。** 図は、構造・流れの 6 種とグラフ 8 種を、JSON の仕様から SVG にする（配置は自動）。`check-docs.ts` は、リンク、表の幅、読み手の行、埋め残し、図の一致を調べ、長い文、曖昧語、冗長な表現、誇張の語などを警告する。依存はなく、Node.js 24 以上で動く。
+- **図と検査は、複製なしで使う。** 図は、構造・流れの 6 種とグラフ 8 種を、JSON の仕様から SVG にする（配置は自動）。`check-docs.ts` は、リンク、表の幅、読み手の行、埋め残し、図の一致を調べる。長い文、曖昧語、冗長な表現、誇張の語などは、警告にする。textlint を使うなら、設定の雛形もある。依存はなく、Node.js 24 以上で動く。
 
 ## 読む順番
 | 知りたいこと | 読む文書 |
@@ -31,7 +31,7 @@ claude plugin install kothar@kothar
 
 自分のリポジトリの CLAUDE.md には、規則（原則、試験）も、プラグインのパスも写さない。「人が読む文書は、スキル `write-docs` に従う」と書くだけにする（[雛形](templates/CLAUDE.md)）。規則を写すと、スキルが起動されず、規則が古くなる。パスは版ごとに変わる。
 
-検査と図は、手で実行することもできる。`<プラグインの場所>` は、プラグインを入れた場所（Claude Code では `${CLAUDE_PLUGIN_ROOT}`）。
+検査と図は、手でも実行できる。`<プラグインの場所>` は、プラグインを入れた場所（Claude Code では `${CLAUDE_PLUGIN_ROOT}`）。
 
 ```sh
 node <プラグインの場所>/scripts/check-docs.ts docs               # 文書を検査する

@@ -1,6 +1,6 @@
 // 文書の検査。雛形（templates/）と、このプラグイン自身の文書（README.md、docs/）に、check-docs の検査をかける。規則は skills/write-docs/SKILL.md。
 import assert from "node:assert/strict";
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import {
   aiSubject, anchors, figureWithoutDesc, brokenLinks, checkDocs, collectMarkdown, doubledGa, englishColon, hasReaderLine, hypeWords, longSentences, placeholders, redundantPhrases, slug, summaryLength, vagueHeadings, vagueWords, warnDocs, warnDocsDetailed, wideTables,
@@ -25,6 +25,17 @@ describe("雛形", () => {
   }
   it("雛形には、埋め残しの <…> がある（埋めて使うため）", () => {
     assert.ok(placeholders("templates/report.md").length > 0);
+  });
+});
+
+describe("textlint の設定の雛形", () => {
+  const rc = JSON.parse(readFileSync("templates/textlint/.textlintrc.json", "utf8"));
+  const guide = readFileSync("skills/write-docs/textlint.md", "utf8");
+  it("文の長さは無効にする（check-docs が数える）", () => assert.equal(rc.rules["preset-ja-technical-writing"]["sentence-length"], false));
+  it("設定が使うパッケージは、手引きの導入命令に入っている", () => {
+    const install = /npm i -D (.*)/.exec(guide)?.[1].split(" ") ?? [];
+    for (const p of ["textlint", "textlint-rule-preset-ja-technical-writing", "@textlint-ja/textlint-rule-preset-ai-writing"]) assert.ok(install.includes(p), p);
+    if (rc.filters?.comments) assert.ok(install.includes("textlint-filter-rule-comments"));
   });
 });
 

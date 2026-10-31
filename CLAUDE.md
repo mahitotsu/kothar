@@ -10,6 +10,7 @@ Kothar は、人に伝える文書の書き方を、規則・雛形・図の部�
 | 原則、規則、試験、手順 | [skills/write-docs/SKILL.md](skills/write-docs/SKILL.md) |
 | 規則の根拠、出典、食い違い、検査の閾値 | [docs/principles.md](docs/principles.md) |
 | 雛形の足し方、文書の組、役割の表 | [skills/write-docs/catalog.md](skills/write-docs/catalog.md)、`templates/` |
+| textlint の設定と導入の手引き | `templates/textlint/`、[skills/write-docs/textlint.md](skills/write-docs/textlint.md) |
 | 図の仕様 | [skills/write-docs/figures.md](skills/write-docs/figures.md)、`scripts/render-figure.ts` |
 | 設計の判断と理由 | [docs/design-decisions.md](docs/design-decisions.md) |
 
@@ -25,9 +26,9 @@ Kothar は、人に伝える文書の書き方を、規則・雛形・図の部�
 
 ## 図の部品を変える
 - 配色は `scripts/svg-parts.ts` の `STYLE` にだけ書く。値は、dataviz のスキルの `palette.md` のものを使う。変えるときは、同スキルの `scripts/validate_palette.js` を、ライトとダークで回す。
-- 種類を足すときは、`scripts/` に部品を書き、`scripts/render-figure.ts` の登録表（`KINDS`）と `figureTable` に足す。ラベルが収まらない入力は、描かずにエラーにする（`fit`）。例の仕様を `templates/figures/` に足し、`test/figures.test.ts` に、入力の検査と表の双子のテストを足す。
+- 種類を足すときは、`scripts/` に部品を書き、`scripts/render-figure.ts` の登録表（`KINDS`）と `figureTable` へ足す。ラベルが収まらない入力は、描かず、エラーにする（`fit`）。例の仕様を `templates/figures/` に足し、`test/figures.test.ts` に、入力の検査と表の双子のテストを足す。
 - 配置の検出（矢印の交差、節点の横切り）と自動調整（`scripts/arrange.ts`）は、`test/figures.test.ts` で守る。例の図は、警告が 0 件であること。
-- 部品を変えたら `npm run figures` で例を作り直し、画像にして、はみ出し、重なり、矢印の向きを、ライトとダークで目で確かめる。画像にする道具は、環境に入れる（例: scratchpad の venv に `resvg-py`）。リポジトリには、置かない。`npm test` が、置いた SVG と生成物の一致を調べる。
+- 部品を変えたら、`npm run figures` で例を作り直す。画像にして、はみ出し・重なり・矢印の向きを、ライトとダークの両方で目視する。画像にする道具は、環境に入れる（例: scratchpad の venv に `resvg-py`）。リポジトリには、置かない。`npm test` が、置いた SVG と生成物の一致を調べる。
 
 ## 承認が要る操作
 - コミット: 区切りのよいところで、ユーザーに確認してから行う。

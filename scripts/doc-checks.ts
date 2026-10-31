@@ -19,7 +19,7 @@ function proseLines(f: string): { line: string; no: number }[] {
   const out: { line: string; no: number }[] = [];
   let fence = false;
   text(f).split("\n").forEach((line, i) => {
-    if (line.startsWith("```")) fence = !fence;
+    if (/^\s*```/.test(line)) fence = !fence;
     else if (!fence) out.push({ line, no: i + 1 });
   });
   return out;
