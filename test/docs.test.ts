@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { existsSync, readdirSync } from "node:fs";
 import { describe, it } from "node:test";
 import {
-  aiSubject, anchors, figureWithoutDesc, brokenLinks, checkDocs, collectMarkdown, hasReaderLine, longSentences, placeholders, slug, summaryLength, vagueHeadings, vagueWords, warnDocs, warnDocsDetailed, wideTables,
+  aiSubject, anchors, figureWithoutDesc, brokenLinks, checkDocs, collectMarkdown, doubledGa, englishColon, hasReaderLine, hypeWords, longSentences, placeholders, redundantPhrases, slug, summaryLength, vagueHeadings, vagueWords, warnDocs, warnDocsDetailed, wideTables,
 } from "../scripts/doc-checks.ts";
 
 const skills = existsSync("skills") ? readdirSync("skills").flatMap((d) => collectMarkdown([`skills/${d}`])) : [];
@@ -64,9 +64,13 @@ describe("検査の部品", () => {
     assert.equal(vagueHeadings("test/fixtures/warnings.md").length, 1);
   });
   it("aiSubject は、一人称の主語を見つける", () => assert.equal(aiSubject("test/fixtures/warnings.md").length, 1));
+  it("redundantPhrases は、コードの外の「することができる」を見つける", () => assert.equal(redundantPhrases("test/fixtures/warnings.md").length, 1));
+  it("doubledGa は、1 文に 2 つの逆接の「が」を見つける", () => assert.equal(doubledGa("test/fixtures/warnings.md").length, 1));
+  it("hypeWords は、本文の誇張の語を見つける（表の中は除く）", () => assert.equal(hypeWords("test/fixtures/warnings.md").length, 1));
+  it("englishColon は、述語のあとのコロンだけを見つける（「使い方:」は除く）", () => assert.equal(englishColon("test/fixtures/warnings.md").length, 1));
   it("warnDocs は、警告を `file:line 警告` の形で返す", () => {
     const w = warnDocs(["test/fixtures/warnings.md"]);
-    assert.equal(w.length, 1 + 3 + 1 + 1 + 1);
+    assert.equal(w.length, 1 + 3 + 1 + 1 + 1 + 1 + 1 + 1 + 1);
     assert.ok(w.every((x) => /^test\/fixtures\/warnings\.md:\d+ 警告 /.test(x)));
   });
   it("抑制: 理由つきのコメントは次の行と行末の警告を抑え、理由のないものは警告になる", () => {

@@ -139,10 +139,9 @@ function plain(line: string): string {
 /** 見出しの文字から、番号（`1.` `2-1.` `A.`）を除く。 */
 const headingText = (h: string) => h.replace(/^(?:\d+(?:-\d+)*|[A-Z])\.\s*/, "").trim();
 
-/** 長い文（既定は 80 字超）。公用文は、50〜60 字で読みにくくなっていないかを意識するよう述べる。警告は余裕を見る。
- *  frontmatter と、`<details>` の中（出典の引用を並べる根拠）は、対象にしない。 */
-export function longSentences(f: string, max = 80): string[] {
-  const out: string[] = [];
+/** 本文の文（句点で区切る）と、その行番号。frontmatter、`<details>` の中（出典の引用を並べる根拠）、表、見出しは、対象にしない。 */
+function sentences(f: string): { sentence: string; no: number }[] {
+  const out: { sentence: string; no: number }[] = [];
   const lines = proseLines(f);
   let front = lines[0]?.line === "---";
   let details = false;
@@ -154,11 +153,62 @@ export function longSentences(f: string, max = 80): string[] {
     if (/<details>/.test(line)) details = true;
     if (/<\/details>/.test(line)) details = false;
     if (details || line.startsWith("|") || line.startsWith("#")) return;
-    for (const sentence of plain(line).split(/[。！？]/)) {
-      const n = [...sentence.replace(/\s/g, "")].length;
-      if (n > max) out.push(`${f}:${no} 警告 ${n} 字の文がある（目安は ${max} 字以内）: ${sentence.slice(0, 20)}…`);
-    }
+    for (const sentence of plain(line).split(/[。！？]/)) if (sentence.trim()) out.push({ sentence, no });
   });
+  return out;
+}
+
+/** 長い文（既定は 80 字超）。公用文は、50〜60 字で読みにくくなっていないかを意識するよう述べる。警告は余裕を見る。 */
+export function longSentences(f: string, max = 80): string[] {
+  const out: string[] = [];
+  for (const { sentence, no } of sentences(f)) {
+    const n = [...sentence.replace(/\s/g, "")].length;
+    if (n > max) out.push(`${f}:${no} 警告 ${n} 字の文がある（目安は ${max} 字以内）: ${sentence.slice(0, 20)}…`);
+  }
+  return out;
+}
+
+/** かぎかっこの中（語を例として挙げる引用）を除く。 */
+const unquote = (s: string) => s.replace(/「[^」]*」/g, "「」");
+
+/** 冗長な表現（textlint の ja-no-redundant-expression）。「を行う」「を実施する」は、Kothar の判断で足した。かぎかっこの中は対象にしない。 */
+const REDUNDANT = /することができ|することが可能|を行[うい]|を行っ|を実施[すし]/g;
+export function redundantPhrases(f: string): string[] {
+  const out: string[] = [];
+  for (const { sentence, no } of sentences(f)) {
+    for (const m of unquote(sentence).matchAll(REDUNDANT)) out.push(`${f}:${no} 警告 冗長な表現「${m[0]}」（動詞で書く。「〜できる」「〜する」）`);
+  }
+  return out;
+}
+
+/** 1 文に 2 つ以上の逆接の「が」（textlint の no-doubled-conjunctive-particle-ga）。形態素解析をしないので、活用語尾か「です」「ます」に続く「が、」だけを数える。 */
+const CONJ_GA = /(?:[るたいだすう]|です|ます)が、/g;
+export function doubledGa(f: string): string[] {
+  const out: string[] = [];
+  for (const { sentence, no } of sentences(f)) {
+    if ((sentence.match(CONJ_GA) ?? []).length >= 2) out.push(`${f}:${no} 警告 逆接の「が」が 1 文に 2 つある（文を分ける）: ${sentence.slice(0, 20)}…`);
+  }
+  return out;
+}
+
+/** 誇張の語（textlint の ai-writing の no-ai-hype-expressions、no-ai-emphasis-patterns）。かぎかっこの中は対象にしない。 */
+const HYPE = /非常に|極めて|圧倒的|革新的|革命的|画期的|劇的|飛躍的|驚くほど|完璧|シームレス/g;
+export function hypeWords(f: string): string[] {
+  const out: string[] = [];
+  for (const { sentence, no } of sentences(f)) {
+    for (const m of unquote(sentence).matchAll(HYPE)) out.push(`${f}:${no} 警告 誇張の語「${m[0]}」（数値か事実で書く）`);
+  }
+  return out;
+}
+
+/** 述語で終わり、後ろにブロックが続くコロン（textlint の ai-writing の no-ai-colon-continuation）。「使い方:」のような名詞のコロンは対象にしない。 */
+const PREDICATE_COLON = /(?:ます|です|する|した|ない|れる|せる|ください)\s*[:：]$/;
+export function englishColon(f: string): string[] {
+  const out: string[] = [];
+  for (const { line, no } of proseLines(f)) {
+    if (line.startsWith("|") || line.startsWith("#")) continue;
+    if (PREDICATE_COLON.test(plain(line))) out.push(`${f}:${no} 警告 述語のあとのコロン（英語の構文。「次のとおり。」などで文を閉じる）`);
+  }
   return out;
 }
 
@@ -277,7 +327,7 @@ export function warnDocsDetailed(files: string[], opt: CheckOptions = {}): { war
   const warnings: string[] = [];
   let suppressed = 0;
   for (const f of files) {
-    const found = [...longSentences(f, opt.maxSentence ?? 80), ...vagueWords(f), ...summaryLength(f), ...vagueHeadings(f), ...figureWithoutDesc(f), ...figureLayout(f)];
+    const found = [...longSentences(f, opt.maxSentence ?? 80), ...vagueWords(f), ...summaryLength(f), ...vagueHeadings(f), ...redundantPhrases(f), ...doubledGa(f), ...hypeWords(f), ...englishColon(f), ...figureWithoutDesc(f), ...figureLayout(f)];
     if (!instructionFile.test(f)) found.push(...aiSubject(f));
     const { lines, problems } = suppressions(f);
     for (const w of found) {
